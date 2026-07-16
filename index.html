@@ -20,9 +20,12 @@
 body{background:var(--bg);color:var(--ink);font-family:'Noto Sans KR',sans-serif;min-height:100vh;padding-bottom:110px}
 button,input,textarea{font-family:inherit}
 
-header{padding:20px 18px 4px;display:flex;justify-content:space-between;align-items:baseline}
+header{padding:20px 18px 4px;display:flex;justify-content:space-between;align-items:center}
 h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
+.hd-right{display:flex;align-items:center;gap:8px}
 .hd-date{font-size:13px;color:var(--sub)}
+.ver{font-size:10.5px;color:var(--sub);border:1px solid var(--line);border-radius:6px;padding:2px 6px;font-family:'Archivo',sans-serif}
+.rf-btn{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--sub);font-size:15px;line-height:1}
 
 .view-sw{display:flex;margin:12px 18px 0;background:var(--card);border-radius:12px;padding:4px;border:1px solid var(--line)}
 .view-sw button{flex:1;padding:9px 0;border:0;background:transparent;color:var(--sub);font-weight:700;font-size:14px;border-radius:9px}
@@ -127,7 +130,11 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
 
 <header>
   <h1>트레이닝 로그</h1>
-  <div class="hd-date" id="hdDate"></div>
+  <div class="hd-right">
+    <span class="ver" id="verTag"></span>
+    <span class="hd-date" id="hdDate"></span>
+    <button class="rf-btn" id="refreshBtn" title="새 버전 확인">⟳</button>
+  </div>
 </header>
 
 <div class="view-sw">
@@ -571,6 +578,13 @@ $('vToday').onclick=()=>{ $('vToday').classList.add('on');$('vHist').classList.r
 $('vHist').onclick=()=>{ $('vHist').classList.add('on');$('vToday').classList.remove('on');$('histView').classList.remove('hidden');$('todayView').classList.add('hidden');$('bar').classList.add('hidden'); renderHistory(); };
 
 /* ---- init ---- */
+const APP_VER='v2.1';
+$('verTag').textContent=APP_VER;
+$('refreshBtn').onclick=()=>{
+  toast('새 버전 확인 중...');
+  // 캐시를 우회하는 주소로 다시 로드 (기록은 localStorage라 안전)
+  setTimeout(()=>{ location.replace(location.pathname+'?v='+Date.now()); },400);
+};
 (function(){
   const d=new Date();
   $('hdDate').textContent=`${d.getMonth()+1}월 ${d.getDate()}일 (${'일월화수목금토'[d.getDay()]})`;
