@@ -8,6 +8,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="운동로그">
 <meta name="theme-color" content="#141619">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="icon" type="image/png" href="icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Archivo:wght@600;800&display=swap" rel="stylesheet">
 <style>
@@ -124,6 +126,27 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
 .hidden{display:none}
 .toast{position:fixed;left:50%;bottom:160px;transform:translateX(-50%) translateY(8px);background:var(--card2);border:1px solid var(--line);color:var(--ink);padding:10px 18px;border-radius:99px;font-size:13.5px;font-weight:700;opacity:0;pointer-events:none;transition:.25s;white-space:nowrap;z-index:7}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* 칼로리 칩 */
+.kcal{font-size:12px;color:var(--sub);font-weight:700}
+.kcal b{color:var(--gold);font-family:'Archivo',sans-serif;font-size:15px}
+
+/* 프로필 모달 */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:10;display:none}
+.modal-bg.show{display:block}
+.modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(88vw,340px);background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px 18px;z-index:11;display:none}
+.modal.show{display:block}
+.modal h2{font-size:16px;font-weight:800;margin-bottom:4px}
+.modal .m-sub{font-size:12px;color:var(--sub);line-height:1.5;margin-bottom:14px}
+.m-row{display:flex;gap:8px;margin-bottom:10px}
+.m-row>div{flex:1}
+.modal label{font-size:11px;color:var(--sub);font-weight:700;display:block;margin-bottom:4px}
+.modal input{width:100%;background:var(--card2);border:1px solid var(--line);border-radius:9px;color:var(--ink);font-size:15px;padding:10px;outline:0}
+.sex-sw{display:flex;gap:6px}
+.sex-sw button{flex:1;padding:10px 0;border:1px solid var(--line);background:var(--card2);color:var(--sub);font-weight:700;border-radius:9px;font-size:14px}
+.sex-sw button.on{background:var(--gold);color:#141619;border-color:transparent}
+.m-save{width:100%;padding:13px 0;border:0;border-radius:11px;background:var(--gold);color:#141619;font-weight:800;font-size:15px;margin-top:6px}
+.m-note{font-size:10.5px;color:var(--sub);line-height:1.5;margin-top:10px}
 </style>
 </head>
 <body class="d-push">
@@ -133,6 +156,7 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
   <div class="hd-right">
     <span class="ver" id="verTag"></span>
     <span class="hd-date" id="hdDate"></span>
+    <button class="rf-btn" id="profBtn" title="내 정보">👤</button>
     <button class="rf-btn" id="refreshBtn" title="새 버전 확인">⟳</button>
   </div>
 </header>
@@ -164,8 +188,28 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
 </div>
 
 <div class="bar" id="bar">
-  <div class="cnt"><b id="cntDone">0</b><span id="cntTotal">/0 세트</span></div>
+  <div class="cnt"><b id="cntDone">0</b><span id="cntTotal">/0 세트</span><div class="kcal" id="kcalChip">🔥 <b>--</b> kcal</div></div>
   <button class="done-btn" id="doneBtn">오늘 출석 체크 ✓</button>
+</div>
+
+<div class="modal-bg" id="modalBg"></div>
+<div class="modal" id="profModal">
+  <h2>내 정보</h2>
+  <div class="m-sub">운동 소모 칼로리 계산에 사용돼요. 이 정보는 내 폰에만 저장됩니다.</div>
+  <div class="m-row">
+    <div><label>키 (cm)</label><input type="number" inputmode="decimal" id="pHeight" placeholder="175"></div>
+    <div><label>몸무게 (kg)</label><input type="number" inputmode="decimal" id="pWeight" placeholder="70"></div>
+  </div>
+  <div class="m-row">
+    <div><label>나이</label><input type="number" inputmode="numeric" id="pAge" placeholder="30"></div>
+    <div><label>성별</label>
+      <div class="sex-sw">
+        <button id="pMale">남</button><button id="pFemale">여</button>
+      </div>
+    </div>
+  </div>
+  <button class="m-save" id="pSave">저장</button>
+  <div class="m-note">계산식: 웨이트 트레이닝 MET × 개인 기초대사량 기반 보정 × 운동 시간(완료 세트당 약 2.5분). 실측이 아닌 추정치입니다.</div>
 </div>
 
 <div class="timer" id="timer">
@@ -471,6 +515,25 @@ function updateCount(){
   const total=session.sets.flat().length;
   $('cntDone').textContent=done;
   $('cntTotal').textContent='/'+total+' 세트';
+  renderKcal(done);
+}
+
+/* ---- 칼로리 계산 ---- */
+function getProfile(){ return sGet('profile'); }
+function calcKcal(doneSets){
+  const p=getProfile();
+  if(!p||!p.w||!p.h||!p.age) return null;
+  // Mifflin-St Jeor 기초대사량 (kcal/일)
+  const bmr = 10*p.w + 6.25*p.h - 5*p.age + (p.sex==='m'?5:-161);
+  // 실패지점 세트가 있으면 고강도(MET 6.0), 아니면 일반 웨이트(MET 5.0)
+  const hasFail = session.sets.flat().includes(2);
+  const met = hasFail?6.0:5.0;
+  const minutes = doneSets*2.5; // 세트당 수행+휴식 평균 2.5분 가정
+  return Math.round(met * (bmr/1440) * minutes);
+}
+function renderKcal(doneSets){
+  const k=calcKcal(doneSets);
+  $('kcalChip').innerHTML = k==null ? '🔥 <b>--</b> kcal' : `🔥 <b>${k}</b> kcal`;
 }
 function renderDoneBtn(){
   const b=$('doneBtn');
@@ -491,7 +554,7 @@ function renderHistory(){
       <div class="h-tag ${r.part}">${(plan[r.part]?.label||'').split('/')[0]}</div>
       <div class="h-info">
         <div class="h-date">${r.date}</div>
-        <div class="h-meta">${plan[r.part]?.label||r.part} · ${r.sd}/${r.st} 세트 수행</div>
+        <div class="h-meta">${plan[r.part]?.label||r.part} · ${r.sd}/${r.st} 세트${r.kcal?` · 🔥${r.kcal}kcal`:''}</div>
       </div>
       <div class="h-badge">${r.st>0&&r.sd>=r.st?'ALL CLEAR':''}</div>
     </div>`).join('')
@@ -529,6 +592,32 @@ function stopTimer(){ clearInterval(tInt); $('timer').classList.remove('show'); 
 $('tSkip').onclick=stopTimer;
 $('tPlus').onclick=()=>{ tLeft+=30; drawTimer(); };
 
+/* ---- 프로필 모달 ---- */
+let pSex='m';
+function openProf(){
+  const p=getProfile()||{};
+  $('pHeight').value=p.h||''; $('pWeight').value=p.w||''; $('pAge').value=p.age||'';
+  pSex=p.sex||'m'; drawSex();
+  $('modalBg').classList.add('show'); $('profModal').classList.add('show');
+}
+function closeProf(){ $('modalBg').classList.remove('show'); $('profModal').classList.remove('show'); }
+function drawSex(){
+  $('pMale').classList.toggle('on',pSex==='m');
+  $('pFemale').classList.toggle('on',pSex==='f');
+}
+$('pMale').onclick=()=>{pSex='m';drawSex();};
+$('pFemale').onclick=()=>{pSex='f';drawSex();};
+$('profBtn').onclick=openProf;
+$('modalBg').onclick=closeProf;
+$('kcalChip').onclick=()=>{ if(!getProfile()) openProf(); };
+$('pSave').onclick=()=>{
+  const h=parseFloat($('pHeight').value), w=parseFloat($('pWeight').value), age=parseInt($('pAge').value);
+  if(!h||!w||!age){ toast('키·몸무게·나이를 모두 입력해 주세요'); return; }
+  sSet('profile',{h,w,age,sex:pSex});
+  closeProf(); updateCount();
+  toast('저장 완료! 이제 칼로리가 계산돼요 🔥');
+};
+
 /* ---- actions ---- */
 function switchPart(p){
   curPart=p; sSet('lastPart',p);
@@ -554,7 +643,7 @@ function saveSession(){
   sSet('exlog',exlog);
   const sd=session.sets.flat().filter(v=>v>0).length, st=session.sets.flat().length;
   const i=index.findIndex(r=>r.date===date&&r.part===curPart);
-  const rec={date,part:curPart,done:session.done,sd,st};
+  const rec={date,part:curPart,done:session.done,sd,st,kcal:calcKcal(sd)};
   if(i>=0)index[i]=rec; else index.push(rec);
   sSet('index',index);
 }
@@ -578,7 +667,7 @@ $('vToday').onclick=()=>{ $('vToday').classList.add('on');$('vHist').classList.r
 $('vHist').onclick=()=>{ $('vHist').classList.add('on');$('vToday').classList.remove('on');$('histView').classList.remove('hidden');$('todayView').classList.add('hidden');$('bar').classList.add('hidden'); renderHistory(); };
 
 /* ---- init ---- */
-const APP_VER='v2.1';
+const APP_VER='v2.3';
 $('verTag').textContent=APP_VER;
 $('refreshBtn').onclick=()=>{
   toast('새 버전 확인 중...');
