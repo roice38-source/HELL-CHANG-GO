@@ -158,6 +158,8 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
 .sex-sw button.on{background:var(--gold);color:#141619;border-color:transparent}
 .m-save{width:100%;padding:13px 0;border:0;border-radius:11px;background:var(--gold);color:#141619;font-weight:800;font-size:15px;margin-top:6px}
 .m-note{font-size:10.5px;color:var(--sub);line-height:1.5;margin-top:10px}
+.bmr-box{margin-top:12px;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:12.5px;color:var(--sub);line-height:1.6}
+.bmr-box b{color:var(--gold);font-family:'Archivo','Noto Sans KR',sans-serif;font-size:16px}
 
 /* 주간 리포트 */
 .wk-card{background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px;font-size:12.5px;line-height:1.7;color:var(--sub)}
@@ -240,6 +242,13 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
       </div>
       <div id="chartBox"></div>
     </div>
+    <div class="chart-card">
+      <div class="chart-hd">
+        <div style="font-size:13px;font-weight:800">🧬 인바디</div>
+        <button class="sug-btn" id="ibAdd">＋ 기록</button>
+      </div>
+      <div id="ibBox"></div>
+    </div>
     <div id="histList"></div>
     <div class="bk-row">
       <button id="bkExport">📤 기록 백업</button>
@@ -270,7 +279,8 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
     </div>
   </div>
   <button class="m-save" id="pSave">저장</button>
-  <div class="m-note">계산식: 웨이트 트레이닝 MET × 개인 기초대사량 기반 보정 × 운동 시간(완료 세트당 약 2.5분). 실측이 아닌 추정치입니다.</div>
+  <div class="bmr-box" id="pBmr"></div>
+  <div class="m-note">계산식: 기초대사량(인바디 체지방률 입력 시 체성분 기반으로 자동 업그레이드) × 운동 강도(MET) × 시간. 실측이 아닌 추정치입니다.</div>
 </div>
 
 <div class="timer" id="timer">
@@ -287,6 +297,20 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
   <div class="m-sub" id="bkSub"></div>
   <textarea class="bk-ta" id="bkTa"></textarea>
   <button class="m-save" id="bkAction">복사하기</button>
+</div>
+
+<div class="modal" id="ibModal">
+  <h2>인바디 기록</h2>
+  <div class="m-sub">측정 결과를 입력하세요. 체중은 내 정보에 자동 반영되고, 체지방률을 넣으면 칼로리 계산이 체성분 기반(Katch-McArdle)으로 업그레이드돼요.</div>
+  <div class="m-row">
+    <div><label>측정일</label><input type="date" id="ibDate"></div>
+    <div><label>체중 (kg)</label><input type="number" inputmode="decimal" step="0.1" id="ibW" placeholder="70.0"></div>
+  </div>
+  <div class="m-row">
+    <div><label>골격근량 (kg)</label><input type="number" inputmode="decimal" step="0.1" id="ibM" placeholder="32.0"></div>
+    <div><label>체지방률 (%)</label><input type="number" inputmode="decimal" step="0.1" id="ibF" placeholder="18.0"></div>
+  </div>
+  <button class="m-save" id="ibSave">저장</button>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -336,6 +360,10 @@ const EXLIB = [
   ['플랭크','코어'],['사이드 플랭크','코어'],['크런치','코어'],['바이시클 크런치','코어'],
   ['레그 레이즈','코어'],['행잉 레그 레이즈','코어'],['행잉 니 레이즈','코어'],['케이블 크런치','코어'],
   ['러시안 트위스트','코어'],['앱 롤아웃','코어'],['마운틴 클라이머','코어'],['V업','코어'],['데드버그','코어'],
+  // 유산소 / 체력
+  ['로잉머신','유산소'],['로잉 HIIT','유산소'],['러닝머신','유산소'],['러닝 인터벌','유산소'],
+  ['사이클','유산소'],['사이클 HIIT','유산소'],['스텝밀','유산소'],['일립티컬','유산소'],
+  ['어썰트 바이크','유산소'],['버피','유산소'],['줄넘기','유산소'],['스프린트','유산소'],
 ];
 // 검색용 별칭 (영문/줄임말 → 매칭 강화)
 const EXALIAS = {
@@ -375,7 +403,16 @@ const EXALIAS = {
   '스티프 레그 데드리프트':'스티프 sldl',
   '행잉 레그 레이즈':'행레레 hanging',
   '딥스':'dips 딥',
+  '로잉머신':'로잉 rowing 조정',
+  '로잉 HIIT':'로잉인터벌 rowing hiit',
+  '러닝머신':'런닝 트레드밀 treadmill running',
+  '러닝 인터벌':'런닝인터벌 스프린트 인터벌런',
+  '사이클':'싸이클 bike 자전거 스핀',
+  '사이클 HIIT':'싸이클인터벌 bike hiit',
 };
+// 유산소 판별 (단위 '분' 기준)
+const CARDIO_EX = new Set(['로잉머신','로잉 HIIT','러닝머신','러닝 인터벌','사이클','사이클 HIIT','스텝밀','일립티컬','어썰트 바이크','버피','줄넘기','스프린트']);
+const isCardio = u => u==='분';
 
 // ===== 운동 → 자극 부위 태그 (운동추천용) =====
 const MTAG = {
@@ -546,12 +583,13 @@ function renderExercises(){
         <div class="ex-scheme">${esc(e.r)} × ${e.s}세트</div>
       </div>
       ${e.goal!==''&&e.goal!=null?`<div class="ex-goal">목표: <b>${esc(e.goal)}${esc(e.u||'kg')}</b></div>`:''}
+      ${isAssist(e.u)?(()=>{const p=getProfile();if(!p||!p.w)return '<div class="ex-goal">👤 내 정보에 몸무게를 넣으면 실제 부하가 표시돼요</div>';const minA=Math.min(...session.weights[i]);return `<div class="ex-goal">실제 부하(탑세트): 몸무게 ${p.w} − 보조 ${minA} = <b>${Math.max(0,+(p.w-minA).toFixed(1))}kg</b></div>`;})():''}
       ${e.tip?`<div class="ex-tip">${esc(e.tip)}</div>`:''}
       <div class="ex-body">
         <div class="act-col">
           <button class="rec-btn" data-rec="${i}">📊 추천</button>
           <button class="rec-btn" data-cfg="${i}">⚙ 구성</button>
-          <div class="unit-tag">${esc(e.u||'kg')}</div>
+          <div class="unit-tag">${esc(e.u||'kg')}${e.u==='km/h'?`<br>경사 ${e.incline??2}%`:''}</div>
         </div>
         <div class="sets">${plates}</div>
       </div>
@@ -705,7 +743,7 @@ function showRec(i){
   const failIdx=last.sets.findIndex(s=>s===2);
   // 탑세트: 일반 운동은 최고 중량, 보조 운동은 최소 보조(가장 어려운 세트)
   const w=last.w||0;
-  const inc = barbell?5:(assist?5:(w>=40?2.5:(w>=10?1:0.5)));
+  const inc = barbell?5:(assist?5:(u==='km/h'?0.5:(w>=40?2.5:(w>=10?1:0.5))));
   const fit = v => barbell?barbellRound(v):Math.max(0,v);
   const isClean = l => !l.sets.includes(2) && l.sets.every(s=>s>0);
   let streak=0;
@@ -780,7 +818,7 @@ function renderEdit(){
         <div><label>세트당 횟수</label><input value="${esc(e.r)}" data-f="r" data-i="${i}"></div>
         <div><label>단위</label>
           <select data-f="u" data-i="${i}" style="width:100%;background:var(--card2);border:1px solid var(--line);border-radius:9px;color:var(--ink);font-size:14px;padding:9px 6px;outline:0">
-            ${[...new Set(['kg','kg×2','보조kg','lb','단',(e.u||'kg')])].map(u=>`<option value="${u}" ${(e.u||'kg')===u?'selected':''}>${u==='단'?'단 (머신 칸수)':u==='보조kg'?'보조kg (서포트 머신)':u}</option>`).join('')}
+            ${[...new Set(['kg','kg×2','보조kg','분','km/h','lb','단',(e.u||'kg')])].map(u=>`<option value="${u}" ${(e.u||'kg')===u?'selected':''}>${u==='단'?'단 (머신 칸수)':u==='보조kg'?'보조kg (서포트 머신)':u==='분'?'분 (유산소)':u==='km/h'?'km/h (러닝머신 속도)':u}</option>`).join('')}
           </select>
         </div>
       </div>
@@ -790,6 +828,12 @@ function renderEdit(){
         <div><label>휴식 (초)</label>
         <input type="number" inputmode="numeric" step="10" value="${e.rest||60}" data-f="rest" data-i="${i}" placeholder="60"></div>
       </div>
+      ${(e.u==='km/h')?`<div class="ef-row">
+        <div><label>경사 인클라인 (%)</label>
+        <input type="number" inputmode="decimal" step="0.5" value="${e.incline??2}" data-f="incline" data-i="${i}"></div>
+        <div><label>라운드당 시간 (분)</label>
+        <input type="number" inputmode="decimal" step="0.5" value="${e.roundMin??2}" data-f="roundMin" data-i="${i}"></div>
+      </div>`:''}
       <label>메모</label>
       <textarea rows="2" data-f="tip" data-i="${i}" placeholder="자극 포인트, 주의사항 등">${esc(e.tip||'')}</textarea>
       <button class="del-btn" data-del="${i}">이 운동 삭제</button>
@@ -802,8 +846,11 @@ function renderEdit(){
       if(f==='s'){ plan[curPart].ex[i].s=Math.max(1,Math.min(10,parseInt(el.value)||1)); }
       else if(f==='goal'){ plan[curPart].ex[i].goal = el.value===''?'':parseFloat(el.value)||''; }
       else if(f==='rest'){ plan[curPart].ex[i].rest = Math.max(10,Math.min(600,parseInt(el.value)||60)); }
+      else if(f==='incline'){ plan[curPart].ex[i].incline = Math.max(0,Math.min(15,parseFloat(el.value)||0)); }
+      else if(f==='roundMin'){ plan[curPart].ex[i].roundMin = Math.max(0.5,Math.min(60,parseFloat(el.value)||2)); }
       else plan[curPart].ex[i][f]=el.value;
       sSet('plan',plan);
+      if(f==='u') renderEdit();
     };
     if(el.dataset.f==='n'){
       el.oninput=()=>showSug(el);
@@ -879,9 +926,21 @@ function showSug(inp){
   box.querySelectorAll('[data-pick]').forEach(d=>{
     d.onpointerdown=ev=>{
       ev.preventDefault();
-      inp.value=(starred?'★':'')+d.dataset.pick;
-      plan[curPart].ex[+i].n=inp.value;
-      if(ASSIST_EX.has(d.dataset.pick)) plan[curPart].ex[+i].u='보조kg';
+      const pk=d.dataset.pick;
+      inp.value=(starred?'★':'')+pk;
+      const ex=plan[curPart].ex[+i];
+      ex.n=inp.value;
+      if(ASSIST_EX.has(pk)) ex.u='보조kg';
+      else if(/러닝|스프린트/.test(pk)&&CARDIO_EX.has(pk)){
+        ex.u='km/h';
+        if(/HIIT|인터벌|스프린트/.test(pk)){ ex.s=8; ex.r='30초 전력/90초 회복'; ex.w=10; ex.incline=2; ex.roundMin=2; }
+        else { ex.s=1; ex.r='스테디'; ex.w=8; ex.incline=1; ex.roundMin=30; }
+      }
+      else if(CARDIO_EX.has(pk)){
+        ex.u='분';
+        if(/HIIT|인터벌|버피/.test(pk)){ ex.s=8; ex.r='30초 전력/90초 회복'; ex.w=2; }
+        else { ex.s=1; ex.r='스테디'; ex.w=20; }
+      }
       sSet('plan',plan);
       box.classList.add('hidden');
       renderEdit();
@@ -902,21 +961,48 @@ function updateCount(){
 
 /* ---- 칼로리 계산 ---- */
 function getProfile(){ return sGet('profile'); }
+// 기초대사량: 인바디 체지방률이 있으면 Katch-McArdle(체성분 반영), 없으면 Mifflin-St Jeor
+function getBMR(p){
+  const ib=(sGet('inbody')||[]).filter(r=>r.f!=null&&r.w!=null).sort((a,b)=>b.date.localeCompare(a.date))[0];
+  if(ib){
+    const lbm=ib.w*(1-ib.f/100);
+    return {bmr: 370 + 21.6*lbm, src:'inbody'};
+  }
+  return {bmr: 10*p.w + 6.25*p.h - 5*p.age + (p.sex==='m'?5:-161), src:'mifflin'};
+}
 function calcKcal(doneSets){
   const p=getProfile();
   if(!p||!p.w||!p.h||!p.age) return null;
-  // Mifflin-St Jeor 기초대사량 (kcal/일)
-  const bmr = 10*p.w + 6.25*p.h - 5*p.age + (p.sex==='m'?5:-161);
-  // 실패지점 세트가 있으면 고강도(MET 6.0), 아니면 일반 웨이트(MET 5.0)
+  const {bmr}=getBMR(p);
   const hasFail = session.sets.flat().includes(2);
-  const met = hasFail?6.0:5.0;
-  // 실측 시간(첫 세트~마지막 세트)이 타당하면 사용, 아니면 세트당 2.5분 추정
-  let minutes = doneSets*2.5;
+  const metW = hasFail?6.0:5.0;
+  let cardioKcal=0, strengthSets=0, cardioMin=0;
+  plan[curPart].ex.forEach((e,i)=>{
+    const done=(session.sets[i]||[]).map((s,j)=>s>0?j:-1).filter(j=>j>=0);
+    if(!done.length) return;
+    if(e.u==='km/h'){
+      // ACSM 러닝 공식: VO2 = 3.5 + 0.2v + 0.9v·경사 (v: m/min) → MET = VO2/3.5
+      const rm=e.roundMin??2, g=(e.incline??0)/100;
+      const avgV=done.reduce((s,j)=>s+(session.weights[i][j]||0),0)/done.length*16.67;
+      const met=(3.5+0.2*avgV+0.9*avgV*g)/3.5;
+      const duty=e.s>1?0.6:1; // HIIT는 회복 구간 감안
+      const min=done.length*rm;
+      cardioKcal += (bmr/1440)*met*duty*min;
+      cardioMin += min;
+    }else if(isCardio(e.u)){
+      const min=done.reduce((s,j)=>s+(session.weights[i][j]||0),0);
+      cardioKcal += (bmr/1440)*8*min;
+      cardioMin += min;
+    }else{
+      strengthSets += done.length;
+    }
+  });
+  let strengthMin = strengthSets*2.5;
   if(session.t0&&session.t1){
-    const span=(session.t1-session.t0)/60000 + 2; // 마지막 세트 수행분 보정
-    if(span>=doneSets*1 && span<=doneSets*6+15) minutes=span;
+    const span=(session.t1-session.t0)/60000 + 2 - cardioMin;
+    if(span>=strengthSets*1 && span<=strengthSets*6+15) strengthMin=Math.max(span,0);
   }
-  return Math.round(met * (bmr/1440) * minutes);
+  return Math.round((bmr/1440)*metW*strengthMin + cardioKcal);
 }
 function sessionMinutes(){
   if(session.t0&&session.t1){
@@ -944,18 +1030,25 @@ function renderHistory(){
   $('sMonth').textContent=done.filter(r=>r.date.startsWith(ym)).length;
   $('sWeek').textContent=done.filter(r=>r.date>=monStr).length;
   $('histList').innerHTML=done.length?done.map(r=>`
-    <div class="h-item">
+    <div class="h-item" data-day="${r.date}" style="flex-wrap:wrap;cursor:pointer">
       <div class="h-tag ${r.part}">${(plan[r.part]?.label||'').split('/')[0]}</div>
       <div class="h-info">
         <div class="h-date">${r.date}</div>
         <div class="h-meta">${plan[r.part]?.label||r.part} · ${r.sd}/${r.st} 세트${r.dur?` · ${r.dur}분`:''}${r.kcal?` · 🔥${r.kcal}kcal`:''}</div>
       </div>
       <div class="h-badge">${r.st>0&&r.sd>=r.st?'ALL CLEAR':''}</div>
+      <div class="h-detail hidden" style="width:100%;border-top:1px solid var(--line);margin-top:8px;padding-top:4px"></div>
     </div>`).join('')
     :'<div class="empty">아직 기록이 없어요.<br>첫 출석 체크를 눌러보세요 💪</div>';
+  document.querySelectorAll('.h-item[data-day]').forEach(el=>el.onclick=()=>{
+    const det=el.querySelector('.h-detail');
+    if(det.classList.contains('hidden')){ det.innerHTML=dayDetail(el.dataset.day); det.classList.remove('hidden'); }
+    else det.classList.add('hidden');
+  });
   renderWeekReport();
   renderChartUI();
   renderBig3();
+  renderInbody();
 }
 
 /* ---- 주간 리포트 ---- */
@@ -967,25 +1060,33 @@ function weekBounds(offsetWeeks){
   return [f(mon),f(sun)];
 }
 function weekVolume(a,b){
-  let vol=0;
+  let vol=0, cardio=0;
   Object.values(exlog).forEach(logs=>logs.forEach(l=>{
     if(l.date>=a&&l.date<=b){
       const rep=l.rep||10;
-      l.sets.forEach((s,j)=>{ if(s>0) vol += ((l.ws&&l.ws[j])||l.w||0)*rep; });
+      l.sets.forEach((s,j)=>{
+        if(s>0){
+          const w=(l.ws&&l.ws[j]!=null)?l.ws[j]:(l.w||0);
+          if(l.u==='분') cardio += w;
+          else if(l.u==='km/h') cardio += (l.rm||2);
+          else if(l.u==='보조kg') vol += Math.max(0,((l.bw||0)-w))*rep;
+          else vol += w*rep;
+        }
+      });
     }
   }));
-  return Math.round(vol);
+  return [Math.round(vol), Math.round(cardio)];
 }
 function renderWeekReport(){
   const [a,b]=weekBounds(0), [pa,pb]=weekBounds(1);
   const att=index.filter(r=>r.done&&r.date>=a&&r.date<=b).length;
   const attP=index.filter(r=>r.done&&r.date>=pa&&r.date<=pb).length;
-  const vol=weekVolume(a,b), volP=weekVolume(pa,pb);
+  const [vol,cardio]=weekVolume(a,b), [volP]=weekVolume(pa,pb);
   const kc=index.filter(r=>r.date>=a&&r.date<=b).reduce((s,r)=>s+(r.kcal||0),0);
   const pct = volP>0? Math.round((vol-volP)/volP*100) : null;
   const arrow = v => v>0?`<b class="up">▲${v}%</b>`:(v<0?`<b class="dn">▼${Math.abs(v)}%</b>`:'<b>—</b>');
   $('wkCard').innerHTML=`<h3>이번 주 리포트 (${a.slice(5)} ~ ${b.slice(5)})</h3>
-    출석 <b>${att}회</b>${attP?` (지난주 ${attP}회)`:''} · 소모 <b>${kc>0?kc+'kcal':'-'}</b><br>
+    출석 <b>${att}회</b>${attP?` (지난주 ${attP}회)`:''} · 소모 <b>${kc>0?kc+'kcal':'-'}</b>${cardio>0?` · 유산소 <b>${cardio}분</b>`:''}<br>
     총 볼륨(중량×횟수) <b>${vol.toLocaleString()}kg</b> ${pct!=null?`· 지난주 대비 ${arrow(pct)}`:''}`;
 }
 
@@ -1012,9 +1113,13 @@ function renderChartUI(){
   drawChart(cur);
 }
 function drawChart(name){
-  const logs=(exlog[name]||[]).slice().sort((a,b)=>a.date.localeCompare(b.date)).slice(-12);
+  const raw=(exlog[name]||[]).slice().sort((a,b)=>a.date.localeCompare(b.date)).slice(-12);
   const box=$('chartBox');
-  if(logs.length<2){ box.innerHTML='<div class="chart-empty">기록이 2회 이상 쌓이면 그래프가 그려져요. 지금 '+logs.length+'회 📈</div>'; return; }
+  if(raw.length<2){ box.innerHTML='<div class="chart-empty">기록이 2회 이상 쌓이면 그래프가 그려져요. 지금 '+raw.length+'회 📈</div>'; return; }
+  // 보조 운동은 실중량(몸무게-보조)로 변환해서 그림
+  const isA=raw.every(l=>l.u==='보조kg');
+  const logs=raw.map(l=>({date:l.date, w: isA&&l.bw? +(l.bw-l.w).toFixed(1) : l.w}));
+  const label=isA&&raw.every(l=>l.bw)?' (실중량)':(raw[0].u==='분'?' (분)':'');
   const W=340,H=150,P=28;
   const ws=logs.map(l=>l.w);
   const lo=Math.min(...ws), hi=Math.max(...ws);
@@ -1030,8 +1135,67 @@ function drawChart(name){
     <text x="${P}" y="${Y(hi)-8}" fill="#8A8F98" font-size="10">${hi}</text>
     <text x="${P}" y="${H-P+14}" fill="#8A8F98" font-size="9">${logs[0].date.slice(5)}</text>
     <text x="${W-P}" y="${H-P+14}" fill="#8A8F98" font-size="9" text-anchor="end">${logs[logs.length-1].date.slice(5)}</text>
-    <text x="${X(logs.length-1)}" y="${Y(ws[ws.length-1])-10}" fill="#F2F0EA" font-size="11" font-weight="bold" text-anchor="end">${ws[ws.length-1]}</text>
+    <text x="${X(logs.length-1)}" y="${Y(ws[ws.length-1])-10}" fill="#F2F0EA" font-size="11" font-weight="bold" text-anchor="end">${ws[ws.length-1]}${label}</text>
   </svg>`;
+}
+
+/* ---- 인바디 ---- */
+function renderInbody(){
+  const ib=(sGet('inbody')||[]).slice().sort((a,b)=>b.date.localeCompare(a.date));
+  const box=$('ibBox');
+  if(!ib.length){ box.innerHTML='<div class="chart-empty">인바디 결과를 기록하면 체중·골격근·체지방 변화를 추적해요 🧬</div>'; return; }
+  const d = (cur,prev,invert) => {
+    if(prev==null||cur==null) return '';
+    const diff=+(cur-prev).toFixed(1);
+    if(diff===0) return '';
+    const good = invert? diff<0 : diff>0;
+    return ` <b class="${good?'up':'dn'}">${diff>0?'+':''}${diff}</b>`;
+  };
+  box.innerHTML = ib.slice(0,5).map((r,i)=>{
+    const p=ib[i+1]||{};
+    return `<div style="font-size:12.5px;color:var(--sub);line-height:1.9"><b style="color:var(--ink)">${r.date}</b>
+      · 체중 <b style="color:var(--ink)">${r.w??'-'}</b>${d(r.w,p.w,true)}
+      · 골격근 <b style="color:var(--ink)">${r.m??'-'}</b>${d(r.m,p.m,false)}
+      · 체지방 <b style="color:var(--ink)">${r.f??'-'}%</b>${d(r.f,p.f,true)}</div>`;
+  }).join('');
+}
+function openIb(){
+  $('ibDate').value=todayStr();
+  $('ibW').value=''; $('ibM').value=''; $('ibF').value='';
+  $('modalBg').classList.add('show'); $('ibModal').classList.add('show');
+}
+function closeIb(){ $('ibModal').classList.remove('show'); }
+$('ibAdd').onclick=openIb;
+$('ibSave').onclick=()=>{
+  const date=$('ibDate').value||todayStr();
+  const w=parseFloat($('ibW').value)||null, m=parseFloat($('ibM').value)||null, f=parseFloat($('ibF').value)||null;
+  if(!w&&!m&&!f){ toast('한 가지 이상 입력해 주세요'); return; }
+  const ib=sGet('inbody')||[];
+  const j=ib.findIndex(r=>r.date===date);
+  const rec={date,w,m,f};
+  if(j>=0) ib[j]=rec; else ib.push(rec);
+  sSet('inbody',ib);
+  // 체중을 프로필에 동기화 (칼로리·실중량 계산 정확도 향상)
+  if(w){ const p=getProfile(); if(p){ p.w=w; sSet('profile',p); } }
+  closeIb(); $('modalBg').classList.remove('show');
+  renderInbody(); toast(f?'저장! 체지방률 반영 → 칼로리 정확도 업 🎯':'인바디 기록 저장 🧬'+(w?' (몸무게 동기화됨)':''));
+};
+
+/* ---- 일별 운동 상세 (기록 항목 탭) ---- */
+function dayDetail(date){
+  const items=[];
+  Object.entries(exlog).forEach(([name,logs])=>{
+    const l=logs.find(x=>x.date===date);
+    if(l&&l.sets.some(s=>s>0)) items.push({name,l});
+  });
+  if(!items.length) return '<div style="font-size:12px;color:var(--sub);margin-top:6px">세트 상세 기록이 없어요</div>';
+  return items.map(({name,l})=>{
+    const cells=l.sets.map((s,j)=>{
+      const w=(l.ws&&l.ws[j]!=null)?l.ws[j]:l.w;
+      return s===2?`<b style="color:var(--gold)">${w}⚡</b>`:(s===1?w:`<span style="opacity:.4">·</span>`);
+    }).join(' / ');
+    return `<div style="font-size:12px;color:var(--sub);margin-top:5px"><b style="color:var(--ink)">${name}</b> — ${cells} ${l.u||'kg'}</div>`;
+  }).join('');
 }
 
 /* ---- 백업 / 복원 ---- */
@@ -1166,12 +1330,23 @@ function closeProf(){ $('modalBg').classList.remove('show'); $('profModal').clas
 function drawSex(){
   $('pMale').classList.toggle('on',pSex==='m');
   $('pFemale').classList.toggle('on',pSex==='f');
+  renderBmr();
 }
+// 프로필 창의 기초대사량 표시 (입력값 기준 실시간 계산)
+function renderBmr(){
+  const h=parseFloat($('pHeight').value), w=parseFloat($('pWeight').value), age=parseInt($('pAge').value);
+  const box=$('pBmr');
+  if(!h||!w||!age){ box.innerHTML='키·몸무게·나이를 입력하면 <b style="font-size:12.5px;color:var(--ink)">1일 기초대사량</b>이 계산돼요'; return; }
+  const {bmr,src}=getBMR({h,w,age,sex:pSex});
+  const label = src==='inbody' ? '인바디 체성분 기반 (Katch-McArdle)' : '키·체중 기반 (Mifflin-St Jeor)';
+  box.innerHTML=`1일 기초대사량 <b>${Math.round(bmr).toLocaleString()}</b> kcal<br><span style="font-size:11px">${label} · 가만히 있어도 소모되는 양이에요</span>`;
+}
+['pHeight','pWeight','pAge'].forEach(id=>$(id).oninput=renderBmr);
 $('pMale').onclick=()=>{pSex='m';drawSex();};
 $('pFemale').onclick=()=>{pSex='f';drawSex();};
 $('profBtn').onclick=openProf;
 $('sugBtn').onclick=showExSug;
-$('modalBg').onclick=()=>{ closeProf(); closeBk(); $('modalBg').classList.remove('show'); };
+$('modalBg').onclick=()=>{ closeProf(); closeBk(); closeIb(); $('modalBg').classList.remove('show'); };
 $('kcalChip').onclick=()=>{ if(!getProfile()) openProf(); };
 $('pSave').onclick=()=>{
   const h=parseFloat($('pHeight').value), w=parseFloat($('pWeight').value), age=parseInt($('pAge').value);
@@ -1217,7 +1392,9 @@ function saveSession(){
         }
       }
     }
-    const rec={date, w:isFinite(topW)?topW:0, ws, sets:st.slice(), rep:parseInt(e.r)||10};
+    const rec={date, w:isFinite(topW)?topW:0, ws, sets:st.slice(), rep:parseInt(e.r)||10, u:e.u||'kg'};
+    if(assist){ const p=getProfile(); if(p&&p.w) rec.bw=p.w; }
+    if(e.u==='km/h'){ rec.inc=e.incline??2; rec.rm=e.roundMin??2; }
     if(j>=0) exlog[name][j]=rec; else exlog[name].push(rec);
     if(exlog[name].length>60) exlog[name]=exlog[name].slice(-60);
   });
@@ -1249,7 +1426,7 @@ $('vToday').onclick=()=>{ $('vToday').classList.add('on');$('vHist').classList.r
 $('vHist').onclick=()=>{ $('vHist').classList.add('on');$('vToday').classList.remove('on');$('histView').classList.remove('hidden');$('todayView').classList.add('hidden');$('bar').classList.add('hidden'); renderHistory(); };
 
 /* ---- init ---- */
-const APP_VER='v4.0';
+const APP_VER='v4.4';
 $('verTag').textContent=APP_VER;
 
 // 서비스 워커 등록 (오프라인 지원)
