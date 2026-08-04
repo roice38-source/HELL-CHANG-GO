@@ -56,12 +56,23 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
 .ex-goal{font-size:12px;color:var(--sub);margin-top:6px}
 .ex-goal b{color:var(--ink);font-weight:700}
 .ex-tip{font-size:12px;color:var(--sub);margin-top:6px;line-height:1.5;border-left:2px solid var(--line);padding-left:8px}
-.ex-body{display:flex;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap}
-.wt{display:flex;align-items:center;gap:6px;background:var(--card2);border-radius:10px;padding:6px 10px}
-.wt input{width:56px;background:transparent;border:0;color:var(--ink);font-size:16px;font-weight:800;text-align:right;outline:0;font-family:'Archivo',sans-serif}
-.wt .u{font-size:12px;color:var(--sub)}
-.rec-btn{border:1px solid var(--line);background:var(--card2);color:var(--sub);font-size:12px;font-weight:700;padding:9px 12px;border-radius:10px}
+.ex-body{display:flex;align-items:flex-start;gap:10px;margin-top:14px;flex-wrap:wrap}
+.act-col{display:flex;flex-direction:column;gap:6px}
+.rec-btn{border:1px solid var(--line);background:var(--card2);color:var(--sub);font-size:12px;font-weight:700;padding:9px 12px;border-radius:10px;white-space:nowrap}
+.cfg-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.cfg-row input{width:64px;background:var(--card);border:1px solid var(--line);border-radius:8px;color:var(--ink);font-size:14px;font-weight:800;text-align:center;padding:8px 4px;outline:0;font-family:'Archivo',sans-serif}
+.cfg-row button{border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:12px;font-weight:700;padding:9px 10px;border-radius:9px}
+.sug-btn{border:1px solid var(--line);background:var(--card);color:var(--sub);font-size:12px;font-weight:700;padding:6px 12px;border-radius:99px;white-space:nowrap}
+.sug-box{margin:10px 18px 0;background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px;font-size:12.5px;line-height:1.6}
+.sug-box b{color:var(--gold)}
+.sug-acts{display:flex;gap:8px;margin-top:8px}
+.sug-acts button{border:0;font-weight:800;font-size:12px;padding:8px 14px;border-radius:8px}
+.sug-add{background:var(--gold);color:#141619}
+.sug-next{background:var(--card);color:var(--sub);border:1px solid var(--line)!important}
+.unit-tag{font-size:11px;color:var(--sub);text-align:center;font-weight:700}
 .sets{display:flex;gap:8px;flex-wrap:wrap}
+.set-col{display:flex;flex-direction:column;align-items:center;gap:5px}
+.sw{width:46px;background:var(--card2);border:1px solid var(--line);border-radius:8px;color:var(--ink);font-size:13px;font-weight:800;text-align:center;padding:5px 2px;outline:0;font-family:'Archivo',sans-serif}
 .plate{width:42px;height:42px;border-radius:50%;border:2.5px solid var(--line);background:var(--card2);color:var(--sub);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;font-family:'Archivo',sans-serif;transition:transform .08s}
 .plate:active{transform:scale(.9)}
 .plate.done{color:#fff;border-color:transparent;box-shadow:inset 0 0 0 3px rgba(255,255,255,.18)}
@@ -147,9 +158,44 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
 .sex-sw button.on{background:var(--gold);color:#141619;border-color:transparent}
 .m-save{width:100%;padding:13px 0;border:0;border-radius:11px;background:var(--gold);color:#141619;font-weight:800;font-size:15px;margin-top:6px}
 .m-note{font-size:10.5px;color:var(--sub);line-height:1.5;margin-top:10px}
+
+/* 주간 리포트 */
+.wk-card{background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px;font-size:12.5px;line-height:1.7;color:var(--sub)}
+.wk-card h3{font-size:13px;color:var(--ink);font-weight:800;margin-bottom:4px}
+.wk-card b{color:var(--gold)}
+.up{color:#35A56B!important}.dn{color:#D64545!important}
+
+/* 그래프 카드 */
+.chart-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:12px}
+.chart-hd{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+.chart-hd select{background:var(--card2);border:1px solid var(--line);border-radius:8px;color:var(--ink);font-size:13px;font-weight:700;padding:7px 8px;outline:0;max-width:55%}
+.big3{font-size:11.5px;color:var(--sub);font-weight:700;text-align:right}
+.big3 b{color:var(--gold);font-family:'Archivo',sans-serif;font-size:15px}
+#chartBox svg{width:100%;height:150px;display:block}
+.chart-empty{color:var(--sub);font-size:12.5px;text-align:center;padding:24px 0}
+
+/* 백업 */
+.bk-row{display:flex;gap:8px;margin-top:4px}
+.bk-row button{flex:1;border:1px solid var(--line);background:var(--card);color:var(--sub);font-weight:700;font-size:13px;padding:12px 0;border-radius:11px}
+.bk-ta{width:100%;height:120px;background:var(--card2);border:1px solid var(--line);border-radius:9px;color:var(--ink);font-size:11px;padding:8px;outline:0;resize:none;font-family:monospace}
+
+/* 업데이트 배너 */
+.upd-banner{position:fixed;top:0;left:0;right:0;z-index:20;background:var(--gold);color:#141619;font-size:13px;font-weight:800;padding:12px 16px;display:none;align-items:center;justify-content:center;gap:12px}
+.upd-banner.show{display:flex}
+.upd-banner button{border:0;background:#141619;color:var(--gold);font-weight:800;font-size:12px;padding:7px 14px;border-radius:99px}
+
+/* 마지막 운동 안내 */
+.last-line{margin:8px 18px 0;font-size:12px;color:var(--sub)}
+.last-line b{color:var(--ink)}
+
+/* 편집 순서 이동 */
+.ef-move{display:flex;gap:6px;justify-content:flex-end;margin-bottom:-4px}
+.ef-move button{border:1px solid var(--line);background:var(--card2);color:var(--sub);font-size:13px;font-weight:800;width:34px;height:30px;border-radius:8px}
 </style>
 </head>
 <body class="d-push">
+
+<div class="upd-banner" id="updBanner"><span id="updMsg">새 버전이 있어요</span><button id="updGo">업데이트</button></div>
 
 <header>
   <h1>트레이닝 로그</h1>
@@ -165,25 +211,40 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
   <button id="vToday" class="on">오늘 운동</button>
   <button id="vHist">기록 보기</button>
 </div>
+<div class="last-line" id="lastLine"></div>
 
 <div id="todayView">
   <div class="tabs" id="tabs"></div>
   <div class="note-row">
     <div class="day-note" id="dayNote"></div>
+    <button class="sug-btn" id="sugBtn">💡 추천</button>
     <button class="edit-btn" id="editBtn">✎ 편집</button>
   </div>
+  <div id="sugSlot"></div>
   <div class="legend">세트 버튼: 한 번 탭 = 완료 · 두 번 탭 = <b>실패지점 ⚡</b> · 세 번 탭 = 해제</div>
   <div class="list" id="exList"></div>
 </div>
 
 <div id="histView" class="hidden">
   <div class="hist">
+    <div class="wk-card" id="wkCard"></div>
     <div class="h-sum">
       <div class="h-box"><div class="v" id="sTotal">0</div><div class="k">총 출석</div></div>
       <div class="h-box"><div class="v" id="sMonth">0</div><div class="k">이번 달</div></div>
       <div class="h-box"><div class="v" id="sWeek">0</div><div class="k">이번 주</div></div>
     </div>
+    <div class="chart-card">
+      <div class="chart-hd">
+        <select id="chartSel"></select>
+        <div class="big3" id="big3"></div>
+      </div>
+      <div id="chartBox"></div>
+    </div>
     <div id="histList"></div>
+    <div class="bk-row">
+      <button id="bkExport">📤 기록 백업</button>
+      <button id="bkImport">📥 복원</button>
+    </div>
   </div>
 </div>
 
@@ -221,6 +282,13 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
   <button id="tSkip">건너뛰기</button>
 </div>
 
+<div class="modal" id="bkModal">
+  <h2 id="bkTitle">기록 백업</h2>
+  <div class="m-sub" id="bkSub"></div>
+  <textarea class="bk-ta" id="bkTa"></textarea>
+  <button class="m-save" id="bkAction">복사하기</button>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -228,66 +296,194 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
 const EXLIB = [
   // 가슴
   ['바벨 벤치 프레스','가슴'],['인클라인 벤치 프레스','가슴'],['디클라인 벤치 프레스','가슴'],
-  ['덤벨 벤치 프레스','가슴'],['인클라인 덤벨 프레스','가슴'],['덤벨 플라이','가슴'],
-  ['인클라인 덤벨 플라이','가슴'],['케이블 크로스오버','가슴'],['펙덱 플라이','가슴'],
-  ['체스트 프레스 머신','가슴'],['딥스','가슴'],['푸시업','가슴'],
+  ['덤벨 벤치 프레스','가슴'],['인클라인 덤벨 프레스','가슴'],['디클라인 덤벨 프레스','가슴'],
+  ['덤벨 플라이','가슴'],['인클라인 덤벨 플라이','가슴'],['케이블 크로스오버','가슴'],
+  ['로우 케이블 크로스오버','가슴'],['펙덱 플라이','가슴'],['체스트 프레스 머신','가슴'],
+  ['인클라인 체스트 프레스 머신','가슴'],['스미스 벤치 프레스','가슴'],['스미스 인클라인 프레스','가슴'],
+  ['딥스','가슴'],['푸시업','가슴'],['디클라인 푸시업','가슴'],
   // 어깨
   ['바벨 오버헤드 프레스','어깨'],['밀리터리 프레스','어깨'],['덤벨 숄더 프레스','어깨'],
-  ['아놀드 프레스','어깨'],['숄더 프레스 머신','어깨'],['사이드 레터럴 레이즈','어깨'],
-  ['케이블 레터럴 레이즈','어깨'],['프론트 레이즈','어깨'],['벤트오버 레터럴 레이즈','어깨'],
-  ['리어 델트 플라이','어깨'],['리어 델트 머신','어깨'],['페이스 풀','어깨'],['업라이트 로우','어깨'],
+  ['시티드 덤벨 프레스','어깨'],['아놀드 프레스','어깨'],['숄더 프레스 머신','어깨'],
+  ['스미스 숄더 프레스','어깨'],['비하인드 넥 프레스','어깨'],['사이드 레터럴 레이즈','어깨'],
+  ['케이블 레터럴 레이즈','어깨'],['머신 레터럴 레이즈','어깨'],['프론트 레이즈','어깨'],
+  ['플레이트 프론트 레이즈','어깨'],['벤트오버 레터럴 레이즈','어깨'],['리어 델트 플라이','어깨'],
+  ['리어 델트 머신','어깨'],['페이스 풀','어깨'],['업라이트 로우','어깨'],['케이블 업라이트 로우','어깨'],
   // 등
   ['컨벤셔널 데드리프트','등'],['루마니안 데드리프트','등'],['스모 데드리프트','등'],
-  ['바벨 로우','등'],['펜들레이 로우','등'],['덤벨 로우','등'],['원암 덤벨 로우','등'],
-  ['시티드 케이블 로우','등'],['티바 로우','등'],['랫 풀 다운','등'],['풀업','등'],['친업','등'],
-  ['스트레이트암 풀다운','등'],['백 익스텐션','등'],['쉬러그','등'],
+  ['트랩바 데드리프트','등'],['랙풀','등'],['바벨 로우','등'],['펜들레이 로우','등'],
+  ['언더그립 바벨 로우','등'],['덤벨 로우','등'],['원암 덤벨 로우','등'],['체스트 서포티드 로우','등'],
+  ['시티드 케이블 로우','등'],['와이드그립 시티드 로우','등'],['티바 로우','등'],['머신 로우','등'],
+  ['하이 로우 머신','등'],['랫 풀 다운','등'],['클로즈그립 랫풀다운','등'],['비하인드넥 랫풀다운','등'],
+  ['풀업','등'],['친업','등'],['어시스트 풀업 머신','등'],['스트레이트암 풀다운','등'],
+  ['케이블 풀오버','등'],['덤벨 풀오버','등'],['백 익스텐션','등'],['쉬러그','등'],['덤벨 쉬러그','등'],
   // 이두
   ['덤벨 컬','이두'],['바벨 컬','이두'],['이지바 컬','이두'],['해머 컬','이두'],
-  ['인클라인 덤벨 컬','이두'],['케이블 컬','이두'],['프리처 컬','이두'],['컨센트레이션 컬','이두'],
+  ['크로스바디 해머 컬','이두'],['인클라인 덤벨 컬','이두'],['케이블 컬','이두'],['로프 해머 컬','이두'],
+  ['프리처 컬','이두'],['머신 컬','이두'],['컨센트레이션 컬','이두'],['스파이더 컬','이두'],['리버스 컬','이두'],
   // 삼두
-  ['케이블 푸시다운','삼두'],['오버헤드 익스텐션','삼두'],['라잉 트라이셉스 익스텐션','삼두'],
-  ['클로즈그립 벤치 프레스','삼두'],['트라이셉스 킥백','삼두'],
+  ['케이블 푸시다운','삼두'],['로프 푸시다운','삼두'],['오버헤드 익스텐션','삼두'],
+  ['케이블 오버헤드 익스텐션','삼두'],['라잉 트라이셉스 익스텐션','삼두'],['스컬크러셔','삼두'],
+  ['클로즈그립 벤치 프레스','삼두'],['트라이셉스 킥백','삼두'],['벤치 딥스','삼두'],['딥스 머신','삼두'],
   // 하체
-  ['바벨 백 스쿼트','하체'],['프론트 스쿼트','하체'],['고블릿 스쿼트','하체'],['핵 스쿼트','하체'],
-  ['레그 프레스','하체'],['레그 익스텐션','하체'],['레그 컬','하체'],['런지','하체'],
-  ['불가리안 스플릿 스쿼트','하체'],['힙 쓰러스트','하체'],['스티프 레그 데드리프트','하체'],
-  ['카프 레이즈','하체'],['이너타이 머신','하체'],['아웃타이 머신','하체'],
+  ['바벨 백 스쿼트','하체'],['프론트 스쿼트','하체'],['고블릿 스쿼트','하체'],['스미스 스쿼트','하체'],
+  ['핵 스쿼트','하체'],['펜듈럼 스쿼트','하체'],['레그 프레스','하체'],['수직 레그 프레스','하체'],
+  ['레그 익스텐션','하체'],['레그 컬','하체'],['시티드 레그 컬','하체'],['런지','하체'],
+  ['워킹 런지','하체'],['덤벨 런지','하체'],['불가리안 스플릿 스쿼트','하체'],['스텝업','하체'],
+  ['힙 쓰러스트','하체'],['글루트 브릿지','하체'],['케이블 킥백','하체'],['스티프 레그 데드리프트','하체'],
+  ['카프 레이즈','하체'],['시티드 카프 레이즈','하체'],['이너타이 머신','하체'],['아웃타이 머신','하체'],
+  ['박스 점프','하체'],
   // 코어
-  ['플랭크','코어'],['크런치','코어'],['레그 레이즈','코어'],['행잉 레그 레이즈','코어'],
-  ['케이블 크런치','코어'],['러시안 트위스트','코어'],['앱 롤아웃','코어'],
+  ['플랭크','코어'],['사이드 플랭크','코어'],['크런치','코어'],['바이시클 크런치','코어'],
+  ['레그 레이즈','코어'],['행잉 레그 레이즈','코어'],['행잉 니 레이즈','코어'],['케이블 크런치','코어'],
+  ['러시안 트위스트','코어'],['앱 롤아웃','코어'],['마운틴 클라이머','코어'],['V업','코어'],['데드버그','코어'],
 ];
+// 검색용 별칭 (영문/줄임말 → 매칭 강화)
+const EXALIAS = {
+  '바벨 벤치 프레스':'벤치 벤프 bench bp 플랫',
+  '인클라인 벤치 프레스':'인벤 incline',
+  '덤벨 벤치 프레스':'덤벤 db bench',
+  '인클라인 덤벨 프레스':'인덤 incline dumbbell',
+  '바벨 오버헤드 프레스':'ohp 오버헤드 숄프 밀프 overhead',
+  '밀리터리 프레스':'밀프 military',
+  '덤벨 숄더 프레스':'숄프 shoulder press',
+  '사이드 레터럴 레이즈':'사레레 레터럴 lateral 사이드',
+  '벤트오버 레터럴 레이즈':'벤트레터럴 리어',
+  '페이스 풀':'페풀 facepull face pull',
+  '컨벤셔널 데드리프트':'데드 dl deadlift 컨데드',
+  '루마니안 데드리프트':'루데드 rdl romanian',
+  '스모 데드리프트':'스모 sumo',
+  '바벨 로우':'바로우 bb row 벤트오버로우',
+  '펜들레이 로우':'펜들레이 pendlay',
+  '시티드 케이블 로우':'시티드로우 케이블로우 seated row',
+  '랫 풀 다운':'랫풀 랫풀다운 lat pulldown',
+  '풀업':'턱걸이 pullup pull up',
+  '친업':'chinup 언더그립풀업',
+  '어시스트 풀업 머신':'어시스트 보조풀업',
+  '덤벨 컬':'덤컬 db curl',
+  '바벨 컬':'바컬 bb curl',
+  '해머 컬':'해머 hammer',
+  '케이블 푸시다운':'푸시다운 pushdown 트라이셉스',
+  '스컬크러셔':'skull 라잉익스텐션',
+  '바벨 백 스쿼트':'스쿼트 백스쿼트 squat 스콰트',
+  '프론트 스쿼트':'프스 front squat',
+  '레그 프레스':'렉프레스 leg press',
+  '레그 익스텐션':'렉스텐션 extension',
+  '레그 컬':'렉컬 leg curl 햄컬',
+  '불가리안 스플릿 스쿼트':'불가리안 bss 스플릿',
+  '힙 쓰러스트':'힙쓰 hip thrust',
+  '카프 레이즈':'카프 종아리 calf',
+  '스티프 레그 데드리프트':'스티프 sldl',
+  '행잉 레그 레이즈':'행레레 hanging',
+  '딥스':'dips 딥',
+};
+
+// ===== 운동 → 자극 부위 태그 (운동추천용) =====
+const MTAG = {
+  '바벨 벤치 프레스':['가슴중','삼두'],'인클라인 벤치 프레스':['가슴상'],'디클라인 벤치 프레스':['가슴하'],
+  '덤벨 벤치 프레스':['가슴중'],'인클라인 덤벨 프레스':['가슴상','어깨전'],'덤벨 플라이':['가슴중'],
+  '인클라인 덤벨 플라이':['가슴상'],'케이블 크로스오버':['가슴중','가슴하'],'펙덱 플라이':['가슴중'],
+  '체스트 프레스 머신':['가슴중'],'딥스':['가슴하','삼두'],'푸시업':['가슴중'],
+  '바벨 오버헤드 프레스':['어깨전','삼두'],'밀리터리 프레스':['어깨전'],'덤벨 숄더 프레스':['어깨전'],
+  '아놀드 프레스':['어깨전','어깨측'],'숄더 프레스 머신':['어깨전'],'사이드 레터럴 레이즈':['어깨측'],
+  '케이블 레터럴 레이즈':['어깨측'],'프론트 레이즈':['어깨전'],'벤트오버 레터럴 레이즈':['어깨후'],
+  '리어 델트 플라이':['어깨후'],'리어 델트 머신':['어깨후'],'페이스 풀':['어깨후','승모'],'업라이트 로우':['어깨측','승모'],
+  '컨벤셔널 데드리프트':['등하부','햄','둔근'],'루마니안 데드리프트':['햄','둔근','등하부'],'스모 데드리프트':['햄','둔근'],
+  '바벨 로우':['등두께'],'펜들레이 로우':['등두께'],'덤벨 로우':['등두께'],'원암 덤벨 로우':['등두께'],
+  '시티드 케이블 로우':['등두께'],'티바 로우':['등두께'],'랫 풀 다운':['광배'],'풀업':['광배'],'친업':['광배','이두'],
+  '스트레이트암 풀다운':['광배'],'백 익스텐션':['등하부'],'쉬러그':['승모'],
+  '덤벨 컬':['이두'],'바벨 컬':['이두'],'이지바 컬':['이두'],'해머 컬':['이두','전완'],
+  '인클라인 덤벨 컬':['이두'],'케이블 컬':['이두'],'프리처 컬':['이두'],'컨센트레이션 컬':['이두'],
+  '케이블 푸시다운':['삼두'],'오버헤드 익스텐션':['삼두'],'라잉 트라이셉스 익스텐션':['삼두'],
+  '클로즈그립 벤치 프레스':['삼두'],'트라이셉스 킥백':['삼두'],
+  '바벨 백 스쿼트':['사두','둔근'],'프론트 스쿼트':['사두'],'고블릿 스쿼트':['사두'],'핵 스쿼트':['사두'],
+  '레그 프레스':['사두','둔근'],'레그 익스텐션':['사두'],'레그 컬':['햄'],'런지':['사두','둔근'],
+  '불가리안 스플릿 스쿼트':['사두','둔근'],'힙 쓰러스트':['둔근'],'스티프 레그 데드리프트':['햄'],
+  '카프 레이즈':['종아리'],'이너타이 머신':['내전근'],'아웃타이 머신':['둔근'],
+  '플랭크':['코어'],'사이드 플랭크':['코어'],'크런치':['코어'],'바이시클 크런치':['코어'],
+  '레그 레이즈':['코어'],'행잉 레그 레이즈':['코어'],'행잉 니 레이즈':['코어'],
+  '케이블 크런치':['코어'],'러시안 트위스트':['코어'],'앱 롤아웃':['코어'],'마운틴 클라이머':['코어'],
+  'V업':['코어'],'데드버그':['코어'],
+  // 확장 운동 태그
+  '디클라인 덤벨 프레스':['가슴하'],'로우 케이블 크로스오버':['가슴상'],
+  '인클라인 체스트 프레스 머신':['가슴상'],'스미스 벤치 프레스':['가슴중'],'스미스 인클라인 프레스':['가슴상'],
+  '디클라인 푸시업':['가슴상'],'시티드 덤벨 프레스':['어깨전'],'스미스 숄더 프레스':['어깨전'],
+  '비하인드 넥 프레스':['어깨전','어깨측'],'머신 레터럴 레이즈':['어깨측'],'플레이트 프론트 레이즈':['어깨전'],
+  '케이블 업라이트 로우':['어깨측','승모'],
+  '트랩바 데드리프트':['등하부','사두','둔근'],'랙풀':['등하부','승모'],'언더그립 바벨 로우':['등두께','이두'],
+  '체스트 서포티드 로우':['등두께'],'와이드그립 시티드 로우':['등두께'],'머신 로우':['등두께'],
+  '하이 로우 머신':['광배','등두께'],'클로즈그립 랫풀다운':['광배'],'비하인드넥 랫풀다운':['광배'],
+  '어시스트 풀업 머신':['광배'],'케이블 풀오버':['광배'],'덤벨 풀오버':['광배','가슴중'],'덤벨 쉬러그':['승모'],
+  '크로스바디 해머 컬':['이두','전완'],'로프 해머 컬':['이두','전완'],'머신 컬':['이두'],
+  '스파이더 컬':['이두'],'리버스 컬':['전완','이두'],
+  '로프 푸시다운':['삼두'],'케이블 오버헤드 익스텐션':['삼두'],'스컬크러셔':['삼두'],
+  '벤치 딥스':['삼두'],'딥스 머신':['삼두','가슴하'],
+  '스미스 스쿼트':['사두','둔근'],'펜듈럼 스쿼트':['사두'],'수직 레그 프레스':['사두','둔근'],
+  '시티드 레그 컬':['햄'],'워킹 런지':['사두','둔근'],'덤벨 런지':['사두','둔근'],'스텝업':['사두','둔근'],
+  '글루트 브릿지':['둔근'],'케이블 킥백':['둔근'],'시티드 카프 레이즈':['종아리'],'박스 점프':['사두','둔근'],
+};
+// 부위별로 채우면 좋은 자극 (우선순위 순) — [태그, 설명, 추천 횟수, 고반복 여부]
+const DESIRE = {
+  push:[['가슴중','가슴 중부(전체 볼륨)','8회'],['가슴상','윗가슴(어깨 프레임 라인)','8~10회'],
+        ['어깨측','어깨 측면(어깨 넓이)','15회',1],['가슴하','아랫가슴(가슴 마무리 라인)','8~10회'],
+        ['어깨후','어깨 후면(직각 어깨)','15회',1],['삼두','삼두(팔 뒷면, 프레스 보조)','10회'],['어깨전','어깨 전면','8회']],
+  pull:[['광배','광배(등 너비)','8~10회'],['등두께','등 중앙(두께)','8회'],['등하부','등 하부/후면 사슬','5회'],
+        ['이두','이두','8회'],['승모','승모(목-어깨 라인)','12회',1],['전완','전완(그립력)','10회']],
+  legs:[['사두','대퇴사두(허벅지 앞)','8회'],['햄','햄스트링(허벅지 뒤)','10회'],['둔근','둔근(엉덩이 파워)','10회'],
+        ['종아리','종아리','15회',1],['코어','코어','15회',1]]
+};
 
 const DEFAULT_PLAN = {
   push: { label:'가슴/어깨',
     note:'가슴 메인 + 어깨 측면 볼륨. ★사이드 레터럴 마지막 세트는 무게 낮춰 실패 지점까지.',
     ex:[
-      {n:'바벨 벤치 프레스', s:4, r:'5회', w:60, u:'kg', goal:65, tip:'양쪽 1.25kg 원판씩 미세 증량'},
-      {n:'인클라인 덤벨 프레스', s:3, r:'8회', w:18, u:'kg×2', goal:20, tip:'윗가슴-전면어깨 라인, 넓은 가동범위'},
-      {n:'바벨 오버헤드 프레스', s:3, r:'6회', w:30, u:'kg', goal:40, tip:'머신 익숙해지면 프리웨이트(바벨) 전환'},
-      {n:'★사이드 레터럴 레이즈', s:4, r:'15회', w:6, u:'kg×2', goal:8, tip:'측면 삼각근 쥐어짜기, 막세트 드롭'},
+      {n:'바벨 벤치 프레스', s:4, rest:120, r:'5회', w:60, u:'kg', goal:65, tip:'양쪽 1.25kg 원판씩 미세 증량'},
+      {n:'인클라인 덤벨 프레스', s:3, rest:90, r:'8회', w:18, u:'kg×2', goal:20, tip:'윗가슴-전면어깨 라인, 넓은 가동범위'},
+      {n:'바벨 오버헤드 프레스', s:3, rest:90, r:'6회', w:30, u:'kg', goal:40, tip:'머신 익숙해지면 프리웨이트(바벨) 전환'},
+      {n:'★사이드 레터럴 레이즈', s:4, rest:60, r:'15회', w:6, u:'kg×2', goal:8, tip:'측면 삼각근 쥐어짜기, 막세트 드롭'},
     ]},
   pull: { label:'등/이두',
     note:'광배 너비(랫풀다운) + 등 두께(바벨로우) 동시 공략. 데드리프트는 스트랩 착용.',
     ex:[
-      {n:'컨벤셔널 데드리프트', s:3, r:'5회', w:90, u:'kg', goal:100, tip:'100kg 도전, 스트랩 필수'},
-      {n:'★바벨 로우', s:3, r:'6~8회', w:50, u:'kg', goal:55, tip:'코어 고정, 배꼽 쪽으로 묵직하게'},
-      {n:'★랫 풀 다운', s:4, r:'8~10회', w:45, u:'kg', goal:55, tip:'이완 시 광배 늘어나는 느낌 끝까지'},
-      {n:'덤벨 컬', s:3, r:'8회', w:12, u:'kg', goal:14, tip:'반동 없이 이두 힘으로만'},
-      {n:'해머 컬', s:3, r:'10회', w:8, u:'kg', goal:'', tip:'전완 두께, 무게 유지'},
+      {n:'컨벤셔널 데드리프트', s:3, rest:180, r:'5회', w:90, u:'kg', goal:100, tip:'100kg 도전, 스트랩 필수'},
+      {n:'★바벨 로우', s:3, rest:90, r:'6~8회', w:50, u:'kg', goal:55, tip:'코어 고정, 배꼽 쪽으로 묵직하게'},
+      {n:'★랫 풀 다운', s:4, rest:90, r:'8~10회', w:45, u:'kg', goal:55, tip:'이완 시 광배 늘어나는 느낌 끝까지'},
+      {n:'덤벨 컬', s:3, rest:60, r:'8회', w:12, u:'kg', goal:14, tip:'반동 없이 이두 힘으로만'},
+      {n:'해머 컬', s:3, rest:60, r:'10회', w:8, u:'kg', goal:'', tip:'전완 두께, 무게 유지'},
     ]},
   legs: { label:'하체/후면',
     note:'하체 대근육 후 등 상부·어깨 후면 한 번 더. 상체 프레임을 바꾸는 핵심 날.',
     ex:[
-      {n:'바벨 백 스쿼트', s:4, r:'5회', w:100, u:'kg', goal:105, tip:'무릎/허리 보호대 착용'},
-      {n:'레그 프레스', s:3, r:'8회', w:100, u:'kg', goal:140, tip:'메인 스쿼트 후 밀어붙이기'},
-      {n:'★시티드 케이블 로우', s:3, r:'10회', w:40, u:'kg', goal:45, tip:'견갑을 강하게 접어 등 중앙 조이기'},
-      {n:'★페이스 풀', s:3, r:'15회', w:15, u:'kg', goal:20, tip:'직각 어깨 + 라운드숄더 교정'},
+      {n:'바벨 백 스쿼트', s:4, rest:180, r:'5회', w:100, u:'kg', goal:105, tip:'무릎/허리 보호대 착용'},
+      {n:'레그 프레스', s:3, rest:90, r:'8회', w:100, u:'kg', goal:140, tip:'메인 스쿼트 후 밀어붙이기'},
+      {n:'★시티드 케이블 로우', s:3, rest:90, r:'10회', w:40, u:'kg', goal:45, tip:'견갑을 강하게 접어 등 중앙 조이기'},
+      {n:'★페이스 풀', s:3, rest:60, r:'15회', w:15, u:'kg', goal:20, tip:'직각 어깨 + 라운드숄더 교정'},
     ]}
 };
 
 const $ = id => document.getElementById(id);
 const todayStr = () => { const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
 const cleanName = n => String(n||'').replace(/^★/,'').trim();
+
+// 바벨 운동 판별 (원판 2.5/5/10/20 + 빈 봉 20kg 제약 적용 대상)
+const BARBELL_EX = new Set(['컨벤셔널 데드리프트','루마니안 데드리프트','스모 데드리프트','펜들레이 로우','프론트 스쿼트','밀리터리 프레스','클로즈그립 벤치 프레스','인클라인 벤치 프레스','디클라인 벤치 프레스','티바 로우']);
+const isBarbell = (name,u) => (u||'kg')==='kg' && (name.includes('바벨')||BARBELL_EX.has(name));
+// 봉 20kg + 한쪽 원판(2.5 최소) 페어 → 5kg 단위, 최소 20kg
+const barbellRound = v => Math.max(20, 20 + Math.round((v-20)/5)*5);
+// 한쪽에 꽂을 원판 조합 (큰 것부터)
+function plateBreak(total){
+  let per=(total-20)/2;
+  if(per<0) return null;
+  if(per===0) return '빈 봉';
+  const out=[];
+  for(const p of [20,10,5,2.5]){
+    const c=Math.floor(per/p+1e-9);
+    if(c>0){ out.push(c>1?`${p}×${c}`:`${p}`); per=+(per-p*c).toFixed(2); }
+  }
+  return per>0?null:'한쪽 '+out.join(' + ');
+}
+// 서포트 머신(보조) 운동 — 무게가 낮을수록 어려움
+const ASSIST_EX = new Set(['딥스','풀업','친업']);
+const isAssist = u => u==='보조kg';
 
 let plan, curPart='push', session=null, index=[], exlog={}, editMode=false, saveTimer=null;
 
@@ -297,19 +493,27 @@ function sSet(k,v){ try{ localStorage.setItem('wlog:'+k, JSON.stringify(v)); }ca
 
 /* ---- session ---- */
 function defaultSession(part){
-  return { part, sets: plan[part].ex.map(e=>Array(e.s).fill(0)), weights: plan[part].ex.map(e=>e.w), done:false };
+  return { part, sets: plan[part].ex.map(e=>Array(e.s).fill(0)), weights: plan[part].ex.map(e=>Array(e.s).fill(e.w)), done:false };
 }
-// 구버전(boolean) 데이터 → 숫자 상태(0/1/2) 변환 + 계획 편집 반영
+// 구버전 데이터 마이그레이션: boolean 세트 → 0/1/2, 단일 중량 → 세트별 배열
 function syncSession(){
   const exs=plan[curPart].ex;
-  while(session.sets.length<exs.length){ session.sets.push([]); session.weights.push(0); }
+  while(session.sets.length<exs.length){ session.sets.push([]); session.weights.push([]); }
   session.sets.length=exs.length; session.weights.length=exs.length;
   exs.forEach((e,i)=>{
     if(!Array.isArray(session.sets[i])) session.sets[i]=[];
     session.sets[i]=session.sets[i].map(v=>v===true?1:(v===false?0:(v||0)));
     while(session.sets[i].length<e.s) session.sets[i].push(0);
     session.sets[i].length=e.s;
-    if(session.weights[i]==null||isNaN(session.weights[i])) session.weights[i]=e.w;
+    // 중량: 숫자(구버전) → 배열
+    if(typeof session.weights[i]==='number'||session.weights[i]==null){
+      const v=(typeof session.weights[i]==='number')?session.weights[i]:e.w;
+      session.weights[i]=Array(e.s).fill(v);
+    }
+    if(!Array.isArray(session.weights[i])) session.weights[i]=Array(e.s).fill(e.w);
+    const lastW=session.weights[i].length?session.weights[i][session.weights[i].length-1]:e.w;
+    while(session.weights[i].length<e.s) session.weights[i].push(lastW);
+    session.weights[i].length=e.s;
   });
 }
 
@@ -332,7 +536,10 @@ function renderExercises(){
     const star = e.n.startsWith('★');
     const name = cleanName(e.n);
     const plates = session.sets[i].map((v,j)=>
-      `<button class="plate ${plateClass(v)}" data-e="${i}" data-s="${j}">${plateLabel(v,j)}</button>`).join('');
+      `<div class="set-col">
+        <button class="plate ${plateClass(v)}" data-e="${i}" data-s="${j}">${plateLabel(v,j)}</button>
+        <input class="sw" type="number" inputmode="decimal" step="0.5" value="${session.weights[i][j]}" data-we="${i}" data-ws="${j}">
+      </div>`).join('');
     return `<div class="ex">
       <div class="ex-hd">
         <div class="ex-name">${star?'<span class="star">★</span>':''}${esc(name)}</div>
@@ -341,8 +548,11 @@ function renderExercises(){
       ${e.goal!==''&&e.goal!=null?`<div class="ex-goal">목표: <b>${esc(e.goal)}${esc(e.u||'kg')}</b></div>`:''}
       ${e.tip?`<div class="ex-tip">${esc(e.tip)}</div>`:''}
       <div class="ex-body">
-        <div class="wt"><input type="number" inputmode="decimal" step="0.5" value="${session.weights[i]}" data-w="${i}"><span class="u">${esc(e.u||'kg')}</span></div>
-        <button class="rec-btn" data-rec="${i}">📊 추천</button>
+        <div class="act-col">
+          <button class="rec-btn" data-rec="${i}">📊 추천</button>
+          <button class="rec-btn" data-cfg="${i}">⚙ 구성</button>
+          <div class="unit-tag">${esc(e.u||'kg')}</div>
+        </div>
         <div class="sets">${plates}</div>
       </div>
       <div class="rec-slot" id="recSlot${i}"></div>
@@ -354,16 +564,123 @@ function renderExercises(){
     const cur=session.sets[e][s];
     const next=(cur+1)%3; // 0→1(완료)→2(실패)→0
     session.sets[e][s]=next;
+    if(next>0){ if(!session.t0) session.t0=Date.now(); session.t1=Date.now(); }
     b.className='plate '+plateClass(next);
     b.textContent=plateLabel(next,s);
-    if(next===1) startTimer(60);
+    if(next===1) startTimer(plan[curPart].ex[e].rest||60);
     updateCount(); queueSave();
   });
-  document.querySelectorAll('.wt input').forEach(inp=>inp.onchange=()=>{
-    session.weights[+inp.dataset.w]=parseFloat(inp.value)||0; queueSave();
+  document.querySelectorAll('.sw').forEach(inp=>inp.onchange=()=>{
+    const e=+inp.dataset.we, s=+inp.dataset.ws;
+    const v=parseFloat(inp.value)||0;
+    session.weights[e][s]=v;
+    // 1세트 값을 바꾸면 아직 시작 안 한(미완료) 뒷세트에 자동 반영
+    if(s===0){
+      for(let j=1;j<session.weights[e].length;j++){
+        if(session.sets[e][j]===0){
+          session.weights[e][j]=v;
+          const el=document.querySelector(`.sw[data-we="${e}"][data-ws="${j}"]`);
+          if(el) el.value=v;
+        }
+      }
+    }
+    queueSave();
   });
   document.querySelectorAll('[data-rec]').forEach(b=>b.onclick=()=>showRec(+b.dataset.rec));
+  document.querySelectorAll('[data-cfg]').forEach(b=>b.onclick=()=>showCfg(+b.dataset.cfg));
+  document.querySelectorAll('.ex-name').forEach((el,i)=>el.onclick=()=>showExHist(i));
   updateCount(); renderDoneBtn();
+}
+
+/* ---- 운동 이름 탭 → 지난 기록 상세 ---- */
+function showExHist(i){
+  const slot=$('recSlot'+i);
+  if(slot.innerHTML){ slot.innerHTML=''; return; }
+  const e=plan[curPart].ex[i];
+  const name=cleanName(e.n);
+  const logs=(exlog[name]||[]).slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5);
+  if(!logs.length){
+    slot.innerHTML=`<div class="rec-box"><div class="msg">아직 저장된 기록이 없어요. 오늘 세트를 체크하면 기록이 쌓입니다.</div></div>`;
+    return;
+  }
+  const rows=logs.map(l=>{
+    const cells=l.sets.map((s,j)=>{
+      const w=(l.ws&&l.ws[j]!=null)?l.ws[j]:l.w;
+      return s===2?`<b style="color:var(--gold)">${w}⚡</b>`:(s===1?`${w}`:`<span style="opacity:.4">${w}·미수행</span>`);
+    }).join(' / ');
+    return `<div style="margin-top:6px"><b style="color:var(--ink)">${l.date}</b> · ${cells} ${e.u||'kg'}</div>`;
+  }).join('');
+  slot.innerHTML=`<div class="rec-box"><div class="msg"><b>${esc(name)}</b> 최근 기록${rows}</div></div>`;
+}
+
+/* ---- 세트 구성 자동 계산 (램프업/동일/백오프) ---- */
+function roundStep(v, top, opt){
+  if(opt&&opt.barbell) return barbellRound(v);
+  if(opt&&opt.assist) return Math.max(0, Math.round(v/5)*5);
+  const step = top>=40?2.5:(top>=10?1:0.5);
+  return Math.max(0, Math.round(v/step)*step);
+}
+function showCfg(i){
+  const slot=$('recSlot'+i);
+  if(slot.innerHTML){ slot.innerHTML=''; return; }
+  const e=plan[curPart].ex[i];
+  const u=e.u||'kg';
+  const assist=isAssist(u);
+  const barbell=isBarbell(cleanName(e.n),u);
+  const arr=session.weights[i];
+  const curTop=(assist? Math.min(...arr) : Math.max(...arr,0))||e.w||0;
+  slot.innerHTML=`<div class="rec-box"><div class="msg" style="width:100%">
+    <div style="margin-bottom:8px">${assist?'탑세트(가장 어려운 세트)의 <b>최소 보조</b> 무게를 넣으세요. 보조가 낮을수록 어려워요.':'오늘의 탑세트(최대) 중량을 넣고 방식을 고르세요.'}</div>
+    <div class="cfg-row">
+      <input type="number" inputmode="decimal" step="0.5" id="cfgTop${i}" value="${isFinite(curTop)?curTop:0}">
+      <span style="font-size:11px;color:var(--sub)">${esc(u)}</span>
+      <button data-mode="ramp">📈 램프업</button>
+      <button data-mode="same">＝ 동일</button>
+      <button data-mode="back">📉 백오프</button>
+    </div>
+    ${barbell?`<div id="cfgPlate${i}" style="margin-top:8px;font-size:11.5px;color:var(--sub)"></div>`:''}
+  </div></div>`;
+  const inp=$('cfgTop'+i);
+  if(barbell){
+    const showPlate=()=>{
+      const v=barbellRound(parseFloat(inp.value)||20);
+      $('cfgPlate'+i).innerHTML=`원판 기준 <b style="color:var(--ink)">${v}kg</b> → ${plateBreak(v)||'조합 불가'} <span style="opacity:.7">(원판 2.5/5/10/20 · 봉 20kg)</span>`;
+    };
+    inp.oninput=showPlate; showPlate();
+  }
+  slot.querySelectorAll('[data-mode]').forEach(btn=>btn.onclick=()=>{
+    let top=parseFloat(inp.value)||0;
+    if(!top&&!assist){ toast('탑세트 중량을 입력해 주세요'); return; }
+    const opt={barbell,assist};
+    if(barbell) top=barbellRound(top);
+    if(assist) top=Math.max(0,Math.round(top/5)*5);
+    const n=arr.length;
+    let ws;
+    if(btn.dataset.mode==='same'){
+      ws=Array(n).fill(top);
+    }else if(btn.dataset.mode==='ramp'){
+      if(assist){
+        // 보조: 처음엔 보조 많이(쉽게) → 탑세트에서 최소 보조
+        ws=Array.from({length:n},(_,j)=> top + 5*(n-1-j));
+      }else{
+        ws=Array.from({length:n},(_,j)=> n===1?top : roundStep(top*(0.7+0.3*j/(n-1)), top, opt));
+        ws[n-1]=top;
+      }
+    }else{
+      if(assist){
+        // 보조 백오프: 탑 유지하다 막세트만 보조 +5 (실패 방지)
+        ws=Array(n).fill(top);
+        if(n>=2) ws[n-1]=top+5;
+      }else{
+        ws=Array(n).fill(top);
+        if(n>=2) ws[n-1]=roundStep(top*0.9, top, opt);
+      }
+    }
+    session.weights[i]=ws;
+    queueSave(); slot.innerHTML='';
+    renderExercises();
+    toast(btn.dataset.mode==='ramp'?'램프업 구성 적용 📈':btn.dataset.mode==='back'?'백오프 구성 적용 📉':'전 세트 동일 적용');
+  });
 }
 
 /* ---- 중량/횟수 추천 ---- */
@@ -379,44 +696,60 @@ function showRec(i){
     return;
   }
   const u=e.u||'kg';
+  const name2=cleanName(e.n);
+  const assist=isAssist(u);
+  const barbell=isBarbell(name2,u);
   const last=logs[0];
   const total=last.sets.length;
   const doneCnt=last.sets.filter(s=>s>0).length;
   const failIdx=last.sets.findIndex(s=>s===2);
+  // 탑세트: 일반 운동은 최고 중량, 보조 운동은 최소 보조(가장 어려운 세트)
   const w=last.w||0;
-  const inc = w>=40?2.5:(w>=10?1:0.5);
+  const inc = barbell?5:(assist?5:(w>=40?2.5:(w>=10?1:0.5)));
+  const fit = v => barbell?barbellRound(v):Math.max(0,v);
   const isClean = l => !l.sets.includes(2) && l.sets.every(s=>s>0);
-  // 최근부터 같은 무게로 연속 무실패(전 세트 완수) 횟수
   let streak=0;
   for(const l of logs){
     if(l.w===w && isClean(l)) streak++;
     else break;
   }
   let recW=w, msg='';
-  if(failIdx>=0 && failIdx<total-1){
-    recW=Math.max(w-inc,0);
-    msg=`지난 기록(${last.date}) ${failIdx+1}세트에서 조기 실패 → <b>${recW}${u}</b>로 낮춰 자세와 볼륨을 다지는 걸 추천.`;
+  // 디로드 감지: 4회 이상 기록 + 최근 3회 중 실패 2회 이상 + 중량 정체
+  const recentFails = logs.slice(0,3).filter(l=>l.sets.includes(2)).length;
+  const stagnant = logs.length>=4 && (assist? logs[0].w>=logs[3].w : logs[0].w<=logs[3].w);
+  if(!assist && recentFails>=2 && stagnant){
+    recW=fit(w*0.85);
+    msg=`최근 3회 중 ${recentFails}회 실패 + 중량 정체 → <b>디로드 주간 추천</b>. 이번 주는 <b>${recW}${u}</b>(약 85%)로 가볍게 회복하고, 다음 주에 <b>${w}${u}</b>로 복귀하면 정체가 뚫리는 경우가 많아요.`;
+  }else if(failIdx>=0 && failIdx<total-1){
+    recW = assist? w+inc : fit(w-inc);
+    msg = assist
+      ? `지난 기록(${last.date}) ${failIdx+1}세트에서 조기 실패 → 보조를 <b>${recW}${u}</b>로 올려(난이도 다운) 볼륨을 다지는 걸 추천.`
+      : `지난 기록(${last.date}) ${failIdx+1}세트에서 조기 실패 → 탑세트 <b>${recW}${u}</b>로 낮춰 자세와 볼륨을 다지는 걸 추천.`;
   }else if(failIdx===total-1){
     recW=w;
-    msg=`지난 기록(${last.date}) 마지막 세트에서 실패 → <b>${w}${u} 유지</b> 추천. 무실패 3회를 만들면 증량 대상이 됩니다.`;
+    msg=`지난 기록(${last.date}) 마지막 세트에서 실패 → <b>${w}${u} 유지</b> 추천. 무실패 3회를 만들면 다음 단계로 갑니다.`;
   }else if(doneCnt<total){
     recW=w;
     msg=`지난 기록(${last.date}) ${doneCnt}/${total} 세트 수행 → <b>${w}${u} 유지</b>하고 전 세트 완수부터.`;
   }else if(streak>=3){
-    recW=w+inc;
-    msg=`<b>${w}${u}</b>에서 무실패 <b>${streak}회 연속</b> 성공 → <b>${recW}${u}</b>로 증량 추천! 횟수는 ${esc(e.r)} 유지.`;
+    recW = assist? Math.max(w-inc,0) : fit(w+inc);
+    msg = assist
+      ? `보조 <b>${w}${u}</b>에서 무실패 <b>${streak}회 연속</b> → 보조를 <b>${recW}${u}</b>로 낮춰 난이도 업 추천!${recW===0?' 이제 맨몸 도전입니다 🔥':''}`
+      : `탑세트 <b>${w}${u}</b> 무실패 <b>${streak}회 연속</b> 성공 → <b>${recW}${u}</b>로 증량 추천! 세트별 중량이 전체 ${recW-w>0?'+':''}${recW-w}${u} 됩니다.${barbell?` (${plateBreak(recW)||''})`:''}`;
   }else{
     recW=w;
-    msg=`<b>${w}${u}</b> 무실패 ${streak}회째 (증량 기준: 3회 연속) → <b>${w}${u} 유지</b> 추천. ${3-streak}회만 더 깔끔하게!`;
+    msg=`<b>${w}${u}</b> 무실패 ${streak}회째 (기준: 3회 연속) → <b>유지</b> 추천. ${3-streak}회만 더 깔끔하게!`;
   }
-  const applyGoal = recW>w; // 증량 추천일 때 목표도 함께 갱신
-  slot.innerHTML=`<div class="rec-box"><div class="msg">${msg}${applyGoal?` 적용 시 목표도 <b>${recW+inc}${u}</b>로 변경됩니다.`:''}</div><button data-apply="${i}" data-v="${recW}">적용</button></div>`;
+  const applyGoal = assist? recW<w : recW>w;
+  const nextGoal = assist? Math.max(recW-inc,0) : fit(recW+inc);
+  slot.innerHTML=`<div class="rec-box"><div class="msg">${msg}${applyGoal?` 적용 시 목표도 <b>${nextGoal}${u}</b>로 변경됩니다.`:''}</div><button data-apply="${i}" data-v="${recW}">적용</button></div>`;
   slot.querySelector('[data-apply]').onclick=ev=>{
     const v=parseFloat(ev.target.dataset.v);
-    session.weights[i]=v;
-    if(applyGoal){ plan[curPart].ex[i].goal=v+inc; sSet('plan',plan); }
+    const diff=v-w;
+    session.weights[i]=session.weights[i].map(x=>Math.max(0,+(x+diff).toFixed(2)));
+    if(applyGoal){ plan[curPart].ex[i].goal=nextGoal; sSet('plan',plan); }
     queueSave(); slot.innerHTML='';
-    toast(applyGoal?'중량 증량 + 목표 갱신됨 🔥':'추천 중량 적용됨');
+    toast(applyGoal?(assist?'난이도 업 + 목표 갱신 🔥':'전 세트 증량 + 목표 갱신 🔥'):'추천 중량 적용됨');
     renderExercises();
   };
 }
@@ -433,6 +766,10 @@ function customNames(){
 function renderEdit(){
   $('exList').innerHTML = plan[curPart].ex.map((e,i)=>`
     <div class="ex"><div class="ef">
+      <div class="ef-move">
+        <button data-mv="${i}" data-dir="-1" ${i===0?'disabled style="opacity:.3"':''}>↑</button>
+        <button data-mv="${i}" data-dir="1" ${i===plan[curPart].ex.length-1?'disabled style="opacity:.3"':''}>↓</button>
+      </div>
       <label>운동 이름 (★를 앞에 붙이면 강조 · 입력하면 목록에서 선택 가능)</label>
       <div class="name-wrap">
         <input value="${esc(e.n)}" data-f="n" data-i="${i}" autocomplete="off">
@@ -441,10 +778,18 @@ function renderEdit(){
       <div class="ef-row">
         <div><label>세트 수</label><input type="number" min="1" max="10" value="${e.s}" data-f="s" data-i="${i}"></div>
         <div><label>세트당 횟수</label><input value="${esc(e.r)}" data-f="r" data-i="${i}"></div>
-        <div><label>단위</label><input value="${esc(e.u||'kg')}" data-f="u" data-i="${i}"></div>
+        <div><label>단위</label>
+          <select data-f="u" data-i="${i}" style="width:100%;background:var(--card2);border:1px solid var(--line);border-radius:9px;color:var(--ink);font-size:14px;padding:9px 6px;outline:0">
+            ${[...new Set(['kg','kg×2','보조kg','lb','단',(e.u||'kg')])].map(u=>`<option value="${u}" ${(e.u||'kg')===u?'selected':''}>${u==='단'?'단 (머신 칸수)':u==='보조kg'?'보조kg (서포트 머신)':u}</option>`).join('')}
+          </select>
+        </div>
       </div>
-      <label>목표 중량 (숫자만 · 비우면 표시 안 함)</label>
-      <input type="number" inputmode="decimal" step="0.5" value="${e.goal!==''&&e.goal!=null?e.goal:''}" data-f="goal" data-i="${i}" placeholder="예: 65">
+      <div class="ef-row">
+        <div><label>목표 중량 (비우면 표시 안 함)</label>
+        <input type="number" inputmode="decimal" step="0.5" value="${e.goal!==''&&e.goal!=null?e.goal:''}" data-f="goal" data-i="${i}" placeholder="예: 65"></div>
+        <div><label>휴식 (초)</label>
+        <input type="number" inputmode="numeric" step="10" value="${e.rest||60}" data-f="rest" data-i="${i}" placeholder="60"></div>
+      </div>
       <label>메모</label>
       <textarea rows="2" data-f="tip" data-i="${i}" placeholder="자극 포인트, 주의사항 등">${esc(e.tip||'')}</textarea>
       <button class="del-btn" data-del="${i}">이 운동 삭제</button>
@@ -456,6 +801,7 @@ function renderEdit(){
       const i=+el.dataset.i, f=el.dataset.f;
       if(f==='s'){ plan[curPart].ex[i].s=Math.max(1,Math.min(10,parseInt(el.value)||1)); }
       else if(f==='goal'){ plan[curPart].ex[i].goal = el.value===''?'':parseFloat(el.value)||''; }
+      else if(f==='rest'){ plan[curPart].ex[i].rest = Math.max(10,Math.min(600,parseInt(el.value)||60)); }
       else plan[curPart].ex[i][f]=el.value;
       sSet('plan',plan);
     };
@@ -464,6 +810,14 @@ function renderEdit(){
       el.onfocus=()=>showSug(el);
       el.onblur=()=>setTimeout(()=>hideSug(el.dataset.i),150);
     }
+  });
+  document.querySelectorAll('[data-mv]').forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.mv, d=+b.dataset.dir, j=i+d;
+    if(j<0||j>=plan[curPart].ex.length) return;
+    [plan[curPart].ex[i],plan[curPart].ex[j]]=[plan[curPart].ex[j],plan[curPart].ex[i]];
+    [session.sets[i],session.sets[j]]=[session.sets[j],session.sets[i]];
+    [session.weights[i],session.weights[j]]=[session.weights[j],session.weights[i]];
+    sSet('plan',plan); queueSave(); renderEdit();
   });
   document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{
     if(!confirm('이 운동을 삭제할까요?')) return;
@@ -479,6 +833,28 @@ function renderEdit(){
   };
 }
 
+// 한글 초성 추출 (초성 검색용)
+const CHO=['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+function chosung(str){
+  return [...str].map(c=>{
+    const code=c.charCodeAt(0);
+    if(code>=0xAC00&&code<=0xD7A3) return CHO[Math.floor((code-0xAC00)/588)];
+    return c;
+  }).join('');
+}
+const norm = s => String(s||'').toLowerCase().replace(/\s+/g,'');
+function exMatch(query, name){
+  const q=norm(query);
+  if(!q) return 3;
+  const n=norm(name);
+  const alias=norm(EXALIAS[name]||'');
+  if(n.startsWith(q)) return 0;                       // 이름 시작 일치 (최우선)
+  if(n.includes(q)) return 1;                         // 이름 부분 일치
+  if(alias.includes(q)) return 1;                     // 별칭 일치 (벤프, ohp 등)
+  if(chosung(n).includes(q)||chosung(name.replace(/\s+/g,'')).includes(q)) return 2; // 초성 (ㅅㅋㅌ)
+  return -1;
+}
+
 function showSug(inp){
   const i=inp.dataset.i;
   const box=document.querySelector(`[data-sug="${i}"]`);
@@ -490,7 +866,11 @@ function showSug(inp){
     ...customs.map(n=>({n,cat:'내 운동',custom:true})),
     ...EXLIB.map(x=>({n:x[0],cat:x[1]}))
   ];
-  if(q) items=items.filter(x=>x.n.toLowerCase().includes(q));
+  if(q){
+    items=items.map(x=>({...x,score:exMatch(q,x.n)}))
+      .filter(x=>x.score>=0)
+      .sort((a,b)=>(a.custom?-0.5:0)+a.score-((b.custom?-0.5:0)+b.score));
+  }
   items=items.slice(0,8);
   if(!items.length || (items.length===1 && items[0].n===cleanName(raw))){ box.classList.add('hidden'); return; }
   box.innerHTML=items.map(x=>
@@ -501,8 +881,10 @@ function showSug(inp){
       ev.preventDefault();
       inp.value=(starred?'★':'')+d.dataset.pick;
       plan[curPart].ex[+i].n=inp.value;
+      if(ASSIST_EX.has(d.dataset.pick)) plan[curPart].ex[+i].u='보조kg';
       sSet('plan',plan);
       box.classList.add('hidden');
+      renderEdit();
     };
   });
 }
@@ -528,8 +910,20 @@ function calcKcal(doneSets){
   // 실패지점 세트가 있으면 고강도(MET 6.0), 아니면 일반 웨이트(MET 5.0)
   const hasFail = session.sets.flat().includes(2);
   const met = hasFail?6.0:5.0;
-  const minutes = doneSets*2.5; // 세트당 수행+휴식 평균 2.5분 가정
+  // 실측 시간(첫 세트~마지막 세트)이 타당하면 사용, 아니면 세트당 2.5분 추정
+  let minutes = doneSets*2.5;
+  if(session.t0&&session.t1){
+    const span=(session.t1-session.t0)/60000 + 2; // 마지막 세트 수행분 보정
+    if(span>=doneSets*1 && span<=doneSets*6+15) minutes=span;
+  }
   return Math.round(met * (bmr/1440) * minutes);
+}
+function sessionMinutes(){
+  if(session.t0&&session.t1){
+    const m=Math.round((session.t1-session.t0)/60000+2);
+    if(m>=1&&m<=300) return m;
+  }
+  return null;
 }
 function renderKcal(doneSets){
   const k=calcKcal(doneSets);
@@ -554,12 +948,132 @@ function renderHistory(){
       <div class="h-tag ${r.part}">${(plan[r.part]?.label||'').split('/')[0]}</div>
       <div class="h-info">
         <div class="h-date">${r.date}</div>
-        <div class="h-meta">${plan[r.part]?.label||r.part} · ${r.sd}/${r.st} 세트${r.kcal?` · 🔥${r.kcal}kcal`:''}</div>
+        <div class="h-meta">${plan[r.part]?.label||r.part} · ${r.sd}/${r.st} 세트${r.dur?` · ${r.dur}분`:''}${r.kcal?` · 🔥${r.kcal}kcal`:''}</div>
       </div>
       <div class="h-badge">${r.st>0&&r.sd>=r.st?'ALL CLEAR':''}</div>
     </div>`).join('')
     :'<div class="empty">아직 기록이 없어요.<br>첫 출석 체크를 눌러보세요 💪</div>';
+  renderWeekReport();
+  renderChartUI();
+  renderBig3();
 }
+
+/* ---- 주간 리포트 ---- */
+function weekBounds(offsetWeeks){
+  const now=new Date(); const mon=new Date(now);
+  mon.setDate(now.getDate()-((now.getDay()+6)%7)-offsetWeeks*7);
+  const sun=new Date(mon); sun.setDate(mon.getDate()+6);
+  const f=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  return [f(mon),f(sun)];
+}
+function weekVolume(a,b){
+  let vol=0;
+  Object.values(exlog).forEach(logs=>logs.forEach(l=>{
+    if(l.date>=a&&l.date<=b){
+      const rep=l.rep||10;
+      l.sets.forEach((s,j)=>{ if(s>0) vol += ((l.ws&&l.ws[j])||l.w||0)*rep; });
+    }
+  }));
+  return Math.round(vol);
+}
+function renderWeekReport(){
+  const [a,b]=weekBounds(0), [pa,pb]=weekBounds(1);
+  const att=index.filter(r=>r.done&&r.date>=a&&r.date<=b).length;
+  const attP=index.filter(r=>r.done&&r.date>=pa&&r.date<=pb).length;
+  const vol=weekVolume(a,b), volP=weekVolume(pa,pb);
+  const kc=index.filter(r=>r.date>=a&&r.date<=b).reduce((s,r)=>s+(r.kcal||0),0);
+  const pct = volP>0? Math.round((vol-volP)/volP*100) : null;
+  const arrow = v => v>0?`<b class="up">▲${v}%</b>`:(v<0?`<b class="dn">▼${Math.abs(v)}%</b>`:'<b>—</b>');
+  $('wkCard').innerHTML=`<h3>이번 주 리포트 (${a.slice(5)} ~ ${b.slice(5)})</h3>
+    출석 <b>${att}회</b>${attP?` (지난주 ${attP}회)`:''} · 소모 <b>${kc>0?kc+'kcal':'-'}</b><br>
+    총 볼륨(중량×횟수) <b>${vol.toLocaleString()}kg</b> ${pct!=null?`· 지난주 대비 ${arrow(pct)}`:''}`;
+}
+
+/* ---- 3대 합계 ---- */
+function latestW(name){
+  const l=(exlog[name]||[]).slice().sort((x,y)=>y.date.localeCompare(x.date))[0];
+  return l?l.w:0;
+}
+function renderBig3(){
+  const b=latestW('바벨 벤치 프레스'), s=latestW('바벨 백 스쿼트'), d=latestW('컨벤셔널 데드리프트');
+  $('big3').innerHTML = (b&&s&&d) ? `3대 <b>${b+s+d}</b>kg` : '';
+}
+
+/* ---- 중량 변화 그래프 ---- */
+function renderChartUI(){
+  const names=Object.keys(exlog).filter(n=>(exlog[n]||[]).length>0).sort();
+  const sel=$('chartSel');
+  if(!names.length){ sel.innerHTML='<option>기록 없음</option>'; $('chartBox').innerHTML='<div class="chart-empty">세트를 기록하면 중량 변화 그래프가 여기에 그려져요 📈</div>'; return; }
+  const prefer=['바벨 벤치 프레스','바벨 백 스쿼트','컨벤셔널 데드리프트'].find(n=>names.includes(n));
+  const cur=sel.dataset.cur && names.includes(sel.dataset.cur) ? sel.dataset.cur : (prefer||names[0]);
+  sel.innerHTML=names.map(n=>`<option ${n===cur?'selected':''}>${esc(n)}</option>`).join('');
+  sel.dataset.cur=cur;
+  sel.onchange=()=>{ sel.dataset.cur=sel.value; drawChart(sel.value); };
+  drawChart(cur);
+}
+function drawChart(name){
+  const logs=(exlog[name]||[]).slice().sort((a,b)=>a.date.localeCompare(b.date)).slice(-12);
+  const box=$('chartBox');
+  if(logs.length<2){ box.innerHTML='<div class="chart-empty">기록이 2회 이상 쌓이면 그래프가 그려져요. 지금 '+logs.length+'회 📈</div>'; return; }
+  const W=340,H=150,P=28;
+  const ws=logs.map(l=>l.w);
+  const lo=Math.min(...ws), hi=Math.max(...ws);
+  const span=(hi-lo)||1;
+  const X=i=>P+ (W-2*P)*i/(logs.length-1);
+  const Y=v=>H-P- (H-2*P)*(v-lo)/span;
+  const pts=logs.map((l,i)=>`${X(i).toFixed(1)},${Y(l.w).toFixed(1)}`).join(' ');
+  const dots=logs.map((l,i)=>`<circle cx="${X(i).toFixed(1)}" cy="${Y(l.w).toFixed(1)}" r="3.5" fill="#E8B54A"/>`).join('');
+  box.innerHTML=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+    <line x1="${P}" y1="${H-P}" x2="${W-P}" y2="${H-P}" stroke="#31363E"/>
+    <polyline points="${pts}" fill="none" stroke="#E8B54A" stroke-width="2.5" stroke-linejoin="round"/>
+    ${dots}
+    <text x="${P}" y="${Y(hi)-8}" fill="#8A8F98" font-size="10">${hi}</text>
+    <text x="${P}" y="${H-P+14}" fill="#8A8F98" font-size="9">${logs[0].date.slice(5)}</text>
+    <text x="${W-P}" y="${H-P+14}" fill="#8A8F98" font-size="9" text-anchor="end">${logs[logs.length-1].date.slice(5)}</text>
+    <text x="${X(logs.length-1)}" y="${Y(ws[ws.length-1])-10}" fill="#F2F0EA" font-size="11" font-weight="bold" text-anchor="end">${ws[ws.length-1]}</text>
+  </svg>`;
+}
+
+/* ---- 백업 / 복원 ---- */
+let bkMode='export';
+function openBk(mode){
+  bkMode=mode;
+  $('modalBg').classList.add('show'); $('bkModal').classList.add('show');
+  if(mode==='export'){
+    const data={};
+    for(let k=0;k<localStorage.length;k++){
+      const key=localStorage.key(k);
+      if(key&&key.startsWith('wlog:')) data[key]=localStorage.getItem(key);
+    }
+    $('bkTitle').textContent='기록 백업';
+    $('bkSub').textContent='아래 코드를 복사해서 카톡 나에게 보내기 등에 저장해 두세요. 폰을 바꾸거나 앱을 지워도 이 코드로 복원됩니다.';
+    $('bkTa').value=JSON.stringify({app:'hellchanggo',ver:APP_VER,ts:todayStr(),data});
+    $('bkAction').textContent='복사하기';
+  }else{
+    $('bkTitle').textContent='기록 복원';
+    $('bkSub').textContent='백업해 둔 코드를 아래에 붙여넣고 복원을 누르세요. 현재 기록 위에 덮어씁니다.';
+    $('bkTa').value='';
+    $('bkAction').textContent='복원하기';
+  }
+}
+function closeBk(){ $('bkModal').classList.remove('show'); if(!$('profModal').classList.contains('show'))$('modalBg').classList.remove('show'); }
+$('bkExport').onclick=()=>openBk('export');
+$('bkImport').onclick=()=>openBk('import');
+$('bkAction').onclick=async()=>{
+  if(bkMode==='export'){
+    try{ await navigator.clipboard.writeText($('bkTa').value); toast('복사됨! 안전한 곳에 붙여넣어 두세요 📋'); }
+    catch(e){ $('bkTa').select(); document.execCommand('copy'); toast('복사됨!'); }
+  }else{
+    try{
+      const obj=JSON.parse($('bkTa').value);
+      if(obj.app!=='hellchanggo'||!obj.data) throw 0;
+      if(!confirm('현재 기록을 백업 시점 기록으로 덮어씁니다. 진행할까요?')) return;
+      Object.entries(obj.data).forEach(([k,v])=>localStorage.setItem(k,v));
+      toast('복원 완료! 새로고침합니다');
+      setTimeout(()=>location.reload(),800);
+    }catch(e){ toast('올바른 백업 코드가 아니에요 😢'); }
+  }
+};
 
 /* ---- rest timer (기존 유지) ---- */
 let tLeft=0, tInt=null, audioCtx=null;
@@ -592,6 +1106,54 @@ function stopTimer(){ clearInterval(tInt); $('timer').classList.remove('show'); 
 $('tSkip').onclick=stopTimer;
 $('tPlus').onclick=()=>{ tLeft+=30; drawTimer(); };
 
+/* ---- 운동 추천 (부족 부위 분석) ---- */
+let sugCursor=0;
+function findGaps(){
+  const covered=new Set();
+  plan[curPart].ex.forEach(e=>{
+    (MTAG[cleanName(e.n)]||[]).forEach(t=>covered.add(t));
+  });
+  const gaps=[];
+  (DESIRE[curPart]||[]).forEach(([tag,label,reps,hi])=>{
+    if(covered.has(tag)) return;
+    // 이 태그를 채울 수 있는 후보 (이미 구성에 없는 운동)
+    const inPlan=new Set(plan[curPart].ex.map(e=>cleanName(e.n)));
+    const cands=Object.keys(MTAG).filter(n=>MTAG[n].includes(tag)&&!inPlan.has(n));
+    if(cands.length) gaps.push({tag,label,reps,cands});
+  });
+  return gaps;
+}
+function showExSug(){
+  const slot=$('sugSlot');
+  if(slot.innerHTML){ slot.innerHTML=''; return; }
+  const gaps=findGaps();
+  if(!gaps.length){
+    slot.innerHTML=`<div class="sug-box">지금 <b>${plan[curPart].label}</b> 구성은 주요 자극이 골고루 채워져 있어요. 훌륭합니다 👍</div>`;
+    return;
+  }
+  // (부족부위 × 후보운동) 평탄화 → 순환 커서
+  const flat=[];
+  gaps.forEach(g=>g.cands.forEach(c=>flat.push({tag:g.tag,label:g.label,reps:g.reps,pick:c})));
+  const g=flat[sugCursor%flat.length];
+  slot.innerHTML=`<div class="sug-box">
+    지금 구성에 <b>${g.label}</b> 자극이 비어 있어요.<br>→ <b>${esc(g.pick)}</b> 추가 추천 (${g.reps} × 3세트)
+    <div class="sug-acts">
+      <button class="sug-add" id="sugAdd">＋ 구성에 추가</button>
+      ${flat.length>1?'<button class="sug-next" id="sugNext">다른 추천</button>':''}
+    </div>
+  </div>`;
+  $('sugAdd').onclick=()=>{
+    plan[curPart].ex.push({n:g.pick, s:3, r:g.reps, w:0, u:ASSIST_EX.has(g.pick)?'보조kg':'kg', goal:'', tip:g.label+' 보강'});
+    sSet('plan',plan);
+    slot.innerHTML=''; sugCursor=0;
+    renderExercises();
+    toast(g.pick+' 추가됨 💪');
+    window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+  };
+  const nx=$('sugNext');
+  if(nx) nx.onclick=()=>{ sugCursor++; slot.innerHTML=''; showExSug(); };
+}
+
 /* ---- 프로필 모달 ---- */
 let pSex='m';
 function openProf(){
@@ -608,7 +1170,8 @@ function drawSex(){
 $('pMale').onclick=()=>{pSex='m';drawSex();};
 $('pFemale').onclick=()=>{pSex='f';drawSex();};
 $('profBtn').onclick=openProf;
-$('modalBg').onclick=closeProf;
+$('sugBtn').onclick=showExSug;
+$('modalBg').onclick=()=>{ closeProf(); closeBk(); $('modalBg').classList.remove('show'); };
 $('kcalChip').onclick=()=>{ if(!getProfile()) openProf(); };
 $('pSave').onclick=()=>{
   const h=parseFloat($('pHeight').value), w=parseFloat($('pWeight').value), age=parseInt($('pAge').value);
@@ -621,6 +1184,7 @@ $('pSave').onclick=()=>{
 /* ---- actions ---- */
 function switchPart(p){
   curPart=p; sSet('lastPart',p);
+  $('sugSlot').innerHTML=''; sugCursor=0;
   session=sGet('session:'+todayStr()+':'+p)||defaultSession(p);
   renderTabs(); renderExercises();
 }
@@ -628,7 +1192,8 @@ function queueSave(){ clearTimeout(saveTimer); saveTimer=setTimeout(saveSession,
 function saveSession(){
   const date=todayStr();
   sSet('session:'+date+':'+curPart,session);
-  // 운동별 기록(exlog) 갱신 — 추천/자동완성의 데이터 소스
+  session.prShown=session.prShown||{};
+  // 운동별 기록(exlog) 갱신 — 추천/자동완성/그래프의 데이터 소스
   plan[curPart].ex.forEach((e,i)=>{
     const name=cleanName(e.n);
     if(!name) return;
@@ -636,16 +1201,33 @@ function saveSession(){
     if(!st.some(v=>v>0)) return;
     exlog[name]=exlog[name]||[];
     const j=exlog[name].findIndex(l=>l.date===date);
-    const rec={date, w:session.weights[i], sets:st.slice()};
+    const ws=session.weights[i].slice();
+    const assist=isAssist(e.u);
+    const topW = assist ? Math.min(...ws) : Math.max(...ws,0);
+    // PR 감지: 완료된 세트 중 역대 최고(보조는 역대 최저) 갱신 시 축하
+    const doneWs=ws.filter((_,k)=>st[k]>0);
+    if(doneWs.length&&!session.prShown[name]){
+      const prevLogs=exlog[name].filter(l=>l.date!==date);
+      if(prevLogs.length){
+        const prevBest = assist ? Math.min(...prevLogs.map(l=>l.w)) : Math.max(...prevLogs.map(l=>l.w));
+        const nowBest = assist ? Math.min(...doneWs) : Math.max(...doneWs);
+        if(assist ? nowBest<prevBest : nowBest>prevBest){
+          session.prShown[name]=1;
+          toast(`🎉 ${name} PR! ${nowBest}${e.u||'kg'} (이전 ${prevBest})`);
+        }
+      }
+    }
+    const rec={date, w:isFinite(topW)?topW:0, ws, sets:st.slice(), rep:parseInt(e.r)||10};
     if(j>=0) exlog[name][j]=rec; else exlog[name].push(rec);
     if(exlog[name].length>60) exlog[name]=exlog[name].slice(-60);
   });
   sSet('exlog',exlog);
   const sd=session.sets.flat().filter(v=>v>0).length, st=session.sets.flat().length;
   const i=index.findIndex(r=>r.date===date&&r.part===curPart);
-  const rec={date,part:curPart,done:session.done,sd,st,kcal:calcKcal(sd)};
+  const rec={date,part:curPart,done:session.done,sd,st,kcal:calcKcal(sd),dur:sessionMinutes()};
   if(i>=0)index[i]=rec; else index.push(rec);
   sSet('index',index);
+  renderLastLine();
 }
 function toast(msg){
   const t=$('toast'); t.textContent=msg; t.classList.add('show');
@@ -667,13 +1249,50 @@ $('vToday').onclick=()=>{ $('vToday').classList.add('on');$('vHist').classList.r
 $('vHist').onclick=()=>{ $('vHist').classList.add('on');$('vToday').classList.remove('on');$('histView').classList.remove('hidden');$('todayView').classList.add('hidden');$('bar').classList.add('hidden'); renderHistory(); };
 
 /* ---- init ---- */
-const APP_VER='v2.3';
+const APP_VER='v4.0';
 $('verTag').textContent=APP_VER;
-$('refreshBtn').onclick=()=>{
-  toast('새 버전 확인 중...');
-  // 캐시를 우회하는 주소로 다시 로드 (기록은 localStorage라 안전)
-  setTimeout(()=>{ location.replace(location.pathname+'?v='+Date.now()); },400);
-};
+
+// 서비스 워커 등록 (오프라인 지원)
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('./sw.js').catch(()=>{});
+}
+// 캐시 비우고 최신으로 다시 로드
+async function forceUpdate(){
+  try{
+    if(navigator.serviceWorker&&navigator.serviceWorker.controller)
+      navigator.serviceWorker.controller.postMessage('clear');
+    if(window.caches){ const ks=await caches.keys(); await Promise.all(ks.map(k=>caches.delete(k))); }
+  }catch(e){}
+  location.replace(location.pathname+'?v='+Date.now());
+}
+$('refreshBtn').onclick=()=>{ toast('새 버전 확인 중...'); setTimeout(forceUpdate,400); };
+$('updGo').onclick=forceUpdate;
+// 백그라운드 새 버전 확인 → 배너
+(async function checkUpdate(){
+  try{
+    const r=await fetch(location.pathname+'?vcheck='+Date.now(),{cache:'no-store'});
+    const t=await r.text();
+    const m=t.match(/APP_VER='([^']+)'/);
+    if(m&&m[1]!==APP_VER){
+      $('updMsg').textContent=`새 버전 ${m[1]} 이(가) 나왔어요!`;
+      $('updBanner').classList.add('show');
+    }
+  }catch(e){}
+})();
+
+// 마지막 운동일 안내
+function renderLastLine(){
+  const done=index.filter(r=>r.done).sort((a,b)=>b.date.localeCompare(a.date));
+  const today=todayStr();
+  const el=$('lastLine');
+  if(done.some(r=>r.date===today)){ el.innerHTML='오늘 운동 완료 💪 잘하셨어요'; return; }
+  if(!done.length){ el.innerHTML='첫 운동을 시작해 보세요 🔥'; return; }
+  const last=done[0];
+  const days=Math.round((new Date(today)-new Date(last.date))/86400000);
+  const ago=days===0?'오늘':days===1?'어제':`${days}일 전`;
+  el.innerHTML=`마지막 운동: <b>${ago}</b> · ${plan[last.part]?.label||last.part}${days>=4?' — 슬슬 가야죠? 👀':''}`;
+}
+
 (function(){
   const d=new Date();
   $('hdDate').textContent=`${d.getMonth()+1}월 ${d.getDate()}일 (${'일월화수목금토'[d.getDay()]})`;
@@ -691,7 +1310,7 @@ $('refreshBtn').onclick=()=>{
   curPart=sGet('lastPart')||'push';
   if(!plan[curPart])curPart='push';
   session=sGet('session:'+todayStr()+':'+curPart)||defaultSession(curPart);
-  renderTabs(); renderExercises();
+  renderTabs(); renderExercises(); renderLastLine();
 })();
 </script>
 </body>
