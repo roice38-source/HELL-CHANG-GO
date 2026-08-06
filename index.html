@@ -70,6 +70,10 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
 .sug-add{background:var(--gold);color:#141619}
 .sug-next{background:var(--card);color:var(--sub);border:1px solid var(--line)!important}
 .unit-tag{font-size:11px;color:var(--sub);text-align:center;font-weight:700}
+.ex-tags{margin-top:10px;font-size:11px;color:var(--sub)}
+.ex-tags b{color:var(--sub);font-weight:700;background:var(--card2);border:1px solid var(--line);border-radius:99px;padding:3px 9px;margin-right:4px;display:inline-block;margin-bottom:4px}
+.est-time{font-size:12px;color:var(--sub);font-weight:700;white-space:nowrap;align-self:center}
+.est-time b{color:var(--gold);font-family:'Archivo',sans-serif}
 .sets{display:flex;gap:8px;flex-wrap:wrap}
 .set-col{display:flex;flex-direction:column;align-items:center;gap:5px}
 .sw{width:46px;background:var(--card2);border:1px solid var(--line);border-radius:8px;color:var(--ink);font-size:13px;font-weight:800;text-align:center;padding:5px 2px;outline:0;font-family:'Archivo',sans-serif}
@@ -219,6 +223,7 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
   <div class="tabs" id="tabs"></div>
   <div class="note-row">
     <div class="day-note" id="dayNote"></div>
+    <span class="est-time" id="estTime"></span>
     <button class="sug-btn" id="sugBtn">💡 추천</button>
     <button class="edit-btn" id="editBtn">✎ 편집</button>
   </div>
@@ -469,6 +474,37 @@ const DESIRE = {
         ['종아리','종아리','15회',1],['코어','코어','15회',1]]
 };
 
+// 부위 태그 → 표시 라벨 (직접 선택 추천용)
+const TAG_LABEL = {
+  '가슴상':'윗가슴','가슴중':'가슴 중부','가슴하':'아랫가슴',
+  '어깨전':'어깨 전면','어깨측':'어깨 측면(넓이)','어깨후':'어깨 후면(직각어깨)',
+  '삼두':'삼두','이두':'이두','전완':'전완(그립)',
+  '광배':'광배(등 너비)','등두께':'등 중앙(두께)','등하부':'등 하부','승모':'승모',
+  '사두':'대퇴사두','햄':'햄스트링','둔근':'둔근','종아리':'종아리','내전근':'내전근','코어':'코어',
+};
+// 부위 검색 별칭 (일상 표현 → 태그 매칭)
+const TAG_SEARCH = {
+  '가슴상':'윗가슴 상부 인클라인 upper',
+  '가슴중':'가슴 중부 미들 중앙가슴',
+  '가슴하':'아랫가슴 하부 밑가슴 언더',
+  '어깨전':'어깨 전면 앞어깨 프론트',
+  '어깨측':'어깨 측면 옆어깨 사이드 어깨넓이 어깨뽕',
+  '어깨후':'어깨 후면 뒷어깨 리어 직각어깨 라운드숄더',
+  '삼두':'삼두 팔뒤 트라이셉스 팔 뒷팔',
+  '이두':'이두 알통 바이셉스 팔 앞팔',
+  '전완':'전완 팔뚝 그립 악력',
+  '광배':'광배 등 등너비 랫 윙 역삼각',
+  '등두께':'등 등두께 등중앙 로우',
+  '등하부':'등하부 허리 기립근 척추',
+  '승모':'승모 목 트랩 어깨라인',
+  '사두':'사두 허벅지 앞벅지 쿼드 대퇴',
+  '햄':'햄스트링 허벅지 뒷벅지 햄',
+  '둔근':'둔근 엉덩이 힙 글루트 애플힙',
+  '종아리':'종아리 카프 알 비복근',
+  '내전근':'내전근 허벅지안쪽 이너',
+  '코어':'코어 복근 배 뱃살 식스팩 앱스 몸통',
+};
+
 const DEFAULT_PLAN = {
   push: { label:'가슴/어깨',
     note:'가슴 메인 + 어깨 측면 볼륨. ★사이드 레터럴 마지막 세트는 무게 낮춰 실패 지점까지.',
@@ -594,6 +630,7 @@ function renderExercises(){
         <div class="sets">${plates}</div>
       </div>
       <div class="rec-slot" id="recSlot${i}"></div>
+      ${(MTAG[name]||[]).length?`<div class="ex-tags">자극 ${(MTAG[name]||[]).map(t=>`<b>${TAG_LABEL[t]||t}</b>`).join('')}</div>`:''}
     </div>`;
   }).join('');
 
@@ -627,7 +664,28 @@ function renderExercises(){
   document.querySelectorAll('[data-rec]').forEach(b=>b.onclick=()=>showRec(+b.dataset.rec));
   document.querySelectorAll('[data-cfg]').forEach(b=>b.onclick=()=>showCfg(+b.dataset.cfg));
   document.querySelectorAll('.ex-name').forEach((el,i)=>el.onclick=()=>showExHist(i));
-  updateCount(); renderDoneBtn();
+  updateCount(); renderDoneBtn(); renderEstTime();
+}
+
+/* ---- 예상 소요시간 (루틴 구성 기반) ---- */
+function estimateMinutes(){
+  let sec=0;
+  plan[curPart].ex.forEach((e,i)=>{
+    if(e.u==='km/h'){ sec += e.s*(e.roundMin??2)*60; }
+    else if(isCardio(e.u)){ sec += (session.weights[i]||[]).reduce((s,v)=>s+(v||0),0)*60; }
+    else{
+      const reps=parseInt(e.r)||10;
+      const repTime=reps*4+15;          // 회당 약 4초 + 세팅 15초
+      const rest=e.rest||60;
+      sec += e.s*repTime + Math.max(0,e.s-1)*rest;
+    }
+    sec += 60; // 운동 간 이동/준비
+  });
+  return Math.round(sec/60);
+}
+function renderEstTime(){
+  const m=estimateMinutes();
+  $('estTime').innerHTML = m>0 ? `⏱ <b>~${m}</b>분` : '';
 }
 
 /* ---- 운동 이름 탭 → 지난 기록 상세 ---- */
@@ -1270,8 +1328,8 @@ function stopTimer(){ clearInterval(tInt); $('timer').classList.remove('show'); 
 $('tSkip').onclick=stopTimer;
 $('tPlus').onclick=()=>{ tLeft+=30; drawTimer(); };
 
-/* ---- 운동 추천 (부족 부위 분석) ---- */
-let sugCursor=0;
+/* ---- 운동 추천 (자동 분석 + 부위 직접 선택) ---- */
+let sugCursor=0, sugTag='auto';
 function findGaps(){
   const covered=new Set();
   plan[curPart].ex.forEach(e=>{
@@ -1280,32 +1338,62 @@ function findGaps(){
   const gaps=[];
   (DESIRE[curPart]||[]).forEach(([tag,label,reps,hi])=>{
     if(covered.has(tag)) return;
-    // 이 태그를 채울 수 있는 후보 (이미 구성에 없는 운동)
     const inPlan=new Set(plan[curPart].ex.map(e=>cleanName(e.n)));
     const cands=Object.keys(MTAG).filter(n=>MTAG[n].includes(tag)&&!inPlan.has(n));
     if(cands.length) gaps.push({tag,label,reps,cands});
   });
   return gaps;
 }
-function showExSug(){
+function tagReps(tag){
+  return ['어깨측','어깨후','종아리','코어','승모'].includes(tag)?'15회':
+         ['가슴상','가슴하','광배','햄','둔근'].includes(tag)?'10회':'8~10회';
+}
+function showExSug(keepOpen){
   const slot=$('sugSlot');
-  if(slot.innerHTML){ slot.innerHTML=''; return; }
-  const gaps=findGaps();
-  if(!gaps.length){
-    slot.innerHTML=`<div class="sug-box">지금 <b>${plan[curPart].label}</b> 구성은 주요 자극이 골고루 채워져 있어요. 훌륭합니다 👍</div>`;
-    return;
+  if(slot.innerHTML&&!keepOpen){ slot.innerHTML=''; return; }
+  // 검색 입력 + 선택된 부위 칩
+  const chip = sugTag!=='auto'
+    ? `<span id="sugChip" style="display:inline-flex;align-items:center;gap:6px;background:var(--gold);color:#141619;font-size:12px;font-weight:800;padding:6px 10px;border-radius:99px;margin-bottom:8px">🎯 ${TAG_LABEL[sugTag]||sugTag} <b style="cursor:pointer">✕</b></span>`
+    : '';
+  const searchHtml=`<div style="margin-bottom:8px">
+    ${chip}
+    <input id="sugSearch" placeholder="부위 검색: 어깨, 뒷어깨, 엉덩이, 팔뚝..." autocomplete="off"
+      style="width:100%;background:var(--card);border:1px solid var(--line);border-radius:8px;color:var(--ink);font-size:13px;padding:9px 10px;outline:0">
+    <div id="sugTagList"></div>
+  </div>`;
+
+  let flat=[], headMsg='';
+  const inPlan=new Set(plan[curPart].ex.map(e=>cleanName(e.n)));
+  if(sugTag==='auto'){
+    const gaps=findGaps();
+    if(!gaps.length){
+      slot.innerHTML=`<div class="sug-box">${searchHtml}🔍 자동 분석: 지금 <b>${plan[curPart].label}</b> 구성은 주요 자극이 골고루 채워져 있어요 👍 더 키우고 싶은 부위를 검색해 보세요.</div>`;
+      bindSugSearch(); return;
+    }
+    gaps.forEach(g=>g.cands.forEach(c=>flat.push({label:g.label,reps:g.reps,pick:c})));
+    headMsg=g=>`🔍 자동 분석: 지금 구성에 <b>${g.label}</b> 자극이 비어 있어요.`;
+  }else{
+    const label=TAG_LABEL[sugTag]||sugTag;
+    const already=plan[curPart].ex.map(e=>cleanName(e.n)).filter(n=>(MTAG[n]||[]).includes(sugTag));
+    const cands=Object.keys(MTAG).filter(n=>MTAG[n].includes(sugTag)&&!inPlan.has(n));
+    if(!cands.length){
+      slot.innerHTML=`<div class="sug-box">${searchHtml}<b>${label}</b>을 자극하는 운동이 이미 전부 루틴에 있거나 후보가 없어요.</div>`;
+      bindSugSearch(); return;
+    }
+    cands.forEach(c=>flat.push({label,reps:tagReps(sugTag),pick:c}));
+    headMsg=()=>already.length
+      ? `<b>${label}</b>은 지금 <b>${already.join(', ')}</b>(으)로 자극 중 — 추가 볼륨용 추천:`
+      : `오늘 루틴에 <b>${label}</b> 자극이 없어요.`;
   }
-  // (부족부위 × 후보운동) 평탄화 → 순환 커서
-  const flat=[];
-  gaps.forEach(g=>g.cands.forEach(c=>flat.push({tag:g.tag,label:g.label,reps:g.reps,pick:c})));
   const g=flat[sugCursor%flat.length];
-  slot.innerHTML=`<div class="sug-box">
-    지금 구성에 <b>${g.label}</b> 자극이 비어 있어요.<br>→ <b>${esc(g.pick)}</b> 추가 추천 (${g.reps} × 3세트)
+  slot.innerHTML=`<div class="sug-box">${searchHtml}
+    ${headMsg(g)}<br>→ <b>${esc(g.pick)}</b> 추가 추천 (${g.reps} × 3세트)
     <div class="sug-acts">
       <button class="sug-add" id="sugAdd">＋ 구성에 추가</button>
       ${flat.length>1?'<button class="sug-next" id="sugNext">다른 추천</button>':''}
     </div>
   </div>`;
+  bindSugSearch();
   $('sugAdd').onclick=()=>{
     plan[curPart].ex.push({n:g.pick, s:3, r:g.reps, w:0, u:ASSIST_EX.has(g.pick)?'보조kg':'kg', goal:'', tip:g.label+' 보강'});
     sSet('plan',plan);
@@ -1315,7 +1403,36 @@ function showExSug(){
     window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
   };
   const nx=$('sugNext');
-  if(nx) nx.onclick=()=>{ sugCursor++; slot.innerHTML=''; showExSug(); };
+  if(nx) nx.onclick=()=>{ sugCursor++; showExSug(true); };
+}
+// 부위 검색 매칭: 라벨/별칭/초성
+function tagMatch(q){
+  const nq=norm(q);
+  if(!nq) return [];
+  return Object.keys(TAG_LABEL).map(tag=>{
+    const label=TAG_LABEL[tag], alias=norm(TAG_SEARCH[tag]||'');
+    const nl=norm(label);
+    let score=-1;
+    if(nl.startsWith(nq)||norm(tag).startsWith(nq)) score=0;
+    else if(nl.includes(nq)||alias.includes(nq)) score=1;
+    else if(chosung(label.replace(/\s+/g,'')).includes(nq)) score=2;
+    return {tag,label,score};
+  }).filter(x=>x.score>=0).sort((a,b)=>a.score-b.score).slice(0,6);
+}
+function bindSugSearch(){
+  const inp=$('sugSearch'), list=$('sugTagList');
+  if(!inp) return;
+  const chipX=document.querySelector('#sugChip b');
+  if(chipX) chipX.onclick=()=>{ sugTag='auto'; sugCursor=0; showExSug(true); };
+  inp.oninput=()=>{
+    const hits=tagMatch(inp.value);
+    if(!hits.length){ list.innerHTML=inp.value.trim()?'<div style="font-size:11.5px;color:var(--sub);padding:6px 2px">일치하는 부위가 없어요</div>':''; return; }
+    list.innerHTML='<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">'+
+      hits.map(h=>`<button data-tag="${h.tag}" style="border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:12px;font-weight:700;padding:7px 12px;border-radius:99px">${h.label}</button>`).join('')+'</div>';
+    list.querySelectorAll('[data-tag]').forEach(b=>b.onclick=()=>{
+      sugTag=b.dataset.tag; sugCursor=0; showExSug(true);
+    });
+  };
 }
 
 /* ---- 프로필 모달 ---- */
@@ -1345,7 +1462,7 @@ function renderBmr(){
 $('pMale').onclick=()=>{pSex='m';drawSex();};
 $('pFemale').onclick=()=>{pSex='f';drawSex();};
 $('profBtn').onclick=openProf;
-$('sugBtn').onclick=showExSug;
+$('sugBtn').onclick=()=>showExSug(false);
 $('modalBg').onclick=()=>{ closeProf(); closeBk(); closeIb(); $('modalBg').classList.remove('show'); };
 $('kcalChip').onclick=()=>{ if(!getProfile()) openProf(); };
 $('pSave').onclick=()=>{
@@ -1426,7 +1543,7 @@ $('vToday').onclick=()=>{ $('vToday').classList.add('on');$('vHist').classList.r
 $('vHist').onclick=()=>{ $('vHist').classList.add('on');$('vToday').classList.remove('on');$('histView').classList.remove('hidden');$('todayView').classList.add('hidden');$('bar').classList.add('hidden'); renderHistory(); };
 
 /* ---- init ---- */
-const APP_VER='v4.4';
+const APP_VER='v4.7';
 $('verTag').textContent=APP_VER;
 
 // 서비스 워커 등록 (오프라인 지원)
