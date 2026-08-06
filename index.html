@@ -75,9 +75,10 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
 .est-time{font-size:12px;color:var(--sub);font-weight:700;white-space:nowrap;align-self:center}
 .est-time b{color:var(--gold);font-family:'Archivo',sans-serif}
 .sets{display:flex;gap:8px;flex-wrap:wrap;flex:1;min-width:0}
-.set-col{display:flex;flex-direction:column;align-items:center;gap:5px}
-.sw{width:44px;background:var(--card2);border:1px solid var(--line);border-radius:8px;color:var(--ink);font-size:13px;font-weight:800;text-align:center;padding:5px 2px;outline:0;font-family:'Archivo',sans-serif}
-.plate{width:44px;height:44px;border-radius:50%;border:2.5px solid var(--line);background:var(--card2);color:var(--sub);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;font-family:'Archivo',sans-serif;transition:transform .08s}
+.set-col{display:flex;flex-direction:column;align-items:center;gap:6px;width:48px}
+.sw{width:48px;background:var(--card2);border:1px solid var(--line);border-radius:9px;color:var(--ink);font-size:13.5px;font-weight:800;text-align:center;padding:6px 0;outline:0;font-family:'Archivo',sans-serif;-webkit-appearance:none;appearance:none;margin:0}
+.sw::-webkit-inner-spin-button,.sw::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.plate{width:48px;height:48px;border-radius:50%;border:2.5px solid var(--line);background:var(--card2);color:var(--sub);font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;font-family:'Archivo',sans-serif;transition:transform .08s}
 .plate:active{transform:scale(.9)}
 .plate.done{color:#fff;border-color:transparent;box-shadow:inset 0 0 0 3px rgba(255,255,255,.18)}
 .d-push .plate.done{background:var(--push)}
@@ -165,6 +166,25 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
 .bmr-box{margin-top:12px;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:12.5px;color:var(--sub);line-height:1.6}
 .bmr-box b{color:var(--gold);font-family:'Archivo','Noto Sans KR',sans-serif;font-size:16px}
 
+/* 홈 브리핑 */
+.home-wrap{padding:14px 18px}
+.hm-hero{background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid var(--line);border-radius:16px;padding:18px 16px;margin-bottom:12px}
+.hm-hero .hm-sub{font-size:12.5px;color:var(--sub);margin-bottom:4px}
+.hm-hero .hm-title{font-size:19px;font-weight:900}
+.hm-hero .hm-title b{color:var(--gold)}
+.hm-meta{font-size:12.5px;color:var(--sub);margin-top:8px;line-height:1.7}
+.hm-meta b{color:var(--ink)}
+.hm-list{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
+.hm-ex{font-size:13px;color:var(--sub);line-height:2;display:flex;justify-content:space-between}
+.hm-ex b{color:var(--ink);font-weight:700}
+.hm-ex .star{color:var(--gold)}
+.hm-start{width:100%;border:0;border-radius:14px;padding:15px 0;font-size:15.5px;font-weight:800;color:#fff;margin-top:14px}
+.hm-start.c-push{background:var(--push)}.hm-start.c-pull{background:var(--pull)}.hm-start.c-legs{background:var(--legs)}
+.hm-row{display:flex;gap:10px}
+.hm-mini{flex:1;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px;text-align:center}
+.hm-mini .v{font-size:20px;font-weight:800;font-family:'Archivo',sans-serif}
+.hm-mini .k{font-size:11px;color:var(--sub);margin-top:2px}
+
 /* 주간 리포트 */
 .wk-card{background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px;font-size:12.5px;line-height:1.7;color:var(--sub)}
 .wk-card h3{font-size:13px;color:var(--ink);font-weight:800;margin-bottom:4px}
@@ -216,23 +236,33 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
 </header>
 
 <div class="view-sw">
-  <button id="vToday" class="on">오늘 운동</button>
-  <button id="vHist">기록 보기</button>
+  <button id="vHome" class="on">홈</button>
+  <button id="vToday">운동</button>
+  <button id="vHist">기록</button>
+  <button id="vSetup">셋팅</button>
 </div>
-<div class="last-line" id="lastLine"></div>
 
-<div id="todayView">
+<div id="homeView">
+  <div class="home-wrap" id="homeWrap"></div>
+</div>
+
+<div id="todayView" class="hidden">
   <div class="tabs" id="tabs"></div>
   <div class="note-row">
     <span class="est-time" id="estTime"></span>
     <div style="flex:1"></div>
     <button class="sug-btn" id="sugBtn">💡 추천</button>
-    <button class="edit-btn" id="editBtn">✎ 편집</button>
   </div>
   <div class="day-note" id="dayNote"></div>
   <div id="sugSlot"></div>
   <div class="legend">세트 버튼: 한 번 탭 = 완료 · 두 번 탭 = <b>실패지점 ⚡</b> · 세 번 탭 = 해제</div>
   <div class="list" id="exList"></div>
+</div>
+
+<div id="setupView" class="hidden">
+  <div class="tabs" id="setupTabs"></div>
+  <div class="day-note" style="margin-top:10px">분할별 운동 구성을 관리해요. 여기서 미리 세팅해 두면 운동할 땐 체크만 하면 됩니다.</div>
+  <div class="list" id="setupList"></div>
 </div>
 
 <div id="histView" class="hidden">
@@ -561,7 +591,7 @@ function plateBreak(total){
 const ASSIST_EX = new Set(['딥스','풀업','친업']);
 const isAssist = u => u==='보조kg';
 
-let plan, curPart='push', session=null, index=[], exlog={}, editMode=false, saveTimer=null;
+let plan, curPart='push', session=null, index=[], exlog={}, saveTimer=null;
 
 /* ---- storage ---- */
 function sGet(k){ try{ const r=localStorage.getItem('wlog:'+k); return r?JSON.parse(r):null; }catch(e){ return null; } }
@@ -607,7 +637,6 @@ function plateLabel(v,j){ return v===2?'⚡':(j+1); }
 
 function renderExercises(){
   syncSession();
-  if(editMode){ renderEdit(); return; }
   $('exList').innerHTML = plan[curPart].ex.map((e,i)=>{
     const star = e.n.startsWith('★');
     const name = cleanName(e.n);
@@ -783,6 +812,47 @@ function showCfg(i){
 }
 
 /* ---- 중량/횟수 추천 ---- */
+// 추천 계산 코어 — showRec(메시지 표시)와 autoSetup(일괄 적용)이 공유
+function recCalc(i){
+  const e=plan[curPart].ex[i];
+  const name=cleanName(e.n);
+  const logs=(exlog[name]||[]).slice().sort((a,b)=>b.date.localeCompare(a.date))
+    .filter(l=>l.date!==todayStr() && l.sets.some(s=>s>0));
+  if(!logs.length) return null;
+  const u=e.u||'kg';
+  const assist=isAssist(u);
+  const barbell=isBarbell(name,u);
+  const last=logs[0];
+  const total=last.sets.length;
+  const doneCnt=last.sets.filter(s=>s>0).length;
+  const failIdx=last.sets.findIndex(s=>s===2);
+  const w=last.w||0;
+  const inc = barbell?5:(assist?5:(u==='km/h'?0.5:(w>=40?2.5:(w>=10?1:0.5))));
+  const fit = v => barbell?barbellRound(v):Math.max(0,v);
+  const isClean = l => !l.sets.includes(2) && l.sets.every(s=>s>0);
+  let streak=0;
+  for(const l of logs){ if(l.w===w && isClean(l)) streak++; else break; }
+  const recentFails = logs.slice(0,3).filter(l=>l.sets.includes(2)).length;
+  const stagnant = logs.length>=4 && (assist? logs[0].w>=logs[3].w : logs[0].w<=logs[3].w);
+  let recW=w, kind='keep';
+  if(!assist && recentFails>=2 && stagnant){ recW=fit(w*0.85); kind='deload'; }
+  else if(failIdx>=0 && failIdx<total-1){ recW = assist? w+inc : fit(w-inc); kind='down'; }
+  else if(failIdx===total-1){ recW=w; kind='lastfail'; }
+  else if(doneCnt<total){ recW=w; kind='incomplete'; }
+  else if(streak>=3){ recW = assist? Math.max(w-inc,0) : fit(w+inc); kind='up'; }
+  const applyGoal = assist? recW<w : recW>w;
+  const nextGoal = assist? Math.max(recW-inc,0) : fit(recW+inc);
+  return {e,u,assist,barbell,last,total,doneCnt,failIdx,w,inc,streak,recentFails,recW,kind,applyGoal,nextGoal};
+}
+// 추천 적용 (중량 시프트 + 목표/기본값 갱신)
+function applyRec(i,c){
+  const diff=c.recW-c.w;
+  session.weights[i]=session.weights[i].map(x=>Math.max(0,+(x+diff).toFixed(2)));
+  plan[curPart].ex[i].w=c.recW;
+  if(c.applyGoal) plan[curPart].ex[i].goal=c.nextGoal;
+  sSet('plan',plan);
+}
+
 function showRec(i){
   const slot=$('recSlot'+i);
   if(slot.innerHTML){ slot.innerHTML=''; return; } // 토글
@@ -862,8 +932,9 @@ function customNames(){
   return out;
 }
 
-function renderEdit(){
-  $('exList').innerHTML = plan[curPart].ex.map((e,i)=>`
+function renderEdit(targetId){
+  const tid=targetId||'setupList';
+  $(tid).innerHTML = plan[curPart].ex.map((e,i)=>`
     <div class="ex"><div class="ef">
       <div class="ef-move">
         <button data-mv="${i}" data-dir="-1" ${i===0?'disabled style="opacity:.3"':''}>↑</button>
@@ -1524,7 +1595,7 @@ function saveSession(){
   const rec={date,part:curPart,done:session.done,sd,st,kcal:calcKcal(sd),dur:sessionMinutes()};
   if(i>=0)index[i]=rec; else index.push(rec);
   sSet('index',index);
-  renderLastLine();
+  renderHome();
 }
 function toast(msg){
   const t=$('toast'); t.textContent=msg; t.classList.add('show');
@@ -1535,18 +1606,109 @@ $('doneBtn').onclick=()=>{
   session.done=!session.done; renderDoneBtn(); saveSession();
   toast(session.done?'출석 완료! 오늘도 성장 중 💪':'출석 취소됨');
 };
-$('editBtn').onclick=()=>{
-  editMode=!editMode;
-  $('editBtn').classList.toggle('on',editMode);
-  $('editBtn').textContent=editMode?'✓ 완료':'✎ 편집';
-  $('bar').classList.toggle('hidden',editMode);
-  renderExercises();
-};
-$('vToday').onclick=()=>{ $('vToday').classList.add('on');$('vHist').classList.remove('on');$('todayView').classList.remove('hidden');$('histView').classList.add('hidden');if(!editMode)$('bar').classList.remove('hidden'); };
-$('vHist').onclick=()=>{ $('vHist').classList.add('on');$('vToday').classList.remove('on');$('histView').classList.remove('hidden');$('todayView').classList.add('hidden');$('bar').classList.add('hidden'); renderHistory(); };
+
+/* ---- 4탭 내비게이션 ---- */
+const VIEWS={vHome:'homeView',vToday:'todayView',vHist:'histView',vSetup:'setupView'};
+function showView(btnId){
+  Object.entries(VIEWS).forEach(([b,v])=>{
+    $(b).classList.toggle('on',b===btnId);
+    $(v).classList.toggle('hidden',b!==btnId);
+  });
+  $('bar').classList.toggle('hidden',btnId!=='vToday');
+  if(btnId==='vHome') renderHome();
+  if(btnId==='vHist') renderHistory();
+  if(btnId==='vSetup') renderSetup();
+}
+Object.keys(VIEWS).forEach(b=>$(b).onclick=()=>showView(b));
+
+/* ---- 셋팅 뷰 (분할별 운동 구성) ---- */
+function renderSetup(){
+  $('setupTabs').innerHTML = Object.keys(plan).map(k=>
+    `<div class="tab t-${k} ${k===curPart?'on':''}" data-p="${k}">${plan[k].label}</div>`).join('');
+  document.querySelectorAll('#setupTabs .tab').forEach(t=>t.onclick=()=>{
+    switchPart(t.dataset.p); renderSetup();
+  });
+  document.body.className='d-'+curPart;
+  renderEdit('setupList');
+}
+
+/* ---- 홈 브리핑 ---- */
+const PART_ORDER=['push','pull','legs'];
+function nextPart(){
+  const done=index.filter(r=>r.done).sort((a,b)=>b.date.localeCompare(a.date));
+  if(!done.length) return {part:'push', reason:'first'};
+  const today=todayStr();
+  const todayDone=done.find(r=>r.date===today);
+  const last=done[0];
+  const idx=PART_ORDER.indexOf(last.part);
+  const nxt=PART_ORDER[(idx+1)%PART_ORDER.length]||'push';
+  return {part:nxt, last, todayDone, reason:'cycle'};
+}
+function estimateMinutesFor(part){
+  let sec=0;
+  plan[part].ex.forEach(e=>{
+    if(e.u==='km/h'){ sec += e.s*(e.roundMin??2)*60; }
+    else if(isCardio(e.u)){ sec += (e.w||0)*e.s*60; }
+    else{
+      const reps=parseInt(e.r)||10;
+      sec += e.s*(reps*4+15) + Math.max(0,e.s-1)*(e.rest||60);
+    }
+    sec += 60;
+  });
+  return Math.round(sec/60);
+}
+function renderHome(){
+  const el=$('homeWrap'); if(!el) return;
+  const {part,last,todayDone}=nextPart();
+  const today=todayStr();
+  const done=index.filter(r=>r.done).sort((a,b)=>b.date.localeCompare(a.date));
+  let daysLine='첫 운동을 시작해 보세요 🔥';
+  if(done.length){
+    const days=Math.round((new Date(today)-new Date(done[0].date))/86400000);
+    const ago=days===0?'오늘':days===1?'어제':`${days}일 전`;
+    daysLine=`마지막 운동 <b>${ago}</b> (${plan[done[0].part]?.label||''})${days>=4?' — 슬슬 가야죠? 👀':''}`;
+  }
+  const [wa,wb]=weekBounds(0);
+  const weekCnt=index.filter(r=>r.done&&r.date>=wa&&r.date<=wb).length;
+  const exList=plan[part].ex.map(e=>{
+    const star=e.n.startsWith('★');
+    return `<div class="hm-ex"><span>${star?'<span class="star">★</span>':''}<b>${esc(cleanName(e.n))}</b></span><span>${esc(e.r)} × ${e.s}세트</span></div>`;
+  }).join('');
+  el.innerHTML=`
+    <div class="hm-hero">
+      <div class="hm-sub">${todayDone?'오늘 운동 완료! 추가로 하신다면':'오늘은'}</div>
+      <div class="hm-title"><b>${plan[part].label}</b> 할 차례</div>
+      <div class="hm-meta">${daysLine}<br>예상 소요 <b>~${estimateMinutesFor(part)}분</b> · ${plan[part].ex.length}개 운동</div>
+      <div class="hm-list">${exList}</div>
+      <button class="hm-start c-${part}" id="hmStart">${todayDone?'운동 이어가기':'🚀 운동 시작하기'}</button>
+    </div>
+    <div class="hm-row">
+      <div class="hm-mini"><div class="v">${weekCnt}</div><div class="k">이번 주 출석</div></div>
+      <div class="hm-mini"><div class="v">${done.length}</div><div class="k">총 출석</div></div>
+    </div>`;
+  $('hmStart').onclick=()=>{
+    switchPart(part);
+    showView('vToday');
+    autoSetup();
+  };
+}
+
+/* ---- 원탭 추천 세팅: 전 운동에 추천 중량 일괄 적용 ---- */
+function autoSetup(){
+  let applied=0;
+  plan[curPart].ex.forEach((e,i)=>{
+    const c=recCalc(i);
+    if(!c) return;
+    const curTop = c.assist? Math.min(...session.weights[i]) : Math.max(...session.weights[i],0);
+    if(c.recW!==curTop || c.kind==='up' || c.kind==='down' || c.kind==='deload'){
+      if(c.recW!==curTop){ applyRec(i,c); applied++; }
+    }
+  });
+  if(applied>0){ queueSave(); renderExercises(); toast(`🚀 ${applied}개 운동에 추천 중량 자동 세팅!`); }
+}
 
 /* ---- init ---- */
-const APP_VER='v5.0';
+const APP_VER='v5.1';
 $('verTag').textContent=APP_VER;
 
 // 서비스 워커 등록 (오프라인 지원)
@@ -1583,18 +1745,6 @@ document.addEventListener('visibilitychange',()=>{
 });
 
 // 마지막 운동일 안내
-function renderLastLine(){
-  const done=index.filter(r=>r.done).sort((a,b)=>b.date.localeCompare(a.date));
-  const today=todayStr();
-  const el=$('lastLine');
-  if(done.some(r=>r.date===today)){ el.innerHTML='오늘 운동 완료 💪 잘하셨어요'; return; }
-  if(!done.length){ el.innerHTML='첫 운동을 시작해 보세요 🔥'; return; }
-  const last=done[0];
-  const days=Math.round((new Date(today)-new Date(last.date))/86400000);
-  const ago=days===0?'오늘':days===1?'어제':`${days}일 전`;
-  el.innerHTML=`마지막 운동: <b>${ago}</b> · ${plan[last.part]?.label||last.part}${days>=4?' — 슬슬 가야죠? 👀':''}`;
-}
-
 (function(){
   const d=new Date();
   $('hdDate').textContent=`${d.getMonth()+1}월 ${d.getDate()}일 (${'일월화수목금토'[d.getDay()]})`;
@@ -1612,7 +1762,7 @@ function renderLastLine(){
   curPart=sGet('lastPart')||'push';
   if(!plan[curPart])curPart='push';
   session=sGet('session:'+todayStr()+':'+curPart)||defaultSession(curPart);
-  renderTabs(); renderExercises(); renderLastLine();
+  renderTabs(); renderExercises(); renderHome();
 })();
 </script>
 </body>
