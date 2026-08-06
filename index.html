@@ -239,7 +239,6 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
   <button id="vHome" class="on">홈</button>
   <button id="vToday">운동</button>
   <button id="vHist">기록</button>
-  <button id="vSetup">셋팅</button>
 </div>
 
 <div id="homeView">
@@ -252,17 +251,12 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
     <span class="est-time" id="estTime"></span>
     <div style="flex:1"></div>
     <button class="sug-btn" id="sugBtn">💡 추천</button>
+    <button class="edit-btn" id="editBtn">✎ 편집</button>
   </div>
   <div class="day-note" id="dayNote"></div>
   <div id="sugSlot"></div>
   <div class="legend">세트 버튼: 한 번 탭 = 완료 · 두 번 탭 = <b>실패지점 ⚡</b> · 세 번 탭 = 해제</div>
   <div class="list" id="exList"></div>
-</div>
-
-<div id="setupView" class="hidden">
-  <div class="tabs" id="setupTabs"></div>
-  <div class="day-note" style="margin-top:10px">분할별 운동 구성을 관리해요. 여기서 미리 세팅해 두면 운동할 땐 체크만 하면 됩니다.</div>
-  <div class="list" id="setupList"></div>
 </div>
 
 <div id="histView" class="hidden">
@@ -637,6 +631,7 @@ function plateLabel(v,j){ return v===2?'⚡':(j+1); }
 
 function renderExercises(){
   syncSession();
+  if(editMode){ renderEdit('exList'); return; }
   $('exList').innerHTML = plan[curPart].ex.map((e,i)=>{
     const star = e.n.startsWith('★');
     const name = cleanName(e.n);
@@ -933,7 +928,7 @@ function customNames(){
 }
 
 function renderEdit(targetId){
-  const tid=targetId||'setupList';
+  const tid=targetId||'exList';
   $(tid).innerHTML = plan[curPart].ex.map((e,i)=>`
     <div class="ex"><div class="ef">
       <div class="ef-move">
@@ -1607,30 +1602,27 @@ $('doneBtn').onclick=()=>{
   toast(session.done?'출석 완료! 오늘도 성장 중 💪':'출석 취소됨');
 };
 
-/* ---- 4탭 내비게이션 ---- */
-const VIEWS={vHome:'homeView',vToday:'todayView',vHist:'histView',vSetup:'setupView'};
+/* ---- 3탭 내비게이션 ---- */
+let editMode=false;
+const VIEWS={vHome:'homeView',vToday:'todayView',vHist:'histView'};
 function showView(btnId){
   Object.entries(VIEWS).forEach(([b,v])=>{
     $(b).classList.toggle('on',b===btnId);
     $(v).classList.toggle('hidden',b!==btnId);
   });
-  $('bar').classList.toggle('hidden',btnId!=='vToday');
+  $('bar').classList.toggle('hidden',btnId!=='vToday'||editMode);
   if(btnId==='vHome') renderHome();
   if(btnId==='vHist') renderHistory();
-  if(btnId==='vSetup') renderSetup();
 }
 Object.keys(VIEWS).forEach(b=>$(b).onclick=()=>showView(b));
 
-/* ---- 셋팅 뷰 (분할별 운동 구성) ---- */
-function renderSetup(){
-  $('setupTabs').innerHTML = Object.keys(plan).map(k=>
-    `<div class="tab t-${k} ${k===curPart?'on':''}" data-p="${k}">${plan[k].label}</div>`).join('');
-  document.querySelectorAll('#setupTabs .tab').forEach(t=>t.onclick=()=>{
-    switchPart(t.dataset.p); renderSetup();
-  });
-  document.body.className='d-'+curPart;
-  renderEdit('setupList');
-}
+$('editBtn').onclick=()=>{
+  editMode=!editMode;
+  $('editBtn').classList.toggle('on',editMode);
+  $('editBtn').textContent=editMode?'✓ 완료':'✎ 편집';
+  $('bar').classList.toggle('hidden',editMode);
+  renderExercises();
+};
 
 /* ---- 홈 브리핑 ---- */
 const PART_ORDER=['push','pull','legs'];
@@ -1708,7 +1700,7 @@ function autoSetup(){
 }
 
 /* ---- init ---- */
-const APP_VER='v5.1';
+const APP_VER='v5.2';
 $('verTag').textContent=APP_VER;
 
 // 서비스 워커 등록 (오프라인 지원)
