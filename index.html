@@ -175,6 +175,8 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
 .hm-meta{font-size:12.5px;color:var(--sub);margin-top:8px;line-height:1.7}
 .hm-meta b{color:var(--ink)}
 .hm-list{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
+.hm-gap{margin-top:10px;font-size:11.5px;color:var(--sub);line-height:1.6;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.hm-gap b{color:var(--gold)}
 .hm-ex{font-size:13px;color:var(--sub);line-height:2;display:flex;justify-content:space-between}
 .hm-ex b{color:var(--ink);font-weight:700}
 .hm-ex .star{color:var(--gold)}
@@ -396,6 +398,26 @@ const EXLIB = [
   ['로잉머신','유산소'],['로잉 HIIT','유산소'],['러닝머신','유산소'],['러닝 인터벌','유산소'],
   ['사이클','유산소'],['사이클 HIIT','유산소'],['스텝밀','유산소'],['일립티컬','유산소'],
   ['어썰트 바이크','유산소'],['버피','유산소'],['줄넘기','유산소'],['스프린트','유산소'],
+  ['스키 에르그','유산소'],['배틀로프','유산소'],['계단 오르기','유산소'],['셔틀런','유산소'],['슬레드 푸시','유산소'],
+  // 확장 — 가슴
+  ['머신 플라이','가슴'],['인클라인 케이블 플라이','가슴'],['스벤드 프레스','가슴'],
+  ['덤벨 스퀴즈 프레스','가슴'],['아처 푸시업','가슴'],['와이드 푸시업','가슴'],
+  // 확장 — 어깨
+  ['케이블 프론트 레이즈','어깨'],['덤벨 Y레이즈','어깨'],['케이블 리어델트 플라이','어깨'],
+  ['랜드마인 프레스','어깨'],['푸시 프레스','어깨'],['원암 케이블 레터럴','어깨'],['스캡션 레이즈','어깨'],
+  // 확장 — 등
+  ['인버티드 로우','등'],['메도우즈 로우','등'],['시일 로우','등'],['원암 랫풀다운','등'],
+  ['굿모닝','등'],['케틀벨 스윙','등'],['파머스 워크','등'],
+  // 확장 — 이두/삼두
+  ['드래그 컬','이두'],['조트만 컬','이두'],['21렙스 컬','이두'],
+  ['다이아몬드 푸시업','삼두'],['원암 케이블 익스텐션','삼두'],['JM 프레스','삼두'],['테이트 프레스','삼두'],
+  // 확장 — 하체
+  ['스모 스쿼트','하체'],['싱글레그 프레스','하체'],['시시 스쿼트','하체'],['노르딕 컬','하체'],
+  ['싱글 레그 데드리프트','하체'],['덩키 카프 레이즈','하체'],['월싯','하체'],['점프 스쿼트','하체'],
+  // 확장 — 코어
+  ['라잉 레그 레이즈','코어'],['리버스 크런치','코어'],['시티드 니업','코어'],['토즈 투 바','코어'],
+  ['할로우 홀드','코어'],['팔로프 프레스','코어'],['케이블 우드촙','코어'],['사이드 벤드','코어'],
+  ['드래곤 플래그','코어'],['버드독','코어'],['L싯','코어'],['플러터 킥','코어'],
 ];
 // 검색용 별칭 (영문/줄임말 → 매칭 강화)
 const EXALIAS = {
@@ -435,6 +457,15 @@ const EXALIAS = {
   '스티프 레그 데드리프트':'스티프 sldl',
   '행잉 레그 레이즈':'행레레 hanging',
   '딥스':'dips 딥',
+  '라잉 레그 레이즈':'라잉레그레이즈 누워서다리들기',
+  '케틀벨 스윙':'케틀벨 kb스윙 swing',
+  '굿모닝':'good morning 굳모닝',
+  '노르딕 컬':'노르딕 nordic 햄컬',
+  '토즈 투 바':'t2b 토투바',
+  '파머스 워크':'farmers 파머스캐리',
+  '팔로프 프레스':'pallof 안티로테이션',
+  '스벤드 프레스':'svend',
+  '21렙스 컬':'21렙 21s',
   '로잉머신':'로잉 rowing 조정',
   '로잉 HIIT':'로잉인터벌 rowing hiit',
   '러닝머신':'런닝 트레드밀 treadmill running',
@@ -489,14 +520,30 @@ const MTAG = {
   '스미스 스쿼트':['사두','둔근'],'펜듈럼 스쿼트':['사두'],'수직 레그 프레스':['사두','둔근'],
   '시티드 레그 컬':['햄'],'워킹 런지':['사두','둔근'],'덤벨 런지':['사두','둔근'],'스텝업':['사두','둔근'],
   '글루트 브릿지':['둔근'],'케이블 킥백':['둔근'],'시티드 카프 레이즈':['종아리'],'박스 점프':['사두','둔근'],
+  // 2차 확장 태그
+  '머신 플라이':['가슴중'],'인클라인 케이블 플라이':['가슴상'],'스벤드 프레스':['가슴중'],
+  '덤벨 스퀴즈 프레스':['가슴중','삼두'],'아처 푸시업':['가슴중'],'와이드 푸시업':['가슴중'],
+  '케이블 프론트 레이즈':['어깨전'],'덤벨 Y레이즈':['어깨후','승모'],'케이블 리어델트 플라이':['어깨후'],
+  '랜드마인 프레스':['어깨전','가슴상'],'푸시 프레스':['어깨전','삼두'],'원암 케이블 레터럴':['어깨측'],'스캡션 레이즈':['어깨측','승모'],
+  '인버티드 로우':['등두께'],'메도우즈 로우':['등두께'],'시일 로우':['등두께'],'원암 랫풀다운':['광배'],
+  '굿모닝':['등하부','햄'],'케틀벨 스윙':['둔근','햄','등하부'],'파머스 워크':['전완','승모','코어'],
+  '드래그 컬':['이두'],'조트만 컬':['이두','전완'],'21렙스 컬':['이두'],
+  '다이아몬드 푸시업':['삼두','가슴중'],'원암 케이블 익스텐션':['삼두'],'JM 프레스':['삼두'],'테이트 프레스':['삼두'],
+  '스모 스쿼트':['사두','내전근','둔근'],'싱글레그 프레스':['사두','둔근'],'시시 스쿼트':['사두'],'노르딕 컬':['햄'],
+  '싱글 레그 데드리프트':['햄','둔근'],'덩키 카프 레이즈':['종아리'],'월싯':['사두'],'점프 스쿼트':['사두','둔근'],
+  '라잉 레그 레이즈':['코어'],'리버스 크런치':['코어'],'시티드 니업':['코어'],'토즈 투 바':['코어'],
+  '할로우 홀드':['코어'],'팔로프 프레스':['코어'],'케이블 우드촙':['코어'],'사이드 벤드':['코어'],
+  '드래곤 플래그':['코어'],'버드독':['코어','등하부'],'L싯':['코어'],'플러터 킥':['코어'],
 };
 // 부위별로 채우면 좋은 자극 (우선순위 순) — [태그, 설명, 추천 횟수, 고반복 여부]
 const DESIRE = {
   push:[['가슴중','가슴 중부(전체 볼륨)','8회'],['가슴상','윗가슴(어깨 프레임 라인)','8~10회'],
         ['어깨측','어깨 측면(어깨 넓이)','15회',1],['가슴하','아랫가슴(가슴 마무리 라인)','8~10회'],
-        ['어깨후','어깨 후면(직각 어깨)','15회',1],['삼두','삼두(팔 뒷면, 프레스 보조)','10회'],['어깨전','어깨 전면','8회']],
+        ['어깨후','어깨 후면(직각 어깨)','15회',1],['삼두','삼두(팔 뒷면, 프레스 보조)','10회'],['어깨전','어깨 전면','8회'],
+        ['코어','코어','15회',1]],
   pull:[['광배','광배(등 너비)','8~10회'],['등두께','등 중앙(두께)','8회'],['등하부','등 하부/후면 사슬','5회'],
-        ['이두','이두','8회'],['승모','승모(목-어깨 라인)','12회',1],['전완','전완(그립력)','10회']],
+        ['이두','이두','8회'],['승모','승모(목-어깨 라인)','12회',1],['전완','전완(그립력)','10회'],
+        ['코어','코어','15회',1]],
   legs:[['사두','대퇴사두(허벅지 앞)','8회'],['햄','햄스트링(허벅지 뒤)','10회'],['둔근','둔근(엉덩이 파워)','10회'],
         ['종아리','종아리','15회',1],['코어','코어','15회',1]]
 };
@@ -1366,8 +1413,8 @@ $('bkAction').onclick=async()=>{
   }
 };
 
-/* ---- rest timer (기존 유지) ---- */
-let tLeft=0, tInt=null, audioCtx=null;
+/* ---- rest timer (종료시각 기반 — 앱을 벗어나도 시간이 흐름) ---- */
+let tEnd=0, tInt=null, tDone=true, audioCtx=null;
 function beep(){
   try{
     audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
@@ -1382,32 +1429,41 @@ function beep(){
   if(navigator.vibrate) navigator.vibrate([200,100,200]);
 }
 function startTimer(sec){
-  tLeft=sec; clearInterval(tInt);
+  tEnd=Date.now()+sec*1000; tDone=false;
+  clearInterval(tInt);
   $('timer').classList.add('show'); $('timer').classList.remove('flash');
-  drawTimer();
-  tInt=setInterval(()=>{
-    tLeft--;
-    if(tLeft<=0){ stopTimer(); beep(); toast('휴식 끝! 다음 세트 🔥'); return; }
-    if(tLeft<=5) $('timer').classList.add('flash');
-    drawTimer();
-  },1000);
+  tickTimer();
+  tInt=setInterval(tickTimer,250);
 }
-function drawTimer(){ $('tTime').textContent=Math.floor(tLeft/60)+':'+String(tLeft%60).padStart(2,'0'); }
-function stopTimer(){ clearInterval(tInt); $('timer').classList.remove('show'); }
+function tickTimer(){
+  const left=Math.ceil((tEnd-Date.now())/1000);
+  if(left<=0){
+    if(!tDone){ tDone=true; stopTimer(); beep(); toast('휴식 끝! 다음 세트 🔥'); }
+    return;
+  }
+  if(left<=5) $('timer').classList.add('flash');
+  $('tTime').textContent=Math.floor(left/60)+':'+String(left%60).padStart(2,'0');
+}
+function stopTimer(){ clearInterval(tInt); tDone=true; $('timer').classList.remove('show'); }
 $('tSkip').onclick=stopTimer;
-$('tPlus').onclick=()=>{ tLeft+=30; drawTimer(); };
+$('tPlus').onclick=()=>{ tEnd+=30000; tickTimer(); };
+// 백그라운드에서 복귀 시 즉시 재계산 (끝났으면 바로 알림)
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='visible' && !tDone) tickTimer();
+});
 
 /* ---- 운동 추천 (자동 분석 + 부위 직접 선택) ---- */
 let sugCursor=0, sugTag='auto';
-function findGaps(){
+function findGaps(part){
+  const p=part||curPart;
   const covered=new Set();
-  plan[curPart].ex.forEach(e=>{
+  plan[p].ex.forEach(e=>{
     (MTAG[cleanName(e.n)]||[]).forEach(t=>covered.add(t));
   });
   const gaps=[];
-  (DESIRE[curPart]||[]).forEach(([tag,label,reps,hi])=>{
+  (DESIRE[p]||[]).forEach(([tag,label,reps,hi])=>{
     if(covered.has(tag)) return;
-    const inPlan=new Set(plan[curPart].ex.map(e=>cleanName(e.n)));
+    const inPlan=new Set(plan[p].ex.map(e=>cleanName(e.n)));
     const cands=Object.keys(MTAG).filter(n=>MTAG[n].includes(tag)&&!inPlan.has(n));
     if(cands.length) gaps.push({tag,label,reps,cands});
   });
@@ -1666,12 +1722,17 @@ function renderHome(){
     const star=e.n.startsWith('★');
     return `<div class="hm-ex"><span>${star?'<span class="star">★</span>':''}<b>${esc(cleanName(e.n))}</b></span><span>${esc(e.r)} × ${e.s}세트</span></div>`;
   }).join('');
+  const gaps=findGaps(part);
+  const gapLine = gaps.length
+    ? `<div class="hm-gap">💡 비어 있는 자극: <b>${gaps.slice(0,3).map(g=>g.label.split('(')[0]).join(' · ')}</b>${gaps.length>3?` 외 ${gaps.length-3}`:''} — 운동 탭 추천에서 채울 수 있어요</div>`
+    : '';
   el.innerHTML=`
     <div class="hm-hero">
       <div class="hm-sub">${todayDone?'오늘 운동 완료! 추가로 하신다면':'오늘은'}</div>
       <div class="hm-title"><b>${plan[part].label}</b> 할 차례</div>
       <div class="hm-meta">${daysLine}<br>예상 소요 <b>~${estimateMinutesFor(part)}분</b> · ${plan[part].ex.length}개 운동</div>
       <div class="hm-list">${exList}</div>
+      ${gapLine}
       <button class="hm-start c-${part}" id="hmStart">${todayDone?'운동 이어가기':'🚀 운동 시작하기'}</button>
     </div>
     <div class="hm-row">
@@ -1700,7 +1761,7 @@ function autoSetup(){
 }
 
 /* ---- init ---- */
-const APP_VER='v5.2';
+const APP_VER='v5.5';
 $('verTag').textContent=APP_VER;
 
 // 서비스 워커 등록 (오프라인 지원)
