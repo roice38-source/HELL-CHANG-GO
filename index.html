@@ -688,7 +688,20 @@ function sSet(k,v){ try{ localStorage.setItem('wlog:'+k, JSON.stringify(v)); }ca
 
 /* ---- session ---- */
 function defaultSession(part){
-  return { part, sets: plan[part].ex.map(e=>Array(e.s).fill(0)), weights: plan[part].ex.map(e=>Array(e.s).fill(e.w)), done:false };
+  return { part, sets: plan[part].ex.map(e=>Array(e.s).fill(0)), weights: plan[part].ex.map(e=>inheritWs(e)), done:false };
+}
+// 지난 세션의 세트별 중량 패턴(램프/백오프 모양)을 그대로 상속
+// 기본 중량(e.w)이 그때보다 올라갔으면 패턴 전체를 그만큼 시프트
+function inheritWs(e){
+  const s=e.s;
+  const logs=(exlog[cleanName(e.n)]||[]).slice().sort((a,b)=>b.date.localeCompare(a.date));
+  const last=logs.find(l=>l.ws&&l.ws.length&&(l.u||'kg')===(e.u||'kg'));
+  if(!last) return Array(s).fill(e.w||0);
+  const shift = e.w ? e.w - last.w : 0;
+  let ws=last.ws.map(v=>Math.max(0,+(v+shift).toFixed(2)));
+  while(ws.length<s) ws.push(ws[ws.length-1]);
+  ws.length=s;
+  return ws;
 }
 // 구버전 데이터 마이그레이션: boolean 세트 → 0/1/2, 단일 중량 → 세트별 배열
 function syncSession(){
@@ -881,7 +894,7 @@ function showCfg(i){
         // 보조: 처음엔 보조 많이(쉽게) → 탑세트에서 최소 보조
         ws=Array.from({length:n},(_,j)=> top + 5*(n-1-j));
       }else{
-        ws=Array.from({length:n},(_,j)=> n===1?top : roundStep(top*(0.7+0.3*j/(n-1)), top, opt));
+        ws=Array.from({length:n},(_,j)=> n===1?top : roundStep(top*(0.8+0.2*j/(n-1)), top, opt));
         ws[n-1]=top;
       }
     }else{
@@ -1824,7 +1837,7 @@ function autoSetup(){
 }
 
 /* ---- init ---- */
-const APP_VER='v5.8';
+const APP_VER='v5.9';
 $('verTag').textContent=APP_VER;
 
 // 서비스 워커 등록 (오프라인 지원)
