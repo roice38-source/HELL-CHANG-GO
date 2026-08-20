@@ -16,7 +16,7 @@
 :root{
   --bg:#141619; --card:#1E2126; --card2:#262A31;
   --ink:#F2F0EA; --sub:#8A8F98; --line:#31363E;
-  --push:#D64545; --pull:#3D7BD9; --legs:#35A56B; --gold:#E8B54A;
+  --push:#D64545; --pull:#3D7BD9; --legs:#35A56B; --full:#8E6BD9; --home:#2FA3A0; --gold:#E8B54A;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{background:var(--bg);color:var(--ink);font-family:'Noto Sans KR',sans-serif;min-height:100vh;padding-bottom:110px}
@@ -33,12 +33,14 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
 .view-sw button{flex:1;padding:9px 0;border:0;background:transparent;color:var(--sub);font-weight:700;font-size:14px;border-radius:9px}
 .view-sw button.on{background:var(--card2);color:var(--ink)}
 
-.tabs{display:flex;gap:8px;padding:16px 18px 4px}
-.tab{flex:1;padding:13px 0;border-radius:14px;background:var(--card);border:1px solid var(--line);text-align:center;color:var(--sub);font-weight:800;font-size:14.5px}
+.tabs{display:flex;gap:8px;padding:16px 18px 4px;flex-wrap:wrap}
+.tab{flex:1 1 30%;padding:13px 0;border-radius:14px;background:var(--card);border:1px solid var(--line);text-align:center;color:var(--sub);font-weight:800;font-size:13px;white-space:nowrap}
 .tab.on{color:#fff;border-color:transparent}
 .tab.on.t-push{background:var(--push)}
 .tab.on.t-pull{background:var(--pull)}
 .tab.on.t-legs{background:var(--legs)}
+.tab.on.t-full{background:var(--full)}
+.tab.on.t-home{background:var(--home)}
 
 .note-row{display:flex;align-items:center;gap:10px;margin:10px 18px 0}
 .day-note{margin:8px 18px 0;font-size:12.5px;color:var(--sub);line-height:1.55}
@@ -84,6 +86,8 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
 .d-push .plate.done{background:var(--push)}
 .d-pull .plate.done{background:var(--pull)}
 .d-legs .plate.done{background:var(--legs)}
+.d-full .plate.done{background:var(--full)}
+.d-home .plate.done{background:var(--home)}
 .plate.fail{background:var(--gold)!important;color:#141619;border-color:transparent;box-shadow:none}
 
 .rec-box{margin-top:10px;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:12.5px;line-height:1.55;display:flex;align-items:center;gap:10px}
@@ -115,6 +119,8 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
 .d-push .done-btn{background:var(--push)}
 .d-pull .done-btn{background:var(--pull)}
 .d-legs .done-btn{background:var(--legs)}
+.d-full .done-btn{background:var(--full)}
+.d-home .done-btn{background:var(--home)}
 .done-btn.checked{background:var(--card2)!important;color:var(--gold)}
 
 /* rest timer */
@@ -133,7 +139,7 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
 .h-box .k{font-size:11.5px;color:var(--sub);margin-top:2px}
 .h-item{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px;margin-bottom:9px;display:flex;align-items:center;gap:12px}
 .h-tag{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:#fff;text-align:center;line-height:1.2}
-.h-tag.push{background:var(--push)}.h-tag.pull{background:var(--pull)}.h-tag.legs{background:var(--legs)}
+.h-tag.push{background:var(--push)}.h-tag.pull{background:var(--pull)}.h-tag.legs{background:var(--legs)}.h-tag.full{background:var(--full)}.h-tag.home{background:var(--home)}
 .h-info{flex:1}
 .h-date{font-size:14px;font-weight:700}
 .h-meta{font-size:12px;color:var(--sub);margin-top:2px}
@@ -172,6 +178,15 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
 .hm-hero .hm-sub{font-size:12.5px;color:var(--sub);margin-bottom:4px}
 .hm-hero .hm-title{font-size:19px;font-weight:900}
 .hm-hero .hm-title b{color:var(--gold)}
+.hm-parts{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.hm-parts .hp{border:1px solid var(--line);background:var(--card2);color:var(--sub);font-size:12px;font-weight:700;padding:7px 12px;border-radius:99px}
+.hm-parts .hp.on{color:#fff;border-color:transparent}
+.hm-parts .hp.on.p-push{background:var(--push)}
+.hm-parts .hp.on.p-pull{background:var(--pull)}
+.hm-parts .hp.on.p-legs{background:var(--legs)}
+.hm-parts .hp.on.p-full{background:var(--full)}
+.hm-parts .hp.on.p-home{background:var(--home)}
+.hm-parts .hp .rec-mark{font-size:10px;opacity:.85;margin-left:3px}
 .hm-meta{font-size:12.5px;color:var(--sub);margin-top:8px;line-height:1.7}
 .hm-meta b{color:var(--ink)}
 .hm-list{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
@@ -182,6 +197,8 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
 .hm-ex .star{color:var(--gold)}
 .hm-start{width:100%;border:0;border-radius:14px;padding:15px 0;font-size:15.5px;font-weight:800;color:#fff;margin-top:14px}
 .hm-start.c-push{background:var(--push)}.hm-start.c-pull{background:var(--pull)}.hm-start.c-legs{background:var(--legs)}
+.hm-start.c-full{background:var(--full)}
+.hm-start.c-home{background:var(--home)}
 .hm-row{display:flex;gap:10px}
 .hm-mini{flex:1;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px;text-align:center}
 .hm-mini .v{font-size:20px;font-weight:800;font-family:'Archivo',sans-serif}
@@ -418,6 +435,9 @@ const EXLIB = [
   ['라잉 레그 레이즈','코어'],['리버스 크런치','코어'],['시티드 니업','코어'],['토즈 투 바','코어'],
   ['할로우 홀드','코어'],['팔로프 프레스','코어'],['케이블 우드촙','코어'],['사이드 벤드','코어'],
   ['드래곤 플래그','코어'],['버드독','코어'],['L싯','코어'],['플러터 킥','코어'],
+  // 홈트 (밴드)
+  ['밴드 로우','등'],['밴드 풀어파트','어깨'],['밴드 보조 풀업','등'],['밴드 페이스 풀','어깨'],
+  ['밴드 레터럴 레이즈','어깨'],['밴드 컬','이두'],['밴드 푸시다운','삼두'],['밴드 굿모닝','하체'],
 ];
 // 검색용 별칭 (영문/줄임말 → 매칭 강화)
 const EXALIAS = {
@@ -466,6 +486,8 @@ const EXALIAS = {
   '팔로프 프레스':'pallof 안티로테이션',
   '스벤드 프레스':'svend',
   '21렙스 컬':'21렙 21s',
+  '밴드 풀어파트':'풀어파트 pull apart 밴드후면',
+  '밴드 로우':'밴드로우 band row',
   '로잉머신':'로잉 rowing 조정',
   '로잉 HIIT':'로잉인터벌 rowing hiit',
   '러닝머신':'런닝 트레드밀 treadmill running',
@@ -534,6 +556,8 @@ const MTAG = {
   '라잉 레그 레이즈':['코어'],'리버스 크런치':['코어'],'시티드 니업':['코어'],'토즈 투 바':['코어'],
   '할로우 홀드':['코어'],'팔로프 프레스':['코어'],'케이블 우드촙':['코어'],'사이드 벤드':['코어'],
   '드래곤 플래그':['코어'],'버드독':['코어','등하부'],'L싯':['코어'],'플러터 킥':['코어'],
+  '밴드 로우':['등두께'],'밴드 풀어파트':['어깨후'],'밴드 보조 풀업':['광배'],'밴드 페이스 풀':['어깨후','승모'],
+  '밴드 레터럴 레이즈':['어깨측'],'밴드 컬':['이두'],'밴드 푸시다운':['삼두'],'밴드 굿모닝':['햄','등하부'],
 };
 // 부위별로 채우면 좋은 자극 (우선순위 순) — [태그, 설명, 추천 횟수, 고반복 여부]
 const DESIRE = {
@@ -545,7 +569,11 @@ const DESIRE = {
         ['이두','이두','8회'],['승모','승모(목-어깨 라인)','12회',1],['전완','전완(그립력)','10회'],
         ['코어','코어','15회',1]],
   legs:[['사두','대퇴사두(허벅지 앞)','8회'],['햄','햄스트링(허벅지 뒤)','10회'],['둔근','둔근(엉덩이 파워)','10회'],
-        ['종아리','종아리','15회',1],['코어','코어','15회',1]]
+        ['종아리','종아리','15회',1],['코어','코어','15회',1]],
+  full:[['사두','하체(스쿼트 계열)','5회'],['가슴중','가슴(프레스 계열)','5~8회'],['등두께','등 중앙(로우 계열)','8회'],
+        ['광배','광배(풀다운/풀업)','10회'],['어깨측','어깨 측면','15회',1],['코어','코어','15회',1]],
+  home:[['광배','당기기(풀업 계열)','최대'],['가슴중','밀기(푸시업 계열)','15회'],['등두께','등 중앙(로우)','15회',1],
+        ['둔근','둔근/후면 사슬','20회',1],['어깨후','어깨 후면','15회',1],['코어','코어','15회',1]]
 };
 
 // 부위 태그 → 표시 라벨 (직접 선택 추천용)
@@ -604,6 +632,26 @@ const DEFAULT_PLAN = {
       {n:'레그 프레스', s:3, rest:90, r:'8회', w:100, u:'kg', goal:140, tip:'메인 스쿼트 후 밀어붙이기'},
       {n:'★시티드 케이블 로우', s:3, rest:90, r:'10회', w:40, u:'kg', goal:45, tip:'견갑을 강하게 접어 등 중앙 조이기'},
       {n:'★페이스 풀', s:3, rest:60, r:'15회', w:15, u:'kg', goal:20, tip:'직각 어깨 + 라운드숄더 교정'},
+    ]},
+  full: { label:'전신',
+    note:'주 1회 시즌용 압축 루틴. 5개 운동으로 전 부위에 매주 무거운 자극을 줍니다. 약 60분.',
+    ex:[
+      {n:'바벨 백 스쿼트', s:3, rest:150, r:'5회', w:100, u:'kg', goal:105, tip:'하체 메인 — 무릎/허리 보호대'},
+      {n:'바벨 벤치 프레스', s:3, rest:120, r:'5회', w:60, u:'kg', goal:65, tip:'가슴 메인'},
+      {n:'바벨 로우', s:3, rest:90, r:'8회', w:50, u:'kg', goal:55, tip:'등 두께 + 라운드숄더 방어'},
+      {n:'랫 풀 다운', s:3, rest:75, r:'10회', w:45, u:'kg', goal:55, tip:'광배 너비'},
+      {n:'사이드 레터럴 레이즈', s:3, rest:45, r:'15회', w:6, u:'kg×2', goal:8, tip:'어깨 측면 마무리'},
+    ]},
+  home: { label:'홈트',
+    note:'헬스장 못 가는 날용. 턱걸이바 + 밴드 + 케틀벨 6kg로 밀기/당기기 밸런스를 지킵니다. 약 35분.',
+    ex:[
+      {n:'풀업', s:4, rest:90, r:'최대 반복', w:0, u:'kg', goal:'', tip:'힘들면 밴드 보조 또는 점프 후 버티며 내려오기'},
+      {n:'푸시업', s:4, rest:60, r:'15회', w:0, u:'kg', goal:'', tip:'가슴 터치할 만큼 깊게'},
+      {n:'밴드 로우', s:3, rest:60, r:'15회', w:0, u:'kg', goal:'', tip:'문/기둥에 걸고 견갑 조이기 — 라운드숄더 방어'},
+      {n:'케틀벨 스윙', s:3, rest:60, r:'20회', w:6, u:'kg', goal:'', tip:'팔이 아니라 둔근으로 튕기기'},
+      {n:'런지', s:3, rest:60, r:'12회', w:6, u:'kg', goal:'', tip:'케틀벨 들고, 무릎이 발끝 넘지 않게'},
+      {n:'밴드 풀어파트', s:3, rest:45, r:'15회', w:0, u:'kg', goal:'', tip:'직각 어깨 — 어깨 후면 조이기'},
+      {n:'라잉 레그 레이즈', s:3, rest:45, r:'15회', w:0, u:'kg', goal:'', tip:'허리 뜨지 않게 코어 고정'},
     ]}
 };
 
@@ -1687,10 +1735,13 @@ function nextPart(){
   if(!done.length) return {part:'push', reason:'first'};
   const today=todayStr();
   const todayDone=done.find(r=>r.date===today);
-  const last=done[0];
-  const idx=PART_ORDER.indexOf(last.part);
+  // 홈트는 보조 운동이라 분할 순환에서 제외 — 가장 최근의 헬스장 분할 기준으로 계산
+  const lastGym=done.find(r=>r.part!=='home');
+  if(!lastGym) return {part:'push', todayDone, reason:'first'};
+  if(lastGym.part==='full') return {part:'full', last:lastGym, todayDone, reason:'full'};
+  const idx=PART_ORDER.indexOf(lastGym.part);
   const nxt=PART_ORDER[(idx+1)%PART_ORDER.length]||'push';
-  return {part:nxt, last, todayDone, reason:'cycle'};
+  return {part:nxt, last:lastGym, todayDone, reason:'cycle'};
 }
 function estimateMinutesFor(part){
   let sec=0;
@@ -1705,9 +1756,13 @@ function estimateMinutesFor(part){
   });
   return Math.round(sec/60);
 }
+let homePick=null; // 홈에서 직접 고른 부위 (null = 자동 추천)
 function renderHome(){
   const el=$('homeWrap'); if(!el) return;
-  const {part,last,todayDone}=nextPart();
+  const rec=nextPart();
+  const part=(homePick&&plan[homePick])?homePick:rec.part;
+  const picked=part!==rec.part;
+  const {todayDone}=rec;
   const today=todayStr();
   const done=index.filter(r=>r.done).sort((a,b)=>b.date.localeCompare(a.date));
   let daysLine='첫 운동을 시작해 보세요 🔥';
@@ -1718,6 +1773,8 @@ function renderHome(){
   }
   const [wa,wb]=weekBounds(0);
   const weekCnt=index.filter(r=>r.done&&r.date>=wa&&r.date<=wb).length;
+  const partChips=Object.keys(plan).map(k=>
+    `<button class="hp p-${k} ${k===part?'on':''}" data-hp="${k}">${plan[k].label}${k===rec.part?'<span class="rec-mark">★추천</span>':''}</button>`).join('');
   const exList=plan[part].ex.map(e=>{
     const star=e.n.startsWith('★');
     return `<div class="hm-ex"><span>${star?'<span class="star">★</span>':''}<b>${esc(cleanName(e.n))}</b></span><span>${esc(e.r)} × ${e.s}세트</span></div>`;
@@ -1728,8 +1785,9 @@ function renderHome(){
     : '';
   el.innerHTML=`
     <div class="hm-hero">
-      <div class="hm-sub">${todayDone?'오늘 운동 완료! 추가로 하신다면':'오늘은'}</div>
-      <div class="hm-title"><b>${plan[part].label}</b> 할 차례</div>
+      <div class="hm-sub">${todayDone?'오늘 운동 완료! 추가로 하신다면':(picked?'오늘 직접 고른':'오늘은')}</div>
+      <div class="hm-title"><b>${plan[part].label}</b> ${picked?'하는 날':'할 차례'}</div>
+      <div class="hm-parts">${partChips}</div>
       <div class="hm-meta">${daysLine}<br>예상 소요 <b>~${estimateMinutesFor(part)}분</b> · ${plan[part].ex.length}개 운동</div>
       <div class="hm-list">${exList}</div>
       ${gapLine}
@@ -1739,8 +1797,13 @@ function renderHome(){
       <div class="hm-mini"><div class="v">${weekCnt}</div><div class="k">이번 주 출석</div></div>
       <div class="hm-mini"><div class="v">${done.length}</div><div class="k">총 출석</div></div>
     </div>`;
+  document.querySelectorAll('[data-hp]').forEach(b=>b.onclick=()=>{
+    homePick=b.dataset.hp===rec.part?null:b.dataset.hp;
+    renderHome();
+  });
   $('hmStart').onclick=()=>{
     switchPart(part);
+    homePick=null;
     showView('vToday');
     autoSetup();
   };
@@ -1761,7 +1824,7 @@ function autoSetup(){
 }
 
 /* ---- init ---- */
-const APP_VER='v5.5';
+const APP_VER='v5.8';
 $('verTag').textContent=APP_VER;
 
 // 서비스 워커 등록 (오프라인 지원)
@@ -1802,6 +1865,9 @@ document.addEventListener('visibilitychange',()=>{
   const d=new Date();
   $('hdDate').textContent=`${d.getMonth()+1}월 ${d.getDate()}일 (${'일월화수목금토'[d.getDay()]})`;
   plan=sGet('plan')||JSON.parse(JSON.stringify(DEFAULT_PLAN));
+  // 기존 사용자 마이그레이션: 전신 탭이 없으면 기본 전신 루틴 추가
+  if(!plan.full) plan.full=JSON.parse(JSON.stringify(DEFAULT_PLAN.full));
+  if(!plan.home) plan.home=JSON.parse(JSON.stringify(DEFAULT_PLAN.home));
   // 구버전 문자열 목표("62.5 → 65kg") → 숫자(65)로 변환
   Object.values(plan).forEach(p=>p.ex.forEach(e=>{
     if(typeof e.goal==='string' && e.goal.trim()!==''){
