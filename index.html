@@ -327,7 +327,7 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
   </div>
 </div>
 
-<div class="bar" id="bar">
+<div class="bar hidden" id="bar">
   <div class="cnt"><b id="cntDone">0</b><span id="cntTotal">/0 세트</span><div class="kcal" id="kcalChip">🔥 <b>--</b> kcal</div></div>
   <button class="done-btn" id="doneBtn">오늘 출석 체크 ✓</button>
 </div>
@@ -1991,7 +1991,7 @@ function autoSetup(){
 }
 
 /* ---- init ---- */
-const APP_VER='v6.1';
+const APP_VER='v6.2';
 $('verTag').textContent=APP_VER;
 
 // 서비스 워커 등록 (오프라인 지원)
@@ -2048,7 +2048,7 @@ document.addEventListener('visibilitychange',()=>{
   curPart=sGet('lastPart')||'push';
   if(!plan[curPart])curPart='push';
   session=sGet('session:'+todayStr()+':'+curPart)||defaultSession(curPart);
-  renderTabs(); renderExercises(); renderHome();
+  renderTabs(); renderExercises(); showView('vHome');
 })();
 </script>
 </body>
