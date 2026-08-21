@@ -204,6 +204,25 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
 .hm-mini .v{font-size:20px;font-weight:800;font-family:'Archivo',sans-serif}
 .hm-mini .k{font-size:11px;color:var(--sub);margin-top:2px}
 
+/* 인터벌 러너 */
+.run-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.rg-cell label{display:block;font-size:10.5px;color:var(--sub);margin-bottom:4px;font-weight:700}
+.rg-cell input{width:100%;background:var(--card2);border:1px solid var(--line);border-radius:9px;color:var(--ink);font-size:15px;font-weight:800;text-align:center;padding:9px 4px;outline:0;font-family:'Archivo',sans-serif;-webkit-appearance:none;margin:0}
+.run-start{width:100%;border:0;border-radius:12px;padding:13px 0;font-size:14.5px;font-weight:800;color:#fff;background:var(--gold);color:#141619;margin-top:10px}
+.run-ov{position:fixed;inset:0;background:rgba(10,12,14,.96);z-index:40;display:none;align-items:center;justify-content:center;padding:24px}
+.run-ov.show{display:flex}
+.run-card{width:100%;max-width:340px;text-align:center}
+.run-name{font-size:14px;color:var(--sub);font-weight:700;margin-bottom:18px}
+.run-phase{font-size:26px;font-weight:900;margin-bottom:6px}
+.run-phase.go{color:#FF6B4A}
+.run-phase.rest{color:#4AC98F}
+.run-spd{font-size:15px;color:var(--sub);font-weight:800;font-family:'Archivo',sans-serif;margin-bottom:14px}
+.run-time{font-size:72px;font-weight:900;font-family:'Archivo',sans-serif;line-height:1;margin-bottom:14px}
+.run-round{font-size:14px;color:var(--sub);font-weight:700;margin-bottom:18px}
+.run-bar{height:8px;background:var(--card2);border-radius:99px;overflow:hidden;margin-bottom:26px}
+.run-bar-fill{height:100%;background:var(--gold);width:0%;transition:width .3s linear}
+.run-stop{border:1px solid var(--line);background:var(--card);color:var(--sub);font-weight:800;font-size:14px;padding:13px 40px;border-radius:99px}
+
 /* 주간 리포트 */
 .wk-card{background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px;font-size:12.5px;line-height:1.7;color:var(--sub)}
 .wk-card h3{font-size:13px;color:var(--ink);font-weight:800;margin-bottom:4px}
@@ -362,6 +381,18 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
     <div><label>체지방률 (%)</label><input type="number" inputmode="decimal" step="0.1" id="ibF" placeholder="18.0"></div>
   </div>
   <button class="m-save" id="ibSave">저장</button>
+</div>
+
+<div class="run-ov" id="runOv">
+  <div class="run-card">
+    <div class="run-name" id="runName"></div>
+    <div class="run-phase go" id="runPhase">🏃 전력 질주!</div>
+    <div class="run-spd" id="runSpd"></div>
+    <div class="run-time" id="runTime">0:00</div>
+    <div class="run-round" id="runRound"></div>
+    <div class="run-bar"><div class="run-bar-fill" id="runBarFill"></div></div>
+    <button class="run-stop" id="runStop">중단</button>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -743,6 +774,33 @@ function renderExercises(){
   $('exList').innerHTML = plan[curPart].ex.map((e,i)=>{
     const star = e.n.startsWith('★');
     const name = cleanName(e.n);
+    // 러닝(km/h) 운동은 인터벌 모드 카드
+    if(isIntervalEx(e)){
+      runDefaults(e);
+      const kmh=e.u==='km/h';
+      const dots = session.sets[i].map((v,j)=>
+        `<button class="plate ${plateClass(v)}" data-e="${i}" data-s="${j}" style="width:34px;height:34px;font-size:11px">${v===1?'✓':(v===2?'⚡':j+1)}</button>`).join('');
+      return `<div class="ex">
+        <div class="ex-hd">
+          <div class="ex-name">${star?'<span class="star">★</span>':''}${esc(name)}</div>
+          <div class="ex-scheme">${e.s}라운드${kmh?` · 경사 ${e.incline??2}%`:``}</div>
+        </div>
+        ${e.tip?`<div class="ex-tip">${esc(e.tip)}</div>`:''}
+        <div class="run-grid">
+          ${kmh?`<div class="rg-cell"><label>🏃 전력 (km/h)</label><input type="number" inputmode="decimal" step="0.5" value="${e.w}" data-rf="w" data-ri="${i}"></div>`:''}
+          <div class="rg-cell"><label>🔥 전력 시간 (초)</label><input type="number" inputmode="numeric" step="5" value="${e.runSec}" data-rf="runSec" data-ri="${i}"></div>
+          ${kmh?`<div class="rg-cell"><label>🚶 회복 (km/h)</label><input type="number" inputmode="decimal" step="0.5" value="${e.rw}" data-rf="rw" data-ri="${i}"></div>`:''}
+          <div class="rg-cell"><label>😮‍💨 회복 시간 (초)</label><input type="number" inputmode="numeric" step="5" value="${e.recSec}" data-rf="recSec" data-ri="${i}"></div>
+        </div>
+        <button class="run-start" data-run="${i}">▶ 인터벌 시작</button>
+        <div class="ex-body" style="margin-top:10px">
+          <div class="act-col"><button class="rec-btn" data-rec="${i}">📊 추천</button></div>
+          <div class="sets">${dots}</div>
+        </div>
+        <div class="rec-slot" id="recSlot${i}"></div>
+        ${(MTAG[name]||[]).length?`<div class="ex-tags">자극 ${(MTAG[name]||[]).map(t=>`<b>${TAG_LABEL[t]||t}</b>`).join('')}</div>`:''}
+      </div>`;
+    }
     const plates = session.sets[i].map((v,j)=>
       `<div class="set-col">
         <button class="plate ${plateClass(v)}" data-e="${i}" data-s="${j}">${plateLabel(v,j)}</button>
@@ -798,6 +856,13 @@ function renderExercises(){
   });
   document.querySelectorAll('[data-rec]').forEach(b=>b.onclick=()=>showRec(+b.dataset.rec));
   document.querySelectorAll('[data-cfg]').forEach(b=>b.onclick=()=>showCfg(+b.dataset.cfg));
+  document.querySelectorAll('[data-rf]').forEach(inp=>inp.onchange=()=>{
+    const i=+inp.dataset.ri, f=inp.dataset.rf;
+    const v=parseFloat(inp.value)||0;
+    plan[curPart].ex[i][f]= f==='runSec'||f==='recSec' ? Math.max(0,Math.round(v)) : Math.max(0,v);
+    sSet('plan',plan); renderEstTime();
+  });
+  document.querySelectorAll('[data-run]').forEach(b=>b.onclick=()=>startRun(+b.dataset.run));
   document.querySelectorAll('.ex-name').forEach((el,i)=>el.onclick=()=>showExHist(i));
   updateCount(); renderDoneBtn(); renderEstTime();
 }
@@ -806,8 +871,7 @@ function renderExercises(){
 function estimateMinutes(){
   let sec=0;
   plan[curPart].ex.forEach((e,i)=>{
-    if(e.u==='km/h'){ sec += e.s*(e.roundMin??2)*60; }
-    else if(isCardio(e.u)){ sec += (session.weights[i]||[]).reduce((s,v)=>s+(v||0),0)*60; }
+    if(isIntervalEx(e)){ runDefaults(e); sec += e.s*(e.runSec+e.recSec) - (e.recSec>0?e.recSec:0); }
     else{
       const reps=parseInt(e.r)||10;
       const repTime=reps*4+15;          // 회당 약 4초 + 세팅 15초
@@ -843,6 +907,78 @@ function showExHist(i){
   }).join('');
   slot.innerHTML=`<div class="rec-box"><div class="msg"><b>${esc(name)}</b> 최근 기록${rows}</div></div>`;
 }
+
+/* ---- 인터벌 러너 (런데이 방식 — 시작시각 기반이라 백그라운드에서도 정확) ---- */
+function runDefaults(e){
+  // km/h는 roundMin(구버전), '분' 유산소는 w(분) 기준으로 스테디 시간 추정
+  const steadySec = e.u==='km/h' ? (e.roundMin??20)*60 : Math.max(1,(e.w||20))*60;
+  if(e.runSec==null) e.runSec = e.s>1?30:steadySec;
+  if(e.recSec==null) e.recSec = e.s>1?90:0;
+  if(e.rw==null) e.rw = e.s>1?5:0;
+}
+const isIntervalEx = e => e.u==='km/h' || isCardio(e.u);
+let RUN=null, runInt=null;
+function runTotalSec(e){ return e.s*(e.runSec+e.recSec) - (e.recSec>0?e.recSec:0); } // 마지막 회복 생략
+function startRun(i){
+  const e=plan[curPart].ex[i]; runDefaults(e);
+  if(!e.runSec || (e.u==='km/h'&&!e.w)){ toast('전력 시간(과 속도)을 입력해 주세요'); return; }
+  RUN={i, start:Date.now(), lastKey:''};
+  if(!session.t0) session.t0=Date.now();
+  $('runOv').classList.add('show');
+  $('runName').textContent=cleanName(e.n);
+  beep(); // 시작음 (사용자 탭 직후라 오디오 활성화됨)
+  clearInterval(runInt);
+  runInt=setInterval(runTick,200);
+  runTick();
+}
+function runTick(){
+  if(!RUN) return;
+  const e=plan[curPart].ex[RUN.i];
+  const total=runTotalSec(e);
+  const el=(Date.now()-RUN.start)/1000;
+  if(el>=total){ finishRun(true); return; }
+  const cyc=e.runSec+e.recSec;
+  const round=Math.min(e.s, Math.floor(el/cyc)+1);
+  const inCyc=el%cyc;
+  const running=inCyc<e.runSec;
+  const left=Math.ceil(running? e.runSec-inCyc : cyc-inCyc);
+  const key=round+(running?'r':'w');
+  if(RUN.lastKey && RUN.lastKey!==key) beep(); // 구간 전환음
+  RUN.lastKey=key;
+  // 완료된 라운드 실시간 반영
+  const recVal = e.u==='km/h' ? e.w : +(((e.runSec+e.recSec)/60).toFixed(1));
+  for(let j=0;j<round-1;j++){ if(session.sets[RUN.i][j]===0){ session.sets[RUN.i][j]=1; session.weights[RUN.i][j]=recVal; } }
+  $('runPhase').textContent = running?'🏃 전력 질주!':'🚶 회복';
+  $('runPhase').className = 'run-phase '+(running?'go':'rest');
+  $('runSpd').textContent = e.u==='km/h' ? (running?e.w:e.rw)+' km/h' : (running?'최대 강도로!':'가볍게 풀어주기');
+  $('runTime').textContent = Math.floor(left/60)+':'+String(left%60).padStart(2,'0');
+  $('runRound').textContent = `${round} / ${e.s} 라운드`;
+  const pct=Math.min(100, el/total*100);
+  $('runBarFill').style.width=pct+'%';
+}
+function finishRun(done){
+  clearInterval(runInt);
+  const i=RUN?RUN.i:null;
+  $('runOv').classList.remove('show');
+  if(i!=null && done){
+    const e=plan[curPart].ex[i];
+    const recVal = e.u==='km/h' ? e.w : +(((e.runSec+e.recSec)/60).toFixed(1));
+    session.sets[i]=session.sets[i].map(()=>1);
+    session.weights[i]=session.weights[i].map(()=>recVal);
+    session.t1=Date.now();
+    beep();
+    toast('인터벌 완료! 전 라운드 클리어 🔥');
+  }else if(i!=null){
+    session.t1=Date.now();
+    toast('러닝 중단 — 완료한 라운드까지 기록됨');
+  }
+  RUN=null;
+  updateCount(); queueSave(); renderExercises();
+}
+$('runStop').onclick=()=>finishRun(false);
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='visible'&&RUN) runTick();
+});
 
 /* ---- 세트 구성 자동 계산 (램프업/동일/백오프) ---- */
 function roundStep(v, top, opt){
@@ -1057,18 +1193,30 @@ function renderEdit(targetId){
           </select>
         </div>
       </div>
-      <div class="ef-row">
+      ${(e.u==='km/h'||e.u==='분')?'':`<div class="ef-row">
         <div><label>목표 중량 (비우면 표시 안 함)</label>
         <input type="number" inputmode="decimal" step="0.5" value="${e.goal!==''&&e.goal!=null?e.goal:''}" data-f="goal" data-i="${i}" placeholder="예: 65"></div>
         <div><label>휴식 (초)</label>
         <input type="number" inputmode="numeric" step="10" value="${e.rest||60}" data-f="rest" data-i="${i}" placeholder="60"></div>
+      </div>`}
+      ${(e.u==='km/h'||e.u==='분')?(()=>{runDefaults(e);return `<div class="ef-row">
+        <div><label>🔥 전력 시간 (초)</label>
+        <input type="number" inputmode="numeric" step="5" value="${e.runSec}" data-f="runSec" data-i="${i}"></div>
+        <div><label>😮‍💨 회복 시간 (초)</label>
+        <input type="number" inputmode="numeric" step="5" value="${e.recSec}" data-f="recSec" data-i="${i}"></div>
       </div>
-      ${(e.u==='km/h')?`<div class="ef-row">
+      ${e.u==='km/h'?`<div class="ef-row">
+        <div><label>🏃 전력 속도 (km/h)</label>
+        <input type="number" inputmode="decimal" step="0.5" value="${e.w}" data-f="w" data-i="${i}"></div>
+        <div><label>🚶 회복 속도 (km/h)</label>
+        <input type="number" inputmode="decimal" step="0.5" value="${e.rw}" data-f="rw" data-i="${i}"></div>
+      </div>
+      <div class="ef-row">
         <div><label>경사 인클라인 (%)</label>
         <input type="number" inputmode="decimal" step="0.5" value="${e.incline??2}" data-f="incline" data-i="${i}"></div>
-        <div><label>라운드당 시간 (분)</label>
-        <input type="number" inputmode="decimal" step="0.5" value="${e.roundMin??2}" data-f="roundMin" data-i="${i}"></div>
-      </div>`:''}
+        <div><label style="opacity:.7">안내</label>
+        <div style="font-size:12px;color:var(--sub);padding:9px 0">세트수 = 라운드수</div></div>
+      </div>`:''}`;})():''}
       <label>메모</label>
       <textarea rows="2" data-f="tip" data-i="${i}" placeholder="자극 포인트, 주의사항 등">${esc(e.tip||'')}</textarea>
       <button class="del-btn" data-del="${i}">이 운동 삭제</button>
@@ -1082,7 +1230,8 @@ function renderEdit(targetId){
       else if(f==='goal'){ plan[curPart].ex[i].goal = el.value===''?'':parseFloat(el.value)||''; }
       else if(f==='rest'){ plan[curPart].ex[i].rest = Math.max(10,Math.min(600,parseInt(el.value)||60)); }
       else if(f==='incline'){ plan[curPart].ex[i].incline = Math.max(0,Math.min(15,parseFloat(el.value)||0)); }
-      else if(f==='roundMin'){ plan[curPart].ex[i].roundMin = Math.max(0.5,Math.min(60,parseFloat(el.value)||2)); }
+      else if(f==='runSec'||f==='recSec'){ plan[curPart].ex[i][f] = Math.max(0,Math.round(parseFloat(el.value)||0)); }
+      else if(f==='w'||f==='rw'){ plan[curPart].ex[i][f] = Math.max(0,parseFloat(el.value)||0); }
       else plan[curPart].ex[i][f]=el.value;
       sSet('plan',plan);
       if(f==='u') renderEdit();
@@ -1168,8 +1317,8 @@ function showSug(inp){
       if(ASSIST_EX.has(pk)) ex.u='보조kg';
       else if(/러닝|스프린트/.test(pk)&&CARDIO_EX.has(pk)){
         ex.u='km/h';
-        if(/HIIT|인터벌|스프린트/.test(pk)){ ex.s=8; ex.r='30초 전력/90초 회복'; ex.w=10; ex.incline=2; ex.roundMin=2; }
-        else { ex.s=1; ex.r='스테디'; ex.w=8; ex.incline=1; ex.roundMin=30; }
+        if(/HIIT|인터벌|스프린트/.test(pk)){ ex.s=8; ex.r='30초 전력/90초 회복'; ex.w=10; ex.incline=2; ex.runSec=30; ex.recSec=90; ex.rw=5; }
+        else { ex.s=1; ex.r='스테디'; ex.w=8; ex.incline=1; ex.runSec=1800; ex.recSec=0; ex.rw=0; }
       }
       else if(CARDIO_EX.has(pk)){
         ex.u='분';
@@ -1216,18 +1365,24 @@ function calcKcal(doneSets){
     const done=(session.sets[i]||[]).map((s,j)=>s>0?j:-1).filter(j=>j>=0);
     if(!done.length) return;
     if(e.u==='km/h'){
-      // ACSM 러닝 공식: VO2 = 3.5 + 0.2v + 0.9v·경사 (v: m/min) → MET = VO2/3.5
-      const rm=e.roundMin??2, g=(e.incline??0)/100;
-      const avgV=done.reduce((s,j)=>s+(session.weights[i][j]||0),0)/done.length*16.67;
-      const met=(3.5+0.2*avgV+0.9*avgV*g)/3.5;
-      const duty=e.s>1?0.6:1; // HIIT는 회복 구간 감안
-      const min=done.length*rm;
-      cardioKcal += (bmr/1440)*met*duty*min;
-      cardioMin += min;
+      runDefaults(e);
+      // ACSM: 걷기(<7km/h) VO2=3.5+0.1v+1.8v·g / 달리기 VO2=3.5+0.2v+0.9v·g
+      const g=(e.incline??0)/100;
+      const met=k=>{ if(!k) return 1.2; const v=k*16.67; const vo2=k<7? 3.5+0.1*v+1.8*v*g : 3.5+0.2*v+0.9*v*g; return vo2/3.5; };
+      const perRound=(met(e.w)*e.runSec + met(e.rw)*e.recSec)/60; // MET·분
+      cardioKcal += (bmr/1440)*perRound*done.length;
+      cardioMin += done.length*(e.runSec+e.recSec)/60;
     }else if(isCardio(e.u)){
-      const min=done.reduce((s,j)=>s+(session.weights[i][j]||0),0);
-      cardioKcal += (bmr/1440)*8*min;
-      cardioMin += min;
+      runDefaults(e);
+      if(e.s>1){ // 인터벌: 전력 9 / 회복 3.5 MET
+        const perRound=(9*e.runSec + 3.5*e.recSec)/60;
+        cardioKcal += (bmr/1440)*perRound*done.length;
+        cardioMin += done.length*(e.runSec+e.recSec)/60;
+      }else{ // 스테디: MET 8 × 분
+        const min=done.reduce((s,j)=>s+(session.weights[i][j]||0),0);
+        cardioKcal += (bmr/1440)*8*min;
+        cardioMin += min;
+      }
     }else{
       strengthSets += done.length;
     }
@@ -1697,7 +1852,7 @@ function saveSession(){
     }
     const rec={date, w:isFinite(topW)?topW:0, ws, sets:st.slice(), rep:parseInt(e.r)||10, u:e.u||'kg'};
     if(assist){ const p=getProfile(); if(p&&p.w) rec.bw=p.w; }
-    if(e.u==='km/h'){ rec.inc=e.incline??2; rec.rm=e.roundMin??2; }
+    if(e.u==='km/h'){ runDefaults(e); rec.inc=e.incline??2; rec.rm=+(((e.runSec+e.recSec)/60).toFixed(2)); }
     if(j>=0) exlog[name][j]=rec; else exlog[name].push(rec);
     if(exlog[name].length>60) exlog[name]=exlog[name].slice(-60);
   });
@@ -1759,8 +1914,7 @@ function nextPart(){
 function estimateMinutesFor(part){
   let sec=0;
   plan[part].ex.forEach(e=>{
-    if(e.u==='km/h'){ sec += e.s*(e.roundMin??2)*60; }
-    else if(isCardio(e.u)){ sec += (e.w||0)*e.s*60; }
+    if(isIntervalEx(e)){ runDefaults(e); sec += e.s*(e.runSec+e.recSec) - (e.recSec>0?e.recSec:0); }
     else{
       const reps=parseInt(e.r)||10;
       sec += e.s*(reps*4+15) + Math.max(0,e.s-1)*(e.rest||60);
@@ -1837,7 +1991,7 @@ function autoSetup(){
 }
 
 /* ---- init ---- */
-const APP_VER='v5.9';
+const APP_VER='v6.1';
 $('verTag').textContent=APP_VER;
 
 // 서비스 워커 등록 (오프라인 지원)
