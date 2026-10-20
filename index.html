@@ -12,6 +12,10 @@
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Archivo:wght@600;800&display=swap" rel="stylesheet">
+<!-- 친구 공유용 Firebase (무료 Spark 플랜, 서버 코드 없음) -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
 <style>
 :root{
   --bg:#141619; --card:#1E2126; --card2:#262A31;
@@ -253,6 +257,44 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
 .last-line{margin:10px 18px 0;font-size:12px;color:var(--sub)}
 .last-line b{color:var(--ink)}
 
+/* 친구 */
+.fr-row{display:flex;gap:8px;margin-bottom:10px;align-items:stretch}
+.fr-row input{background:var(--card2);border:1px solid var(--line);border-radius:9px;color:var(--ink);font-size:15px;padding:10px;outline:0;min-width:0}
+.fr-row input[type=number]{font-family:'Archivo','Noto Sans KR',sans-serif;font-weight:800;text-align:center;width:84px;flex-shrink:0}
+.fr-row input[type=text]{flex:1}
+.fr-lab{font-size:11px;color:var(--sub);font-weight:700;margin-bottom:4px}
+.fr-types{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.fr-types button{border:1px solid var(--line);background:var(--card2);color:var(--sub);font-size:12.5px;font-weight:700;padding:8px 11px;border-radius:99px;white-space:nowrap}
+.fr-types button.on{background:var(--gold);color:#141619;border-color:transparent}
+.fr-mine{margin-top:10px;font-size:12.5px;color:var(--sub);line-height:1.9}
+.fr-mine b{color:var(--ink)}
+.fr-mine .x{color:var(--sub);margin-left:6px;font-weight:800;cursor:pointer}
+.fr-code{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--sub);margin-bottom:10px}
+.fr-code b{font-family:'Archivo',sans-serif;font-size:20px;letter-spacing:2px;color:var(--gold)}
+.fr-code .ed{font-size:11px;border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--sub)}
+.fr-add{display:flex;gap:8px;margin-bottom:10px}
+.fr-add input{flex:1;background:var(--card2);border:1px solid var(--line);border-radius:9px;color:var(--ink);font-size:15px;padding:10px;outline:0;text-transform:uppercase;letter-spacing:2px;font-family:'Archivo','Noto Sans KR',sans-serif;font-weight:800;min-width:0}
+.fr-add button{border:0;background:var(--gold);color:#141619;font-weight:800;font-size:13px;padding:0 16px;border-radius:9px}
+.fr-list{display:flex;gap:6px;flex-wrap:wrap;font-size:12px}
+.fr-list span{border:1px solid var(--line);background:var(--card2);border-radius:99px;padding:4px 10px;color:var(--ink);font-weight:700}
+.fr-list span i{font-style:normal;color:var(--sub);margin-left:6px;font-weight:800}
+.fr-day{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:9px}
+.fr-day h4{font-size:13px;font-weight:800;margin-bottom:6px;display:flex;justify-content:space-between}
+.fr-day h4 span{color:var(--sub);font-weight:700;font-size:11.5px}
+.fr-line{display:flex;gap:10px;align-items:baseline;font-size:13px;line-height:1.5;padding:5px 0;border-top:1px solid var(--line)}
+.fr-line:first-of-type{border-top:0}
+.fr-line .nm{font-weight:800;min-width:48px;flex-shrink:0}
+.fr-line .nm.me{color:var(--gold)}
+.fr-line .wt{font-family:'Archivo',sans-serif;font-weight:800;min-width:58px;flex-shrink:0}
+.fr-line .wt small{font-size:10px;color:var(--sub);font-family:'Noto Sans KR',sans-serif;margin-left:2px}
+.fr-line .fr-ex{color:var(--sub);flex:1;font-size:12.5px}
+.fr-line .fr-ex b{color:var(--ink);font-weight:700}
+.fr-miss{font-size:11.5px;color:var(--sub);margin-top:6px;padding-top:6px;border-top:1px dashed var(--line)}
+.fr-setup{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 14px;font-size:12.5px;color:var(--sub);line-height:1.7}
+.fr-setup h3{font-size:14px;color:var(--ink);font-weight:800;margin-bottom:6px}
+.fr-setup input{width:100%;background:var(--card2);border:1px solid var(--line);border-radius:9px;color:var(--ink);font-size:15px;padding:10px;outline:0;margin:8px 0}
+.fr-setup code{font-family:monospace;color:var(--gold)}
+
 /* 편집 순서 이동 */
 .ef-move{display:flex;gap:6px;justify-content:flex-end;margin-bottom:-4px}
 .ef-move button{border:1px solid var(--line);background:var(--card2);color:var(--sub);font-size:13px;font-weight:800;width:34px;height:30px;border-radius:8px}
@@ -277,6 +319,7 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
   <button id="vHome" class="on">홈</button>
   <button id="vToday">운동</button>
   <button id="vHist">기록</button>
+  <button id="vFr">친구</button>
 </div>
 
 <div id="homeView">
@@ -323,6 +366,34 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
     <div class="bk-row">
       <button id="bkExport">📤 기록 백업</button>
       <button id="bkImport">📥 복원</button>
+    </div>
+  </div>
+</div>
+
+<div id="frView" class="hidden">
+  <div class="hist">
+    <div id="frSetup"></div>
+    <div id="frMain" class="hidden">
+      <div class="chart-card">
+        <div class="chart-hd"><div class="card-title">📝 오늘 기록</div><span class="big3" id="frTodayLbl"></span></div>
+        <div class="fr-lab">몸무게 (kg)</div>
+        <div class="fr-row"><input type="number" inputmode="decimal" step="0.1" id="frW" placeholder="0.0"><button class="sug-btn" id="frWSave" style="align-self:center">몸무게만 저장</button></div>
+        <div class="fr-lab">운동</div>
+        <div class="fr-types" id="frTypes"></div>
+        <div class="fr-row">
+          <input type="number" inputmode="numeric" id="frMin" placeholder="분">
+          <input type="text" id="frMemo" placeholder="메모 (선택) 예: 5km / 턱걸이 50개" maxlength="40">
+        </div>
+        <button class="m-save" id="frSave">기록 저장</button>
+        <div class="fr-mine" id="frMine"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-hd"><div class="card-title">👥 친구</div><button class="sug-btn" id="frShare">초대코드 공유</button></div>
+        <div class="fr-code">내 코드 <b id="frMyCode">------</b><span class="ed" id="frName"></span></div>
+        <div class="fr-add"><input type="text" id="frCodeIn" placeholder="친구 코드" maxlength="6" autocapitalize="characters" autocomplete="off"><button id="frAddBtn">추가</button></div>
+        <div class="fr-list" id="frList"></div>
+      </div>
+      <div id="frFeed"></div>
     </div>
   </div>
 </div>
@@ -1566,7 +1637,7 @@ $('ibSave').onclick=()=>{
   if(j>=0) ib[j]=rec; else ib.push(rec);
   sSet('inbody',ib);
   // 체중을 프로필에 동기화 (칼로리·실중량 계산 정확도 향상)
-  if(w){ const p=getProfile(); if(p){ p.w=w; sSet('profile',p); } }
+  if(w){ const p=getProfile(); if(p){ p.w=w; sSet('profile',p); } frSetWeight(date,w,true); }
   closeIb(); $('modalBg').classList.remove('show');
   renderInbody(); toast(f?'저장! 체지방률 반영 → 칼로리 정확도 업 🎯':'인바디 기록 저장 🧬'+(w?' (몸무게 동기화됨)':''));
 };
@@ -1871,12 +1942,13 @@ function toast(msg){
 
 $('doneBtn').onclick=()=>{
   session.done=!session.done; renderDoneBtn(); saveSession();
+  frAutoGym(session.done);
   toast(session.done?'출석 완료! 오늘도 성장 중 💪':'출석 취소됨');
 };
 
 /* ---- 3탭 내비게이션 ---- */
 let editMode=false;
-const VIEWS={vHome:'homeView',vToday:'todayView',vHist:'histView'};
+const VIEWS={vHome:'homeView',vToday:'todayView',vHist:'histView',vFr:'frView'};
 function showView(btnId){
   Object.entries(VIEWS).forEach(([b,v])=>{
     $(b).classList.toggle('on',b===btnId);
@@ -1885,6 +1957,7 @@ function showView(btnId){
   $('bar').classList.toggle('hidden',btnId!=='vToday'||editMode);
   if(btnId==='vHome') renderHome();
   if(btnId==='vHist') renderHistory();
+  if(btnId==='vFr') renderFriends();
 }
 Object.keys(VIEWS).forEach(b=>$(b).onclick=()=>showView(b));
 
@@ -1990,8 +2063,250 @@ function autoSetup(){
   if(applied>0){ queueSave(); renderExercises(); toast(`🚀 ${applied}개 운동에 추천 중량 자동 세팅!`); }
 }
 
+/* =====================================================================
+   친구 공유 (Firebase Realtime Database, 익명 로그인)
+   - 날짜별로 "누가 / 몇 kg / 무슨 운동 몇 분"만 공유하는 단순 피드
+   - 설정: Firebase 콘솔 → 프로젝트 설정 → 웹 앱 구성값을 아래 FB_CONFIG에 붙여넣기
+     (설정 방법은 FRIENDS-SETUP.md 참고)
+   ===================================================================== */
+const FB_CONFIG = {
+  apiKey: "AIzaSyB9kTE5TJYzIDOmPyOMBuNPQi3RQ8s-9QY",
+  authDomain: "burn-the-pig.firebaseapp.com",
+  databaseURL: "https://burn-the-pig-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "burn-the-pig",
+  storageBucket: "burn-the-pig.firebasestorage.app",
+  messagingSenderId: "416560483207",
+  appId: "1:416560483207:web:55adfc57c9d59ac90b2122"
+}; /* 예시:
+const FB_CONFIG = {
+  apiKey: "AIza....",
+  authDomain: "hellchanggo.firebaseapp.com",
+  databaseURL: "https://hellchanggo-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "hellchanggo",
+  appId: "1:1234567890:web:abcdef"
+}; */
+const FR_TYPES={gym:['🏋️','헬스'],body:['🤸','맨몸'],run:['🏃','러닝'],walk:['🚶','걷기'],bike:['🚴','자전거'],swim:['🏊','수영'],etc:['💪','기타']};
+const FR_KEEP_DAYS=60;   // 서버에 올리는 최근 일수
+const FR_FEED_DAYS=14;   // 피드에 보여줄 최근 일수
+let fbDb=null, fbUid=null, frFriends={}, frPubs={}, frSubs={}, frType='gym', frPubTimer=null, frStatus='';
+
+const frCfg = () => sGet('social')||{};
+const frLog = () => sGet('frlog')||{};
+function frReady(){ return !!(FB_CONFIG && window.firebase); }
+function frDayEntry(date){ const l=frLog(); if(!l[date]) l[date]={}; return [l,l[date]]; }
+
+/* --- 로컬 기록 --- */
+function frSetWeight(date,w,fromIb){
+  const [l,d]=frDayEntry(date); d.w=w; sSet('frlog',l);
+  if(!fromIb){
+    // 기록 탭 인바디/프로필에도 반영 → 체중 그래프·칼로리 계산 일관성
+    const ib=sGet('inbody')||[]; const j=ib.findIndex(r=>r.date===date);
+    if(j>=0) ib[j].w=w; else ib.push({date,w,m:null,f:null});
+    sSet('inbody',ib);
+    const p=getProfile(); if(p){ p.w=w; sSet('profile',p); }
+  }
+  frQueuePublish();
+}
+function frAddEx(date,t,m,memo,auto){
+  const [l,d]=frDayEntry(date); d.ex=d.ex||[];
+  // 자동(출석체크) 항목은 하루 1개만 — 갱신
+  if(auto){ const k=d.ex.findIndex(e=>e.auto); const rec={t,m,memo,auto:true}; if(k>=0) d.ex[k]=rec; else d.ex.push(rec); }
+  else d.ex.push({t,m,memo});
+  sSet('frlog',l); frQueuePublish();
+}
+function frRemoveEx(date,i){
+  const [l,d]=frDayEntry(date); if(d.ex){ d.ex.splice(i,1); if(!d.ex.length) delete d.ex; }
+  if(!d.w&&!d.ex) delete l[date];
+  sSet('frlog',l); frQueuePublish();
+}
+// 출석 체크 시 앱 세션(분할·시간)을 피드에 자동 등록 / 취소 시 제거
+function frAutoGym(on){
+  const date=todayStr();
+  if(on){
+    const dur=sessionMinutes()||estimateMinutesFor(curPart);
+    const label=(plan[curPart]?.label||curPart).split('/')[0];
+    frAddEx(date, curPart==='home'?'body':'gym', dur, label, true);
+  }else{
+    const [l,d]=frDayEntry(date);
+    if(d.ex){ d.ex=d.ex.filter(e=>!e.auto); if(!d.ex.length) delete d.ex; }
+    if(!d.w&&!d.ex) delete l[date];
+    sSet('frlog',l); frQueuePublish();
+  }
+  if(!$('frView').classList.contains('hidden')) renderFriends();
+}
+
+/* --- Firebase 연결 --- */
+function frInit(){
+  if(!frReady()) return;
+  try{
+    if(!firebase.apps.length) firebase.initializeApp(FB_CONFIG);
+    fbDb=firebase.database();
+    firebase.auth().onAuthStateChanged(u=>{
+      fbUid=u?u.uid:null;
+      if(u) frOnLogin(); else renderFriends();
+    });
+    firebase.auth().signInAnonymously().catch(e=>{ console.error(e); frStatus='로그인 실패: '+(e.code||e.message); renderFriends(); });
+  }catch(e){ console.error(e); frStatus='초기화 실패: '+e.message; }
+}
+const CODE_CHARS='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+function frRandCode(){ let c=''; for(let i=0;i<6;i++) c+=CODE_CHARS[Math.floor(Math.random()*CODE_CHARS.length)]; return c; }
+async function frClaimCode(){
+  for(let tries=0;tries<5;tries++){
+    const code=frRandCode();
+    const r=await fbDb.ref('codes/'+code).transaction(cur=>cur===null?fbUid:undefined);
+    if(r.committed) return code;
+  }
+  throw new Error('코드 생성 실패');
+}
+async function frOnLogin(){
+  const cfg=frCfg();
+  try{
+    if(!cfg.code){ cfg.code=await frClaimCode(); sSet('social',cfg); }
+    // 새 기기 등 로컬이 비어있으면 서버 기록으로 복원
+    const snap=await fbDb.ref('users/'+fbUid+'/pub').once('value');
+    const remote=snap.val();
+    if(remote){
+      if(!cfg.name&&remote.name){ cfg.name=remote.name; sSet('social',cfg); }
+      if(remote.log){ const l=frLog(); let ch=false; Object.entries(remote.log).forEach(([d,v])=>{ if(!l[d]){ l[d]=v; ch=true; } }); if(ch) sSet('frlog',l); }
+    }
+  }catch(e){ console.error(e); frStatus='서버 오류: '+(e.code||e.message); }
+  // 친구 목록 구독
+  fbDb.ref('users/'+fbUid+'/friends').on('value',snap=>{
+    frFriends=snap.val()||{};
+    Object.keys(frSubs).forEach(id=>{ if(!frFriends[id]){ frSubs[id].off(); delete frSubs[id]; delete frPubs[id]; } });
+    Object.keys(frFriends).forEach(id=>{
+      if(frSubs[id]) return;
+      const ref=fbDb.ref('users/'+id+'/pub'); frSubs[id]=ref;
+      ref.on('value',s=>{ frPubs[id]=s.val()||{name:'?'}; renderFriends(); });
+    });
+    renderFriends();
+  });
+  // 친구 요청 자동 수락 (상대가 내 코드를 넣으면 나한테도 자동으로 친구 추가)
+  fbDb.ref('requests/'+fbUid).on('value',snap=>{
+    const req=snap.val(); if(!req) return;
+    const upd={};
+    Object.keys(req).forEach(from=>{ upd['users/'+fbUid+'/friends/'+from]=true; upd['requests/'+fbUid+'/'+from]=null; });
+    fbDb.ref().update(upd).catch(console.error);
+  });
+  frPublish();
+  renderFriends();
+}
+function frQueuePublish(){ clearTimeout(frPubTimer); frPubTimer=setTimeout(frPublish,800); }
+function frPublish(){
+  if(!fbDb||!fbUid) return;
+  const cfg=frCfg(); if(!cfg.name) return;
+  const cut=new Date(); cut.setDate(cut.getDate()-FR_KEEP_DAYS);
+  const cutStr=cut.toISOString().slice(0,10);
+  const log={}; Object.entries(frLog()).forEach(([d,v])=>{ if(d>=cutStr) log[d]=v; });
+  fbDb.ref('users/'+fbUid+'/pub').set({name:cfg.name,code:cfg.code||'',log,up:firebase.database.ServerValue.TIMESTAMP}).catch(e=>{ console.error(e); toast('공유 실패: '+(e.code||'')); });
+}
+async function frAddFriend(code){
+  code=(code||'').trim().toUpperCase();
+  if(code.length!==6){ toast('코드 6자리를 입력해 주세요'); return; }
+  if(code===frCfg().code){ toast('내 코드예요 😅'); return; }
+  try{
+    const s=await fbDb.ref('codes/'+code).once('value');
+    const fid=s.val();
+    if(!fid){ toast('없는 코드예요'); return; }
+    if(frFriends[fid]){ toast('이미 친구예요'); return; }
+    const upd={}; upd['users/'+fbUid+'/friends/'+fid]=true; upd['requests/'+fid+'/'+fbUid]=true;
+    await fbDb.ref().update(upd);
+    $('frCodeIn').value=''; toast('친구 추가 완료 👥');
+  }catch(e){ console.error(e); toast('추가 실패: '+(e.code||e.message)); }
+}
+function frRemoveFriend(fid){
+  const nm=frPubs[fid]?.name||'친구';
+  if(!confirm(nm+' 님을 친구에서 삭제할까요?')) return;
+  fbDb.ref('users/'+fbUid+'/friends/'+fid).remove().catch(console.error);
+}
+
+/* --- 렌더 --- */
+function frFmtDate(d){
+  const t=todayStr(); if(d===t) return '오늘';
+  const y=new Date(); y.setDate(y.getDate()-1);
+  const ys=y.getFullYear()+'-'+String(y.getMonth()+1).padStart(2,'0')+'-'+String(y.getDate()).padStart(2,'0');
+  if(d===ys) return '어제';
+  const dt=new Date(d+'T00:00:00'); return `${dt.getMonth()+1}월 ${dt.getDate()}일 (${'일월화수목금토'[dt.getDay()]})`;
+}
+function frExText(ex){
+  if(!ex||!ex.length) return '';
+  return ex.map(e=>{ const [ic,nm]=FR_TYPES[e.t]||FR_TYPES.etc; return `${ic} <b>${esc(e.memo&&e.t!=='gym'?nm+'·'+e.memo:(e.memo||nm))}</b>${e.m?` ${e.m}분`:''}`; }).join(' · ');
+}
+function renderFriends(){
+  const setup=$('frSetup'), main=$('frMain');
+  const cfg=frCfg();
+  // 1) 미설정 / 연결 전
+  if(!frReady()){
+    setup.innerHTML=`<div class="fr-setup"><h3>👥 친구 공유 준비 중</h3>
+      ${window.firebase?'아직 Firebase 설정값(<code>FB_CONFIG</code>)이 비어 있어요.<br>FRIENDS-SETUP.md 순서대로 설정하면 켜집니다.':'오프라인이거나 Firebase 스크립트를 불러오지 못했어요.<br>네트워크 연결 후 다시 열어 주세요.'}</div>`;
+    main.classList.add('hidden'); return;
+  }
+  if(!fbUid){
+    setup.innerHTML=`<div class="fr-setup"><h3>👥 친구 공유</h3>${frStatus||'서버에 연결하는 중...'}</div>`;
+    main.classList.add('hidden'); return;
+  }
+  if(!cfg.name){
+    setup.innerHTML=`<div class="fr-setup"><h3>👥 친구들에게 보일 이름</h3>닉네임을 정하면 친구 피드가 켜져요.<br>공유되는 건 <b style="color:var(--ink)">날짜 · 몸무게 · 운동 종류/시간</b>뿐이에요.
+      <input type="text" id="frNameIn" placeholder="예: 규민" maxlength="8"><button class="m-save" id="frNameSave">시작하기</button></div>`;
+    main.classList.add('hidden');
+    $('frNameSave').onclick=()=>{ const n=$('frNameIn').value.trim(); if(!n){ toast('이름을 입력해 주세요'); return; } const c=frCfg(); c.name=n; sSet('social',c); frPublish(); renderFriends(); };
+    return;
+  }
+  setup.innerHTML=''; main.classList.remove('hidden');
+  const today=todayStr(), log=frLog(), td=log[today]||{};
+  // 2) 오늘 기록 입력
+  $('frTodayLbl').textContent=frFmtDate(today)+' · '+today.slice(5).replace('-','/');
+  if(!$('frW').value) $('frW').value=td.w??(getProfile()?.w??''); // 입력 중인 값은 덮어쓰지 않음
+  $('frTypes').innerHTML=Object.entries(FR_TYPES).map(([k,[ic,nm]])=>`<button data-t="${k}" class="${frType===k?'on':''}">${ic} ${nm}</button>`).join('');
+  document.querySelectorAll('#frTypes button').forEach(b=>b.onclick=()=>{ frType=b.dataset.t; renderFriends(); });
+  $('frMine').innerHTML=(td.ex||[]).map((e,i)=>{ const [ic,nm]=FR_TYPES[e.t]||FR_TYPES.etc; return `<div>${ic} <b>${esc(e.memo||nm)}</b>${e.m?` ${e.m}분`:''}${e.auto?' <span style="font-size:10px">(출석체크 자동)</span>':''}<span class="x" data-i="${i}">✕</span></div>`; }).join('')
+    || '<div>오늘 운동 기록이 아직 없어요</div>';
+  document.querySelectorAll('#frMine .x').forEach(x=>x.onclick=()=>{ frRemoveEx(today,+x.dataset.i); renderFriends(); });
+  // 3) 친구 목록
+  $('frMyCode').textContent=cfg.code||'------';
+  $('frName').textContent=cfg.name+' ✎';
+  const ids=Object.keys(frFriends);
+  $('frList').innerHTML=ids.length?ids.map(id=>`<span>${esc(frPubs[id]?.name||'…')}<i data-id="${id}">✕</i></span>`).join('')
+    :'<div style="font-size:12px;color:var(--sub)">아직 친구가 없어요. 내 코드를 공유하거나 친구 코드를 입력하세요.</div>';
+  document.querySelectorAll('#frList i').forEach(i=>i.onclick=()=>frRemoveFriend(i.dataset.id));
+  // 4) 날짜별 피드
+  const people=[{name:cfg.name,log,me:true},...ids.map(id=>({name:frPubs[id]?.name||'…',log:frPubs[id]?.log||{}}))];
+  const cut=new Date(); cut.setDate(cut.getDate()-FR_FEED_DAYS+1);
+  const cutStr=cut.getFullYear()+'-'+String(cut.getMonth()+1).padStart(2,'0')+'-'+String(cut.getDate()).padStart(2,'0');
+  const dates=new Set([today]);
+  people.forEach(p=>Object.keys(p.log).forEach(d=>{ if(d>=cutStr&&d<=today) dates.add(d); }));
+  $('frFeed').innerHTML=[...dates].sort().reverse().map(d=>{
+    const rows=people.filter(p=>p.log[d]&&(p.log[d].w||p.log[d].ex));
+    const miss=people.filter(p=>!rows.includes(p)).map(p=>p.name);
+    const cnt=rows.filter(p=>p.log[d].ex).length;
+    return `<div class="fr-day"><h4>${frFmtDate(d)}<span>${cnt}/${people.length}명 운동</span></h4>
+      ${rows.map(p=>{ const e=p.log[d]; return `<div class="fr-line"><span class="nm ${p.me?'me':''}">${esc(p.name)}</span><span class="wt">${e.w?e.w+'<small>kg</small>':'<small>-</small>'}</span><span class="fr-ex">${frExText(e.ex)||'<span style="color:var(--sub)">휴식</span>'}</span></div>`; }).join('')||'<div class="fr-line" style="color:var(--sub)">아직 기록 없음</div>'}
+      ${miss.length&&d===today?`<div class="fr-miss">아직 기록 없음: ${miss.map(esc).join(', ')}</div>`:''}
+    </div>`;
+  }).join('');
+}
+$('frSave').onclick=()=>{
+  const date=todayStr();
+  const w=parseFloat($('frW').value), m=parseInt($('frMin').value), memo=$('frMemo').value.trim();
+  if(w) frSetWeight(date,w,false);
+  if(m>0) frAddEx(date,frType,m,memo,false);
+  else if(!w){ toast('몸무게 또는 운동 시간을 입력해 주세요'); return; }
+  $('frMin').value=''; $('frMemo').value='';
+  renderFriends(); toast(m>0?'운동 기록 공유 💪':'몸무게 기록 ⚖️');
+};
+$('frWSave').onclick=()=>{ const w=parseFloat($('frW').value); if(!w){ toast('몸무게를 입력해 주세요'); return; } frSetWeight(todayStr(),w,false); renderFriends(); toast('몸무게 기록 ⚖️'); };
+$('frAddBtn').onclick=()=>frAddFriend($('frCodeIn').value);
+$('frCodeIn').onkeydown=e=>{ if(e.key==='Enter') frAddFriend($('frCodeIn').value); };
+$('frName').onclick=()=>{ const n=prompt('친구들에게 보일 이름',frCfg().name||''); if(n&&n.trim()){ const c=frCfg(); c.name=n.trim().slice(0,8); sSet('social',c); frPublish(); renderFriends(); } };
+$('frShare').onclick=async()=>{
+  const code=frCfg().code; if(!code) return;
+  const text=`💪 헬창고 친구 초대\n내 코드: ${code}\n앱 → 친구 탭 → 코드 입력\n${location.origin+location.pathname}`;
+  try{ if(navigator.share){ await navigator.share({text}); return; } }catch(e){ return; }
+  try{ await navigator.clipboard.writeText(text); toast('초대 문구 복사됨 📋'); }catch(e){ prompt('복사해서 보내세요',text); }
+};
+
 /* ---- init ---- */
-const APP_VER='v6.2';
+const APP_VER='v6.3';
 $('verTag').textContent=APP_VER;
 
 // 서비스 워커 등록 (오프라인 지원)
@@ -2049,6 +2364,7 @@ document.addEventListener('visibilitychange',()=>{
   if(!plan[curPart])curPart='push';
   session=sGet('session:'+todayStr()+':'+curPart)||defaultSession(curPart);
   renderTabs(); renderExercises(); showView('vHome');
+  frInit();
 })();
 </script>
 </body>

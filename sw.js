@@ -1,5 +1,5 @@
 // HELL CHANG GO 서비스 워커 — 오프라인 지원
-const CACHE = 'hcg-v1';
+const CACHE = 'hcg-v2';
 const CORE = ['./', './index.html', './icon.png'];
 
 self.addEventListener('install', e => {
@@ -19,6 +19,13 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
   const url = new URL(e.request.url);
+
+  // Firebase(인증·실시간 DB) 등 외부 API는 캐시 개입 금지 — 폰트/파이어베이스 SDK만 캐시 대상
+  if (url.origin !== location.origin) {
+    const cacheable = /^(fonts\.googleapis\.com|fonts\.gstatic\.com)$/.test(url.hostname) ||
+      (url.hostname === 'www.gstatic.com' && url.pathname.startsWith('/firebasejs/'));
+    if (!cacheable) return;
+  }
 
   // 버전 확인 요청은 항상 네트워크 직행 (캐시 개입 금지)
   if (url.searchParams.has('vcheck')) {
