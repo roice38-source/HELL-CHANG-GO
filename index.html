@@ -289,6 +289,17 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
 .fr-line .wt small{font-size:10px;color:var(--sub);font-family:'Noto Sans KR',sans-serif;margin-left:2px}
 .fr-line .fr-ex{color:var(--sub);flex:1;font-size:12.5px}
 .fr-line .fr-ex b{color:var(--ink);font-weight:700}
+.fr-goal{display:flex;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line);font-size:12.5px}
+.fr-goal:first-child{border-top:0}
+.fr-goal .nm{font-weight:800;min-width:48px;flex-shrink:0}
+.fr-goal .nm.me{color:var(--gold)}
+.fr-goal .g{flex:1;color:var(--sub);line-height:1.5}
+.fr-goal .g b{color:var(--ink);font-family:'Archivo','Noto Sans KR',sans-serif}
+.fr-goal .left{font-family:'Archivo',sans-serif;font-weight:800;font-size:17px;color:var(--gold);white-space:nowrap;text-align:right}
+.fr-goal .left small{display:block;font-size:10px;color:var(--sub);font-family:'Noto Sans KR',sans-serif;font-weight:700}
+.fr-goal .left.ok{color:#35A56B}
+.fr-gbar{height:5px;background:var(--line);border-radius:3px;margin-top:5px;overflow:hidden}
+.fr-gbar i{display:block;height:100%;background:var(--gold);border-radius:3px}
 .fr-k{color:var(--gold);font-family:'Archivo','Noto Sans KR',sans-serif;font-weight:800;font-size:11.5px;white-space:nowrap}
 .fr-miss{font-size:11.5px;color:var(--sub);margin-top:6px;padding-top:6px;border-top:1px dashed var(--line)}
 .fr-setup{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 14px;font-size:12.5px;color:var(--sub);line-height:1.7}
@@ -377,16 +388,14 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
     <div id="frMain" class="hidden">
       <div class="chart-card">
         <div class="chart-hd"><div class="card-title">📝 오늘 기록</div><span class="big3" id="frTodayLbl"></span></div>
-        <div class="fr-lab">몸무게 (kg)</div>
-        <div class="fr-row"><input type="number" inputmode="decimal" step="0.1" id="frW" placeholder="0.0"><button class="sug-btn" id="frWSave" style="align-self:center">몸무게만 저장</button></div>
-        <div class="fr-lab">운동</div>
-        <div class="fr-types" id="frTypes"></div>
-        <div class="fr-row">
-          <input type="number" inputmode="numeric" id="frMin" placeholder="분">
-          <input type="text" id="frMemo" placeholder="메모 (선택) 예: 5km / 턱걸이 50개" maxlength="40">
-        </div>
-        <button class="m-save" id="frSave">기록 저장</button>
+        <div class="fr-lab">오늘 몸무게 (kg)</div>
+        <div class="fr-row"><input type="number" inputmode="decimal" step="0.1" id="frW" placeholder="0.0"></div>
+        <div class="fr-lab">목표 몸무게 (kg) · 목표일</div>
+        <div class="fr-row"><input type="number" inputmode="decimal" step="0.1" id="frGW" placeholder="목표 kg"><input type="date" id="frGD" style="flex:1"></div>
+        <button class="m-save" id="frWSave">저장</button>
         <div class="fr-mine" id="frMine"></div>
+        <div id="frGoalBox"></div>
+        <div class="m-note" style="margin-top:8px">운동은 <b>운동 탭에서 출석 체크</b>하면 자동으로 공유돼요.</div>
       </div>
       <div class="chart-card">
         <div class="chart-hd"><div class="card-title">👥 친구</div><button class="sug-btn" id="frShare">초대코드 공유</button></div>
@@ -394,6 +403,7 @@ h1{font-size:20px;font-weight:900;letter-spacing:-.5px}
         <div class="fr-add"><input type="text" id="frCodeIn" placeholder="친구 코드" maxlength="6" autocapitalize="characters" autocomplete="off"><button id="frAddBtn">추가</button></div>
         <div class="fr-list" id="frList"></div>
       </div>
+      <div class="chart-card" id="frGoalCard"><div class="chart-hd"><div class="card-title">🏁 목표 현황</div></div><div id="frGoals"></div></div>
       <div id="frFeed"></div>
     </div>
   </div>
@@ -2088,17 +2098,9 @@ const FB_CONFIG = {
   appId: "1:1234567890:web:abcdef"
 }; */
 const FR_TYPES={gym:['🏋️','헬스'],body:['🤸','맨몸'],run:['🏃','러닝'],walk:['🚶','걷기'],bike:['🚴','자전거'],swim:['🏊','수영'],etc:['💪','기타']};
-const FR_MET={gym:5,body:5,run:9,walk:3.5,bike:7,swim:7,etc:5}; // 수동 입력 칼로리 추정용 (Compendium 평균치)
-// 수동 입력 운동의 추정 kcal — 프로필(키·나이·성별) 있으면 BMR 기반, 체중은 오늘 입력값 우선
-function frEstKcal(t,min,w){
-  const p=getProfile(); if(!p||!p.h||!p.age) return null;
-  const q=Object.assign({},p,{w:w||p.w}); if(!q.w) return null;
-  const {bmr}=getBMR(q);
-  return Math.round((bmr/1440)*(FR_MET[t]||5)*min);
-}
 const FR_KEEP_DAYS=60;   // 서버에 올리는 최근 일수
 const FR_FEED_DAYS=14;   // 피드에 보여줄 최근 일수
-let fbDb=null, fbUid=null, frFriends={}, frPubs={}, frSubs={}, frType='gym', frPubTimer=null, frStatus='';
+let fbDb=null, fbUid=null, frFriends={}, frPubs={}, frSubs={}, frPubTimer=null, frStatus='';
 
 const frCfg = () => sGet('social')||{};
 const frLog = () => sGet('frlog')||{};
@@ -2117,17 +2119,11 @@ function frSetWeight(date,w,fromIb){
   }
   frQueuePublish();
 }
+// 출석 체크 항목은 하루 1개 — 갱신
 function frAddEx(date,t,m,memo,auto,kcal){
   const [l,d]=frDayEntry(date); d.ex=d.ex||[];
-  const rec={t,m,memo}; if(kcal) rec.k=kcal;
-  // 자동(출석체크) 항목은 하루 1개만 — 갱신
-  if(auto){ rec.auto=true; const k=d.ex.findIndex(e=>e.auto); if(k>=0) d.ex[k]=rec; else d.ex.push(rec); }
-  else d.ex.push(rec);
-  sSet('frlog',l); frQueuePublish();
-}
-function frRemoveEx(date,i){
-  const [l,d]=frDayEntry(date); if(d.ex){ d.ex.splice(i,1); if(!d.ex.length) delete d.ex; }
-  if(!d.w&&!d.ex) delete l[date];
+  const rec={t,m,memo,auto:true}; if(kcal) rec.k=kcal;
+  const k=d.ex.findIndex(e=>e.auto); if(k>=0) d.ex[k]=rec; else d.ex.push(rec);
   sSet('frlog',l); frQueuePublish();
 }
 // 출석 체크 시 앱 세션(분할·시간)을 피드에 자동 등록 / 취소 시 제거
@@ -2210,7 +2206,7 @@ function frPublish(){
   const cut=new Date(); cut.setDate(cut.getDate()-FR_KEEP_DAYS);
   const cutStr=cut.toISOString().slice(0,10);
   const log={}; Object.entries(frLog()).forEach(([d,v])=>{ if(d>=cutStr) log[d]=v; });
-  fbDb.ref('users/'+fbUid+'/pub').set({name:cfg.name,code:cfg.code||'',log,up:firebase.database.ServerValue.TIMESTAMP}).catch(e=>{ console.error(e); toast('공유 실패: '+(e.code||'')); });
+  fbDb.ref('users/'+fbUid+'/pub').set({name:cfg.name,code:cfg.code||'',log,goal:(cfg.goalW?{w:cfg.goalW,d:cfg.goalD||null,sw:cfg.goalSW||null}:null),up:firebase.database.ServerValue.TIMESTAMP}).catch(e=>{ console.error(e); toast('공유 실패: '+(e.code||'')); });
 }
 async function frAddFriend(code){
   code=(code||'').trim().toUpperCase();
@@ -2244,6 +2240,29 @@ function frExText(ex){
   if(!ex||!ex.length) return '';
   return ex.map(e=>{ const [ic,nm]=FR_TYPES[e.t]||FR_TYPES.etc; return `${ic} <b>${esc(e.memo&&e.t!=='gym'?nm+'·'+e.memo:(e.memo||nm))}</b>${e.m?` ${e.m}분`:''}${e.k?` <span class="fr-k">🔥${e.k}</span>`:''}`; }).join(' · ');
 }
+// 목표 진행 계산: 최근 체중, 남은 kg, 남은 일수, 하루 필요 감량
+function frGoalCalc(log,goal){
+  if(!goal||!goal.w) return null;
+  const ds=Object.keys(log).filter(d=>log[d].w).sort();
+  const cur=ds.length?log[ds[ds.length-1]].w:null;
+  if(cur==null) return {cur:null};
+  const left=+(cur-goal.w).toFixed(1);
+  let days=null; if(goal.d){ days=Math.ceil((new Date(goal.d+'T00:00:00')-new Date(todayStr()+'T00:00:00'))/86400000); }
+  const perDay=(left>0&&days&&days>0)?left/days:null;
+  const start=goal.sw||cur; const prog=start>goal.w?Math.max(0,Math.min(1,(start-cur)/(start-goal.w))):0;
+  return {cur,left,days,perDay,prog};
+}
+function frGoalLine(p){
+  const g=frGoalCalc(p.log,p.goal); if(!g) return '';
+  if(g.cur==null) return `<div class="fr-goal"><span class="nm ${p.me?'me':''}">${esc(p.name)}</span><span class="g">목표 <b>${p.goal.w}kg</b> · 몸무게 기록이 아직 없어요</span></div>`;
+  const done=g.left<=0;
+  const dday=g.days==null?'':(g.days>0?`D-${g.days}`:(g.days===0?'D-Day':`${-g.days}일 지남`));
+  const rate=done?'달성 🎉':(g.perDay!=null?`하루 <b>${g.perDay>=1?g.perDay.toFixed(2)+'kg':Math.round(g.perDay*1000)+'g'}</b>씩`:(g.days!=null&&g.days<=0?'기한 지남':'목표일 미설정'));
+  const warn=(g.perDay!=null&&g.perDay>0.15)?' <span style="color:#D64545">⚠️ 무리</span>':'';
+  return `<div class="fr-goal"><span class="nm ${p.me?'me':''}">${esc(p.name)}</span>
+    <span class="g"><b>${g.cur}</b> → <b>${p.goal.w}</b>kg${dday?` · ${dday}`:''}<br>${rate}${warn}<div class="fr-gbar"><i style="width:${Math.round(g.prog*100)}%"></i></div></span>
+    <span class="left ${done?'ok':''}">${done?'✓':g.left}<small>${done?'달성':'kg 남음'}</small></span></div>`;
+}
 function renderFriends(){
   const setup=$('frSetup'), main=$('frMain');
   const cfg=frCfg();
@@ -2269,11 +2288,10 @@ function renderFriends(){
   // 2) 오늘 기록 입력
   $('frTodayLbl').textContent=frFmtDate(today)+' · '+today.slice(5).replace('-','/');
   if(!$('frW').value) $('frW').value=td.w??(getProfile()?.w??''); // 입력 중인 값은 덮어쓰지 않음
-  $('frTypes').innerHTML=Object.entries(FR_TYPES).map(([k,[ic,nm]])=>`<button data-t="${k}" class="${frType===k?'on':''}">${ic} ${nm}</button>`).join('');
-  document.querySelectorAll('#frTypes button').forEach(b=>b.onclick=()=>{ frType=b.dataset.t; renderFriends(); });
-  $('frMine').innerHTML=(td.ex||[]).map((e,i)=>{ const [ic,nm]=FR_TYPES[e.t]||FR_TYPES.etc; return `<div>${ic} <b>${esc(e.memo||nm)}</b>${e.m?` ${e.m}분`:''}${e.k?` <span class="fr-k">🔥${e.k}kcal</span>`:''}${e.auto?' <span style="font-size:10px">(출석체크 자동)</span>':''}<span class="x" data-i="${i}">✕</span></div>`; }).join('')
-    || '<div>오늘 운동 기록이 아직 없어요</div>';
-  document.querySelectorAll('#frMine .x').forEach(x=>x.onclick=()=>{ frRemoveEx(today,+x.dataset.i); renderFriends(); });
+  if(!$('frGW').value&&cfg.goalW) $('frGW').value=cfg.goalW;
+  if(!$('frGD').value&&cfg.goalD) $('frGD').value=cfg.goalD;
+  $('frMine').innerHTML=(td.ex||[]).map(e=>{ const [ic,nm]=FR_TYPES[e.t]||FR_TYPES.etc; return `<div>${ic} <b>${esc(e.memo||nm)}</b>${e.m?` ${e.m}분`:''}${e.k?` <span class="fr-k">🔥${e.k}kcal</span>`:''}</div>`; }).join('')
+    || '<div>오늘 운동 기록이 아직 없어요 — 운동 탭에서 출석 체크!</div>';
   // 3) 친구 목록
   $('frMyCode').textContent=cfg.code||'------';
   $('frName').textContent=cfg.name+' ✎';
@@ -2282,7 +2300,10 @@ function renderFriends(){
     :'<div style="font-size:12px;color:var(--sub)">아직 친구가 없어요. 내 코드를 공유하거나 친구 코드를 입력하세요.</div>';
   document.querySelectorAll('#frList i').forEach(i=>i.onclick=()=>frRemoveFriend(i.dataset.id));
   // 4) 날짜별 피드
-  const people=[{name:cfg.name,log,me:true},...ids.map(id=>({name:frPubs[id]?.name||'…',log:frPubs[id]?.log||{}}))];
+  const people=[{name:cfg.name,log,me:true,goal:cfg.goalW?{w:cfg.goalW,d:cfg.goalD,sw:cfg.goalSW}:null},...ids.map(id=>({name:frPubs[id]?.name||'…',log:frPubs[id]?.log||{},goal:frPubs[id]?.goal||null}))];
+  const gl=people.filter(p=>p.goal).map(frGoalLine).join('');
+  $('frGoalCard').classList.toggle('hidden',!gl);
+  $('frGoals').innerHTML=gl;
   const cut=new Date(); cut.setDate(cut.getDate()-FR_FEED_DAYS+1);
   const cutStr=cut.getFullYear()+'-'+String(cut.getMonth()+1).padStart(2,'0')+'-'+String(cut.getDate()).padStart(2,'0');
   const dates=new Set([today]);
@@ -2297,16 +2318,16 @@ function renderFriends(){
     </div>`;
   }).join('');
 }
-$('frSave').onclick=()=>{
-  const date=todayStr();
-  const w=parseFloat($('frW').value), m=parseInt($('frMin').value), memo=$('frMemo').value.trim();
-  if(w) frSetWeight(date,w,false);
-  if(m>0) frAddEx(date,frType,m,memo,false,frEstKcal(frType,m,w||null));
-  else if(!w){ toast('몸무게 또는 운동 시간을 입력해 주세요'); return; }
-  $('frMin').value=''; $('frMemo').value='';
-  renderFriends(); toast(m>0?'운동 기록 공유 💪':'몸무게 기록 ⚖️');
+$('frWSave').onclick=()=>{
+  const w=parseFloat($('frW').value), gw=parseFloat($('frGW').value), gd=$('frGD').value;
+  if(!w&&!gw){ toast('몸무게 또는 목표를 입력해 주세요'); return; }
+  const c=frCfg();
+  if(gw){ if(!c.goalSW||c.goalW!==gw){ c.goalSW=w||c.goalSW||getProfile()?.w||null; } c.goalW=gw; c.goalD=gd||null; }
+  else if(!$('frGW').value){ delete c.goalW; delete c.goalD; delete c.goalSW; }
+  sSet('social',c);
+  if(w) frSetWeight(todayStr(),w,false); else frQueuePublish();
+  renderFriends(); toast(w?'저장 ⚖️':'목표 저장 🏁');
 };
-$('frWSave').onclick=()=>{ const w=parseFloat($('frW').value); if(!w){ toast('몸무게를 입력해 주세요'); return; } frSetWeight(todayStr(),w,false); renderFriends(); toast('몸무게 기록 ⚖️'); };
 $('frAddBtn').onclick=()=>frAddFriend($('frCodeIn').value);
 $('frCodeIn').onkeydown=e=>{ if(e.key==='Enter') frAddFriend($('frCodeIn').value); };
 $('frName').onclick=()=>{ const n=prompt('친구들에게 보일 이름',frCfg().name||''); if(n&&n.trim()){ const c=frCfg(); c.name=n.trim().slice(0,8); sSet('social',c); frPublish(); renderFriends(); } };
@@ -2318,7 +2339,7 @@ $('frShare').onclick=async()=>{
 };
 
 /* ---- init ---- */
-const APP_VER='v6.4';
+const APP_VER='v6.5';
 $('verTag').textContent=APP_VER;
 
 // 서비스 워커 등록 (오프라인 지원)
